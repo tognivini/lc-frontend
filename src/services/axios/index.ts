@@ -5,7 +5,7 @@ import { cleanEmptyQueryParams } from '../api-services/utils/cleanEmpryQueryPara
 
 const { REACT_APP_API_URL } = process.env
 
-const baseURL = REACT_APP_API_URL || 'http://10.0.2.2:3333'
+const baseURL = REACT_APP_API_URL || 'http://localhost:3333'
 
 const api = axios.create({
   baseURL

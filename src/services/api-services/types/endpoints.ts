@@ -13,7 +13,7 @@ const routes = {
   LIST_PERMISSIONS: '/api/permissions',
 
   // Visit rate
-  LIST_VISIT_RATE: '/api/visit/visit-rate',
+  GET_ALL_USERS: '/api/user',
   POST_EDIT_VISIT_RATE: '/api/visit/visit-rate/alter',
   GET_VISIT_FREQUENCY_EXPORT: '/api/visit/visit-rate/export/file',
 

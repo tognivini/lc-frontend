@@ -17,7 +17,7 @@ import {
 
 import { Button } from '../../../components/atomos/Button'
 // import { brand } from '../../../common/images'
-// import { useAuth } from '../../../contexts/auth.context'
+import { useAuth, AuthProvider } from '../../../contexts/auth.context'
 // import { useMessage } from '../../../contexts/message.context'
 
 // import { Form } from '@unform/web'
@@ -36,7 +36,7 @@ const LoginPage = ({ ...props }) => {
 
   // const formRef = useRef(null)
 
-  // const { onLogin } = useAuth()
+  const { onLogin } = useAuth()
 
   // const { onSignal, onMessageSucess, onMessageFailed } = useMessage()
 
@@ -88,7 +88,26 @@ const LoginPage = ({ ...props }) => {
   //     })
   // }
 
-  const handleSubmit = data => { }
+
+
+  const handleSubmit = data => {
+
+    if(email && password){
+      console.log('aa', email, password)
+      const body = {
+        email, password
+      }
+      onLogin(body)
+              .then(res => {
+                // if (props.location.state?.from) {
+                //   const { pathname, search } = props.location.state.from
+                //   return history.push(pathname + search)
+                // }
+                // history.push(routesType.CRM_INITIAL)
+                console.log('nice')
+              })
+    }
+   }
   return (
     <Container>
       <TitleGrid>

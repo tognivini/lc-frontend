@@ -14,7 +14,6 @@ export const Container = styled.div`
   background-image: url(${loginImage});
   overflow: hidden;
   background-position: center;
-  background-size: 100%;
   background-repeat: no-repeat;
   width: 100%;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
