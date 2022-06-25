@@ -2,7 +2,8 @@ import React, {
   createContext,
   useContext,
   useState,
-  useCallback
+  useCallback,
+  useEffect
 } from 'react'
 
 import { login } from '../services/api-services'
@@ -23,9 +24,9 @@ const AuthContext = createContext({
 })
 
 const AuthProvider = ({ children }) => {
-  const USER_LOCAL_STORAGE = '@rodoil/user'
-  const TOKEN_LOCAL_STORAGE = '@rodoil/token'
-  const REFRESH_TOKEN_LOCAL_STORAGE = '@rodoil/refresh_token'
+  const USER_LOCAL_STORAGE = '@me/user'
+  const TOKEN_LOCAL_STORAGE = '@me/token'
+  // const REFRESH_TOKEN_LOCAL_STORAGE = '@me/refresh_token'
 
   const getUserType = (userData, _token) => {
     const decodedToken = jwtDecode(
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }) => {
     return {
       ...userData,
       isAdmin:
-        decodedToken.type === TypeUserEnum.ADMINISTRADOR,
+        decodedToken.permissionType === TypeUserEnum.ADMIN,
     }
   }
 
@@ -44,12 +45,11 @@ const AuthProvider = ({ children }) => {
    * recuperando localStorage
    */
   const _token = localStorage.getItem(TOKEN_LOCAL_STORAGE)
-  const _refreshToken = localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE)
+  // const _refreshToken = localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE)
   const _user = {
     ...JSON.parse(localStorage.getItem(USER_LOCAL_STORAGE)),
-    scopes: undefined,
     ...jwtDecode(
-      localStorage.getItem('@rodoil/token') ||
+      localStorage.getItem('@me/token') ||
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOm51bGwsInNjb3BlcyI6W119.mmMcsFJgYHmgUeIe81IUZ0UjkXU8c3_R2jY9xmwwvxg'
     )
   }
@@ -58,17 +58,17 @@ const AuthProvider = ({ children }) => {
    * setando header da api
    */
   api.defaults.headers.Authorization = _token
-  api.defaults.headers.refreshToken = _refreshToken
+  // api.defaults.headers.refreshToken = _refreshToken
 
   const [user, setUser] = useState(getUserType(_user, _token))
   const [token, setToken] = useState(_token)
-  const [refreshToken, setRefreshToken] = useState(_refreshToken)
+  // const [refreshToken, setRefreshToken] = useState(_refreshToken)
 
   const onSetTokens = useCallback(dto => {
     setToken(dto.token)
-    setRefreshToken(dto.refreshToken)
+    // setRefreshToken(dto.refreshToken)
     localStorage.setItem(TOKEN_LOCAL_STORAGE, dto.token)
-    localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE, dto.refreshToken)
+    // localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE, dto.refreshToken)
   }, [])
 
   const populateLocalStorage = useCallback(dto => {
@@ -76,45 +76,50 @@ const AuthProvider = ({ children }) => {
       USER_LOCAL_STORAGE,
       JSON.stringify({
         ...dto.user,
-        scopes: undefined,
         isAdmin: undefined,
-        role: undefined,
+        permissionType: undefined,
         userId: undefined,
       })
     )
     localStorage.setItem(TOKEN_LOCAL_STORAGE, dto.token)
-    localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE, dto.refreshToken)
+    // localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE, dto.refreshToken)
   }, [])
 
   const onLogout = useCallback(() => {
     localStorage.clear()
     setUser(null)
     setToken(null)
-    setRefreshToken(null)
+    // setRefreshToken(null)
   }, [])
 
   const onSetUserData = useCallback(data => {
     setUser(getUserType(data.user, data.token))
   }, [])
 
+  useEffect(()=>{
+    console.log(user, 'user user user')
+  }, [user])
+
   const onLogin = useCallback(
     body => {
       return new Promise(async (resolve, reject) => {
         try {
-          const { token, refreshToken, error, ...rest } = await login({
+          const { token, error, ...rest } = await login({
             ...body
           })
+
+          console.log(token, 'tk', rest)
 
           if (!error) {
             populateLocalStorage({
               user: rest,
               token,
-              refreshToken
+              // refreshToken
             })
             onSetUserData({
               user: rest,
               token,
-              refreshToken
+              // refreshToken
             })
           }
 
@@ -136,7 +141,7 @@ const AuthProvider = ({ children }) => {
         onLogout,
         isAuthenticated: Boolean(_token),
         onSetUserData,
-        refreshToken,
+        // refreshToken,
         setToken: onSetTokens
       }}
     >

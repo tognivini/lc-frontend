@@ -26,6 +26,7 @@ export const setAccessToken = ({
 }: any) => {
   return api.interceptors.request.use(async config => {
     try {
+      console.log(config, 'setAcessToken')
       // let _refreshToken = api.defaults.headers?.refreshToken
       // let _token = api.defaults.headers?.Authorization
 

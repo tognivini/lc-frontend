@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef } from "react";
 
 import {
   Container,
   Content,
   HeaderTitle,
-  RodoilBrand,
   BrandView,
   CardTitle,
   SubTitle,
@@ -12,35 +11,34 @@ import {
   TitleGrid,
   LoginInput,
   PasswordInput,
-  SpamLink
-} from './styles'
-
-import { Button } from '../../../components/atomos/Button'
+  SpamLink,
+} from "./styles";
+import { Button } from "../../../components/atomos/Button";
 // import { brand } from '../../../common/images'
-import { useAuth, AuthProvider } from '../../../contexts/auth.context'
+import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 // import { useMessage } from '../../../contexts/message.context'
 
 // import { Form } from '@unform/web'
-import { routesType } from '../../../resources/routesTypes'
+import { routesType } from "../../../resources/routesTypes";
 
 // import * as Yup from 'yup'
 
 const LoginPage = ({ ...props }) => {
-  const { history } = props
+  const { history } = props;
 
-  const [email, setEmail] = useState()
-  const [errorEmail, setErrorEmail] = useState()
+  const [email, setEmail] = useState();
+  const [errorEmail, setErrorEmail] = useState();
 
-  const [password, setPassword] = useState()
-  const [errorPassword, setErrorPassword] = useState()
+  const [password, setPassword] = useState();
+  const [errorPassword, setErrorPassword] = useState();
 
   // const formRef = useRef(null)
 
-  const { onLogin } = useAuth()
+  const { onLogin } = useAuth();
 
   // const { onSignal, onMessageSucess, onMessageFailed } = useMessage()
 
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(false);
 
   // const handleSubmit = data => {
   //   const schema = Yup.object().shape({
@@ -88,41 +86,35 @@ const LoginPage = ({ ...props }) => {
   //     })
   // }
 
-
-
-  const handleSubmit = data => {
-
-    if(email && password){
-      console.log('aa', email, password)
+  const handleSubmit = (data) => {
+    if (email && password) {
+      console.log("aa", email, password);
       const body = {
-        email, password
-      }
+        email,
+        password,
+      };
       onLogin(body)
-              .then(res => {
-                // if (props.location.state?.from) {
-                //   const { pathname, search } = props.location.state.from
-                //   return history.push(pathname + search)
-                // }
-                // history.push(routesType.CRM_INITIAL)
-                console.log('nice')
-              })
+        .then((res) => {
+          // history.push(routesType.CRM_INITIAL)
+          console.log("nice", res);
+        })
     }
-   }
+  };
   return (
     <Container>
       <TitleGrid>
-      <HeaderTitle>Lavanderia CEU</HeaderTitle>
-      <SubTitle>UFSM</SubTitle>
+        <HeaderTitle>Lavanderia CEU</HeaderTitle>
+        <SubTitle>UFSM</SubTitle>
       </TitleGrid>
 
       <FormGrid>
         <Content>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
-              marginBottom: '12%'
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              marginBottom: "12%",
             }}
           >
             <BrandView>
@@ -130,18 +122,24 @@ const LoginPage = ({ ...props }) => {
             </BrandView>
           </div>
           <form onSubmit={handleSubmit}>
-            <div style={{ width: '100%' }}>
-              <LoginInput placeholder="E-mail" name="email" onChange={(e)=>{
-                setEmail(e?.target?.value)
-              }} 
-              error={errorEmail}
+            <div style={{ width: "100%" }}>
+              <LoginInput
+                placeholder="E-mail"
+                name="email"
+                onChange={(e) => {
+                  setEmail(e?.target?.value);
+                }}
+                error={errorEmail}
               />
-              <PasswordInput password placeholder="Senha" name="password" 
-              onChange={(e)=>{
-                setPassword(e?.target?.value)
-              }} 
-              error={errorPassword}
-              /> 
+              <PasswordInput
+                password
+                placeholder="Senha"
+                name="password"
+                onChange={(e) => {
+                  setPassword(e?.target?.value);
+                }}
+                error={errorPassword}
+              />
             </div>
             <Button
               disabled={disabled}
@@ -157,7 +155,7 @@ const LoginPage = ({ ...props }) => {
         </Content>
       </FormGrid>
     </Container>
-  )
-}
+  );
+};
 
-export { LoginPage }
+export { LoginPage };

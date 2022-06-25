@@ -1,44 +1,53 @@
-import { api } from '../../../axios'
-import axios from 'axios'
-import { routes } from '../../types/endpoints'
-import jwtDecode from 'jwt-decode'
+import { api } from "../../../axios";
+// import axios from 'axios'
+import { routes } from "../../types/endpoints";
+import jwtDecode from "jwt-decode";
 
-export async function login(payload:any) {
-  return new Promise((resolve, reject) => {
+interface ILogin {
+  email: string;
+  password: string;
+}
+
+interface IDecodedTk {
+  permissionType: string;
+  userId: string;
+}
+
+export async function login(payload: ILogin) {
+  return new Promise(async (resolve, reject) => {
     api
       .post(routes.LOGIN, payload)
-      .then(response => {
-        const { data } = response.data
+      .then((response) => {
+        const { data } = response.data;
+        const decoded: IDecodedTk = jwtDecode(data?.token);
 
-        const decoded:any= jwtDecode(data.token)
-
-        // api.defaults.headers.Authorization = data.token
-        // api.defaults.headers.refreshToken = data.refreshToken
-        // api.defaults.headers.testando = true
-
-        resolve({ ...data, ...decoded, error: false })
+        const newPayloadDecoded = {
+          permissionType: decoded?.permissionType,
+          userId: decoded?.userId,
+        };
+        resolve({ ...data, ...newPayloadDecoded, error: false });
       })
-      .catch(error => {
-        reject(error)
-      })
-  })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 }
-export const refreshTokenRequest = async (refreshToken:any) => {
-  try {
-    const response = await axios.post(
-      api.defaults.baseURL + routes.REFRESH_TOKEN,
-      {
-        refreshToken: `${refreshToken}`
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    )
+// export const refreshTokenRequest = async (refreshToken:any) => {
+//   try {
+//     const response = await axios.post(
+//       api.defaults.baseURL + routes.REFRESH_TOKEN,
+//       {
+//         refreshToken: `${refreshToken}`
+//       },
+//       {
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       }
+//     )
 
-    return response.data ? response.data.data : {}
-  } catch (error) {
-    throw new Error()
-  }
-}
+//     return response.data ? response.data.data : {}
+//   } catch (error) {
+//     throw new Error()
+//   }
+// }
