@@ -12,7 +12,6 @@ import { routesType } from "../resources/routesTypes";
 import Header from "./Header";
 
 import { useAuth } from "../contexts/auth.context";
-import { useEffect } from "react";
 
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
@@ -27,16 +26,7 @@ const ConfigRoutes = () => {
           <Routes>
             <Route
               path={routesType.ROOT}
-              element={
-                <Navigate
-                  to={
-                    isAuthenticated
-                      ? routesType.USER_PROFILE
-                      : routesType.AUTH_ROOT
-                  }
-                  replace
-                />
-              }
+              element={<Navigate to={routesType.AUTH_ROOT} replace />}
             />
             <Route exact path={routesType.AUTH_ROOT} element={<LoginPage />} />
             {/* <Route

@@ -12,21 +12,21 @@ const transparentCss = css`
 
   background: transparent;
   color: ${({ color }) => {
-    const key = color || 'red'
+    const key = color || 'blueGreenLight'
     return colors[key]
   }};
 
   svg {
-    color: ${({ color }) => colors[color] || colors.red};
+    color: ${({ color }) => colors[color] || colors.blueGreenLight};
   }
 
   padding: 0 !important;
   font-weight: 500;
 
   :hover {
-    color: ${({ color }) => colors[color] || colors.red} !important;
+    color: ${({ color }) => colors[color] || colors.blueGreenLight} !important;
     svg {
-      color: ${({ color }) => colors[color] || colors.red} !important;
+      color: ${({ color }) => colors[color] || colors.blueGreenLight} !important;
     }
     background: transparent !important;
   }
@@ -78,11 +78,11 @@ export const DefaultButton = styled.button`
   user-select: none;
   border: solid 1.4px
     ${({ color }) => {
-    const key = color || 'red'
+    const key = color || 'blueGreenLight'
     return colors[key]
   }};
   outline: none;
-  border-radius: 2rem;
+  border-radius: 8px;
   width: fit-content;
 
   display: flex;
@@ -91,12 +91,12 @@ export const DefaultButton = styled.button`
   cursor: pointer;
   letter-spacing: 0.16px;
   background: ${({ color }) => {
-    const key = color || 'red'
+    const key = color || 'blueGreenLight'
     return colors[key]
   }};
   color: ${colors.white};
   line-height: 14px;
-  width: fit-content;
+  /* width: ${customWidth => customWidth ? customWidth  : 'fit-content' } ; */
 
   ${({ fullWidth }) => fullWidth && fullWidthStyle}
 
@@ -130,17 +130,6 @@ export const DefaultButton = styled.button`
     color: ${colors.white};
     font-size: 28px !important;
 
-    /* @media (max-width: 1920px) {
-      font-size: 28px !important;
-    }
-
-    @media (max-width: 1440px) {
-      font-size: 27px !important;
-    }
-
-    @media (max-width: 1024px) {
-      font-size: 20px !important;
-    }*/
     margin: 0;
     margin-right: 6px !important;
     margin-left: -10px !important;
@@ -148,18 +137,6 @@ export const DefaultButton = styled.button`
 
   img {
     height: 26px !important;
-
-    /* @media (max-width: 1920px) {
-      height: 26px !important;
-    }
-
-    @media (max-width: 1440px) {
-      height: 23px !important;
-    }
-
-    @media (max-width: 1024px) {
-      height: 20px !important;
-    } */
     margin: 0;
     margin-right: 8px !important;
   }

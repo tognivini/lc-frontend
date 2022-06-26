@@ -1,157 +1,123 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 import {
   Container,
   Content,
-  HeaderTitle,
+  // HeaderTitle,
   BrandView,
   CardTitle,
-  SubTitle,
+  // SubTitle,
   FormGrid,
-  TitleGrid,
-  LoginInput,
-  PasswordInput,
-  SpamLink,
+  // TitleGrid,
+  InputCustom,
+  // PasswordInput,
+  InputMasked,
+  ContainerButton,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
-// import { brand } from '../../../common/images'
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-// import { useMessage } from '../../../contexts/message.context'
 
-// import { Form } from '@unform/web'
 import { routesType } from "../../../resources/routesTypes";
-
-// import * as Yup from 'yup'
+import { useEffect } from "react";
 
 const UserProfilePage = ({ ...props }) => {
-  // const { history } = props;
-  const navigate = useNavigate()
+  const { user } = useAuth();
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      setName(user?.name);
+      setEmail(user?.email);
+      setPhoneNumber(user?.phoneNumber);
+    }
+  }, [user]);
+
+  const [name, setName] = useState();
+  const [errorName, setErrorName] = useState(false);
   const [email, setEmail] = useState();
-  const [errorEmail, setErrorEmail] = useState();
+  const [errorEmail, setErrorEmail] = useState(false);
 
-  const [password, setPassword] = useState();
-  const [errorPassword, setErrorPassword] = useState();
-
-  // const formRef = useRef(null)
-
-  const { onLogin } = useAuth();
-
-  // const { onSignal, onMessageSucess, onMessageFailed } = useMessage()
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
 
   const [disabled, setDisabled] = useState(false);
 
-  // const handleSubmit = data => {
-  //   const schema = Yup.object().shape({
-  //     user: Yup.string().required('Este campo é obrigatório'),
-  //     password: Yup.string().required('Este campo é obrigatório')
-  //   })
-
-  //   // formRef.current.setErrors({})
-
-  //   schema
-  //     .validate(data, {
-  //       abortEarly: false
-  //     })
-  //     .then(() => {
-  //       onSignal()
-  //       setDisabled(true)
-  //       onLogin(data)
-  //         .then(res => {
-  //           onMessageSucess('Logado com sucesso', 1500)
-  //           if (props.location.state?.from) {
-  //             const { pathname, search } = props.location.state.from
-  //             return history.push(pathname + search)
-  //           }
-  //           history.push(routesType.CRM_INITIAL)
-  //         })
-  //         .catch(error => {
-  //           const { response } = error || {}
-  //           setDisabled(false)
-  //           onMessageFailed(
-  //             (response?.data?.messages && response?.data?.messages[0]) ||
-  //               'Houve um erro inesperado com seu login'
-  //           )
-  //         })
-  //     })
-  //     .catch(err => {
-  //       onMessageFailed('Verifique os campos do formulário.')
-  //       const validationErrors = {}
-  //       if (err instanceof Yup.ValidationError) {
-  //         err.inner.forEach(error => {
-  //           validationErrors[error.path] = error.message
-  //         })
-
-  //         formRef.current.setErrors(validationErrors)
-  //       }
-  //     })
-  // }
-
-  const handleSubmit = (data) => {
-    if (email && password) {
-      console.log("aa", email, password);
+  const handleSubmit = (event) => {
+    event.preventDefault()
+      console.log("aa", email, phoneNumber);
       const body = {
+        name,
         email,
-        password,
+        phoneNumber,
       };
-      onLogin(body)
-        .then((res) => {
-          navigate(routesType.HOME)
-        })
-    }
+      // onLogin(body).then((res) => {
+      //   navigate(routesType.HOME);
+      // });
   };
+
   return (
     <Container>
-      <TitleGrid>
-        <HeaderTitle>USER RPPOFILE</HeaderTitle>
-        <SubTitle>UFSM</SubTitle>
-      </TitleGrid>
-
       <FormGrid>
         <Content>
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "left",
               width: "100%",
-              marginBottom: "12%",
+              marginBottom: "10px",
             }}
           >
             <BrandView>
-              <CardTitle>LOGIN</CardTitle>
+              <CardTitle>Editar perfil</CardTitle>
             </BrandView>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e)=> handleSubmit(e)}>
             <div style={{ width: "100%" }}>
-              <LoginInput
+              <InputCustom
+                label="Nome"
+                placeholder="Nome"
+                name="name"
+                value={name}
+                onChange={(e) => {
+                  setName(e?.target?.value);
+                }}
+                error={errorName}
+              />
+              <InputCustom
+                label="E-mail"
                 placeholder="E-mail"
                 name="email"
+                value={email}
                 onChange={(e) => {
                   setEmail(e?.target?.value);
                 }}
                 error={errorEmail}
               />
-              <PasswordInput
-                password
-                placeholder="Senha"
-                name="password"
+              <InputMasked
+                label="Telefone"
+                mask="cellPhone"
+                placeholder="(99) 99999-9999"
+                name="phoneNumber"
+                controlledValue={phoneNumber}
                 onChange={(e) => {
-                  setPassword(e?.target?.value);
+                  setPhoneNumber(e?.target?.value);
                 }}
-                error={errorPassword}
+                error={errorPhoneNumber}
               />
             </div>
-            <Button
-              disabled={disabled}
-              type="submit"
-              fullWidth
-              color="secundary"
-              style={{ height: 40, fontSize: 20 }}
-            >
-              Entrar
-            </Button>
-            <SpamLink>Não possui uma conta?</SpamLink>
+            <ContainerButton>
+              <Button
+                disabled={disabled}
+                type="submit"
+                // fullWidth
+                color="blueGreenLight"
+                style={{ height: 40, fontSize: 20, with: 50 }}
+              >
+                Editar
+              </Button>
+            </ContainerButton>
           </form>
         </Content>
       </FormGrid>
