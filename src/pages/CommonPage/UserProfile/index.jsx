@@ -19,6 +19,8 @@ import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 
 import { onGetAllUsers, onUpdateUser } from "../../../services/api-services/index";
+import Swal from 'sweetalert2'
+
 
 import { routesType } from "../../../resources/routesTypes";
 import { useEffect } from "react";
@@ -63,8 +65,13 @@ const UserProfilePage = ({ ...props }) => {
       phoneNumber,
     };
     const userId = user.userId
-    onUpdateUser({ payload, userId }).then((res) => {
-      console.log('mds', res)
+    onUpdateUser(payload, userId).then((res) => {
+      Swal.fire({
+        title: 'Sucesso!',
+        text: 'Usuário editado com sucesso!',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      })
     });
   };
 

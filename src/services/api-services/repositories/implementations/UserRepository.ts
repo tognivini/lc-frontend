@@ -1,7 +1,7 @@
 import { api } from "../../../axios";
 import { routes } from "../../types/endpoints";
 
-async function onGetAllUsers(params) {
+async function onGetAllUsers(params:any) {
   try {
     return (await api.get(routes.LIST_USERS, { params })).data;
   } catch (error) {
@@ -38,13 +38,14 @@ async function onGetAllUsers(params) {
 //       .catch(reject)
 //   })
 // }
-const onUpdateUser = ({ payload, userId }) => {
+const onUpdateUser = (payload:any, userId:any) => {
   console.log(payload, userId)
+  // console.log()
   return new Promise((resolve, reject) => {
     api
       .put(routes.EDIT_USER + userId, payload)
-      .then(({ data }) => {
-        resolve(data);
+      .then((data:any ) => {
+        resolve(data?.data);
       })
       .catch(reject);
   });
