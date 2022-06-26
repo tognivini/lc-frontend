@@ -15,12 +15,17 @@ import {
   SpamLink,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
+// import { brand } from '../../../common/images'
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+// import { useMessage } from '../../../contexts/message.context'
 
+// import { Form } from '@unform/web'
 import { routesType } from "../../../resources/routesTypes";
 
+// import * as Yup from 'yup'
 
-const LoginPage = ({ ...props }) => {
+const UserProfilePage = ({ ...props }) => {
+  // const { history } = props;
   const navigate = useNavigate()
 
   const [email, setEmail] = useState();
@@ -29,13 +34,61 @@ const LoginPage = ({ ...props }) => {
   const [password, setPassword] = useState();
   const [errorPassword, setErrorPassword] = useState();
 
+  // const formRef = useRef(null)
+
   const { onLogin } = useAuth();
+
+  // const { onSignal, onMessageSucess, onMessageFailed } = useMessage()
 
   const [disabled, setDisabled] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // const handleSubmit = data => {
+  //   const schema = Yup.object().shape({
+  //     user: Yup.string().required('Este campo é obrigatório'),
+  //     password: Yup.string().required('Este campo é obrigatório')
+  //   })
 
+  //   // formRef.current.setErrors({})
+
+  //   schema
+  //     .validate(data, {
+  //       abortEarly: false
+  //     })
+  //     .then(() => {
+  //       onSignal()
+  //       setDisabled(true)
+  //       onLogin(data)
+  //         .then(res => {
+  //           onMessageSucess('Logado com sucesso', 1500)
+  //           if (props.location.state?.from) {
+  //             const { pathname, search } = props.location.state.from
+  //             return history.push(pathname + search)
+  //           }
+  //           history.push(routesType.CRM_INITIAL)
+  //         })
+  //         .catch(error => {
+  //           const { response } = error || {}
+  //           setDisabled(false)
+  //           onMessageFailed(
+  //             (response?.data?.messages && response?.data?.messages[0]) ||
+  //               'Houve um erro inesperado com seu login'
+  //           )
+  //         })
+  //     })
+  //     .catch(err => {
+  //       onMessageFailed('Verifique os campos do formulário.')
+  //       const validationErrors = {}
+  //       if (err instanceof Yup.ValidationError) {
+  //         err.inner.forEach(error => {
+  //           validationErrors[error.path] = error.message
+  //         })
+
+  //         formRef.current.setErrors(validationErrors)
+  //       }
+  //     })
+  // }
+
+  const handleSubmit = (data) => {
     if (email && password) {
       console.log("aa", email, password);
       const body = {
@@ -51,7 +104,7 @@ const LoginPage = ({ ...props }) => {
   return (
     <Container>
       <TitleGrid>
-        <HeaderTitle>Lavanderia CEU</HeaderTitle>
+        <HeaderTitle>USER RPPOFILE</HeaderTitle>
         <SubTitle>UFSM</SubTitle>
       </TitleGrid>
 
@@ -69,7 +122,7 @@ const LoginPage = ({ ...props }) => {
               <CardTitle>LOGIN</CardTitle>
             </BrandView>
           </div>
-          <form onSubmit={(e)=>handleSubmit(e)}>
+          <form onSubmit={handleSubmit}>
             <div style={{ width: "100%" }}>
               <LoginInput
                 placeholder="E-mail"
@@ -106,4 +159,4 @@ const LoginPage = ({ ...props }) => {
   );
 };
 
-export { LoginPage };
+export { UserProfilePage };

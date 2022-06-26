@@ -1,42 +1,83 @@
-import React from 'react'
+import React from "react";
 
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
-import { AuthLayout } from '../layouts/AuthLayout'
-// import { CRMLayout } from '../layouts/CRMLayout'
-import { routesType } from '../resources/routesTypes'
-import { PrivateRoute } from './modules/PrivateRoute'
-// import { useAuth } from '../contexts/auth.context'
-import JwtContextProvider from '../contexts/jwt.context'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { LoginPage } from "../pages/AuthPage/LoginPage";
+import { UserProfilePage } from "../pages/CommonPage/UserProfile";
+import { routesType } from "../resources/routesTypes";
+import Header from "./Header";
 
-const Routes = () => {
-//   const { isAuthenticated, user } = useAuth()
-console.log('start? route')
+import { useAuth } from "../contexts/auth.context";
+import { useEffect } from "react";
+
+const ConfigRoutes = () => {
+  const { isAuthenticated, user } = useAuth();
+
   return (
-    <HashRouter>
-      <Switch>
-          <Route path={routesType.AUTH_ROOT} component={AuthLayout} />
-        {/* 
-         {!isAuthenticated && (
-          <Route path={routesType.AUTH_ROOT} component={AuthLayout} />
-        )}
-        */}
+    <Router>
+      <div className="App">
+        <header>
+          <Header />
+        </header>
+        <main>
+          <Routes>
+            <Route
+              path={routesType.ROOT}
+              element={
+                <Navigate
+                  to={
+                    isAuthenticated
+                      ? routesType.USER_PROFILE
+                      : routesType.AUTH_ROOT
+                  }
+                  replace
+                />
+              }
+            />
+            <Route exact path={routesType.AUTH_ROOT} element={<LoginPage />} />
+            {/* <Route
+              exact
+              path={routesType.USER_PROFILE}
+              element={<UserProfilePage />}
+            /> */}
+            <Route
+              exact
+              path={routesType.USER_EDIT}
+              element={<UserProfilePage />}
+            />
 
-        <PrivateRoute
-          path={routesType.ROOT}
-          component={props => (
-            <JwtContextProvider>
-              {/* <CRMLayout {...props} /> */}
-            </JwtContextProvider>
-          )}
-        />
+            {!isAuthenticated && (
+              <Route
+                path="*"
+                element={<Navigate to={routesType.AUTH_ROOT} replace />}
+              />
+            )}
 
-        {/* <Redirect
-          from=""
-          to={isAuthenticated ? routesType.ROOT : routesType.AUTH_ROOT}
-        /> */}
-      </Switch>
-    </HashRouter>
-  )
-}
+            {/* <Route
+              path="*"
+              element={
+                <Navigate
+                  to={
+                    isAuthenticated
+                      ? routesType.USER_PROFILE
+                      : routesType.AUTH_ROOT
+                  }
+                  replace
+                />
+              }
+            /> */}
+          </Routes>
+        </main>
+        {/* <footer>
+          <Footer />
+        </footer> */}
+      </div>
+    </Router>
+  );
+};
 
-export { Routes }
+export { ConfigRoutes };

@@ -96,10 +96,6 @@ const AuthProvider = ({ children }) => {
     setUser(getUserType(data.user, data.token))
   }, [])
 
-  useEffect(()=>{
-    console.log(user, 'user user user')
-  }, [user])
-
   const onLogin = useCallback(
     body => {
       return new Promise(async (resolve, reject) => {
