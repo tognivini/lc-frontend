@@ -1,18 +1,13 @@
-import { api } from '../../../axios'
-import { routes } from '../../types/endpoints'
+import { api } from "../../../axios";
+import { routes } from "../../types/endpoints";
 
-// async function onListAllUsers(onlyUsers:any, params:any) {
-//   try {
-//     if (onlyUsers) {
-//       const { data } = (await api.get(routes.LIST_USERS, { params })).data
-//       return data
-//     } else {
-//       return (await api.get(routes.LIST_USERS, { params })).data
-//     }
-//   } catch (error) {
-//     throw new Error(error)
-//   }
-// }
+async function onGetAllUsers(params) {
+  try {
+    return (await api.get(routes.LIST_USERS, { params })).data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // async function onCreateUser(payload) {
 //   try {
@@ -43,16 +38,17 @@ import { routes } from '../../types/endpoints'
 //       .catch(reject)
 //   })
 // }
-// const onUpdateUser = ({ payload, userId }) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .put('/api/users/' + userId, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
+const onUpdateUser = ({ payload, userId }) => {
+  console.log(payload, userId)
+  return new Promise((resolve, reject) => {
+    api
+      .put(routes.EDIT_USER + userId, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 
 // const onUpdateProfile = ({ payload, userId }) => {
 //   return new Promise((resolve, reject) => {
@@ -66,9 +62,9 @@ import { routes } from '../../types/endpoints'
 // }
 
 export {
-  // onListAllUsers,
+  onGetAllUsers,
   // onCreateUser,
   // onGetUserDataById,
-  // onUpdateUser,
+  onUpdateUser,
   // onUpdateProfile
-}
+};

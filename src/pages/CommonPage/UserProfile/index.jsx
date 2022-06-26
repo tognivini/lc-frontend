@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -18,6 +18,8 @@ import {
 import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 
+import { onGetAllUsers, onUpdateUser } from "../../../services/api-services/index";
+
 import { routesType } from "../../../resources/routesTypes";
 import { useEffect } from "react";
 
@@ -26,11 +28,20 @@ const UserProfilePage = ({ ...props }) => {
 
   const navigate = useNavigate();
 
+  const setUser = useCallback(async () => {
+    if (user) {
+      const userId = user.userId;
+      await onGetAllUsers({ userId }).then((res) => {
+        setName(res[0]?.name);
+        setEmail(res[0]?.email);
+        setPhoneNumber(res[0]?.phoneNumber);
+      });
+    }
+  }, [user]);
+
   useEffect(() => {
     if (user) {
-      setName(user?.name);
-      setEmail(user?.email);
-      setPhoneNumber(user?.phoneNumber);
+      setUser();
     }
   }, [user]);
 
@@ -45,16 +56,16 @@ const UserProfilePage = ({ ...props }) => {
   const [disabled, setDisabled] = useState(false);
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-      console.log("aa", email, phoneNumber);
-      const body = {
-        name,
-        email,
-        phoneNumber,
-      };
-      // onLogin(body).then((res) => {
-      //   navigate(routesType.HOME);
-      // });
+    event.preventDefault();
+    const payload = {
+      name,
+      email,
+      phoneNumber,
+    };
+    const userId = user.userId
+    onUpdateUser({ payload, userId }).then((res) => {
+      console.log('mds', res)
+    });
   };
 
   return (
@@ -73,7 +84,7 @@ const UserProfilePage = ({ ...props }) => {
               <CardTitle>Editar perfil</CardTitle>
             </BrandView>
           </div>
-          <form onSubmit={(e)=> handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div style={{ width: "100%" }}>
               <InputCustom
                 label="Nome"
