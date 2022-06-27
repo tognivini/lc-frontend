@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { LoginPage } from "../pages/AuthPage/LoginPage";
+import { RegisterPage } from "../pages/AuthPage/RegisterPage";
 import { UserProfilePage } from "../pages/CommonPage/UserProfile";
 import { routesType } from "../resources/routesTypes";
 import Header from "./Header";
@@ -29,6 +30,12 @@ const ConfigRoutes = () => {
               element={<Navigate to={routesType.AUTH_ROOT} replace />}
             />
             <Route exact path={routesType.AUTH_ROOT} element={<LoginPage />} />
+            <Route
+              exact
+              path={routesType.AUTH_REGISTER}
+              element={<RegisterPage />}
+            />
+         
             {/* <Route
               exact
               path={routesType.USER_PROFILE}

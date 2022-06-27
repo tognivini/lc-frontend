@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 import {
   Container,
@@ -19,9 +19,8 @@ import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 
 import { routesType } from "../../../resources/routesTypes";
 
-
 const LoginPage = ({ ...props }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState();
   const [errorEmail, setErrorEmail] = useState();
@@ -37,15 +36,13 @@ const LoginPage = ({ ...props }) => {
     event.preventDefault();
 
     if (email && password) {
-      console.log("aa", email, password);
       const body = {
         email,
         password,
       };
-      onLogin(body)
-        .then((res) => {
-          navigate(routesType.HOME)
-        })
+      onLogin(body).then((res) => {
+        navigate(routesType.USER_EDIT);
+      });
     }
   };
   return (
@@ -69,9 +66,10 @@ const LoginPage = ({ ...props }) => {
               <CardTitle>LOGIN</CardTitle>
             </BrandView>
           </div>
-          <form onSubmit={(e)=>handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div style={{ width: "100%" }}>
               <LoginInput
+                label="E-mail"
                 placeholder="E-mail"
                 name="email"
                 onChange={(e) => {
@@ -80,8 +78,9 @@ const LoginPage = ({ ...props }) => {
                 error={errorEmail}
               />
               <PasswordInput
-                password
+                label="Senha"
                 placeholder="Senha"
+                password
                 name="password"
                 onChange={(e) => {
                   setPassword(e?.target?.value);
@@ -93,12 +92,18 @@ const LoginPage = ({ ...props }) => {
               disabled={disabled}
               type="submit"
               fullWidth
-              color="secundary"
+              color="blueGreenLight"
               style={{ height: 40, fontSize: 20 }}
             >
               Entrar
             </Button>
-            <SpamLink>Não possui uma conta?</SpamLink>
+            <SpamLink
+              onClick={() => {
+                navigate(routesType.AUTH_REGISTER);
+              }}
+            >
+              Não possui uma conta?
+            </SpamLink>
           </form>
         </Content>
       </FormGrid>

@@ -104,8 +104,6 @@ const AuthProvider = ({ children }) => {
             ...body
           })
 
-          console.log(token, 'tk', rest)
-
           if (!error) {
             populateLocalStorage({
               user: rest,

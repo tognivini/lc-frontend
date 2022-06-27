@@ -2,7 +2,7 @@ const routes = {
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/auth/refresh-token',
   LIST_USERS: '/api/user',
-  CREATE_USER: '/api/user',
+  CREATE_USER: '/api/user/create',
   EDIT_USER: '/api/user/update/',
 
   // Schedules

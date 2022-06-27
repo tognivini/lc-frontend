@@ -1,7 +1,14 @@
 import { api } from "../../../axios";
 import { routes } from "../../types/endpoints";
 
-async function onGetAllUsers(params:any) {
+interface IUserParams {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password?: string;
+}
+
+async function onGetAllUsers(params: IUserParams) {
   try {
     return (await api.get(routes.LIST_USERS, { params })).data;
   } catch (error) {
@@ -17,16 +24,16 @@ async function onGetAllUsers(params:any) {
 //   }
 // }
 
-// const onCreateUser = payload => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .post(routes.CREATE_USER, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
+const onCreateUser = (payload: IUserParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(routes.CREATE_USER, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 
 // const onGetUserDataById = userId => {
 //   return new Promise((resolve, reject) => {
@@ -38,13 +45,11 @@ async function onGetAllUsers(params:any) {
 //       .catch(reject)
 //   })
 // }
-const onUpdateUser = (payload:any, userId:any) => {
-  console.log(payload, userId)
-  // console.log()
+const onUpdateUser = (payload: IUserParams, userId: string) => {
   return new Promise((resolve, reject) => {
     api
       .put(routes.EDIT_USER + userId, payload)
-      .then((data:any ) => {
+      .then((data: any) => {
         resolve(data?.data);
       })
       .catch(reject);
@@ -64,7 +69,7 @@ const onUpdateUser = (payload:any, userId:any) => {
 
 export {
   onGetAllUsers,
-  // onCreateUser,
+  onCreateUser,
   // onGetUserDataById,
   onUpdateUser,
   // onUpdateProfile
