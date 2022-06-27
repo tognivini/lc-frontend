@@ -46,7 +46,7 @@ const LoginPage = ({ ...props }) => {
     }
   };
   return (
-    <Container>
+    <Container imgOpacity={"0.5"}>
       <TitleGrid>
         <HeaderTitle>Lavanderia CEU</HeaderTitle>
         <SubTitle>UFSM</SubTitle>

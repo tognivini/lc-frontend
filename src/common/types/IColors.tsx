@@ -8,7 +8,9 @@ const colors = {
   navyBlue: '#162056',
   blue: '#01339B',
   lightBlue: '#1ABCFE',
-  blueGreenLight: '#12bbad',
+  blueGreenLighter: '#12bbad',
+  blueGreenLight: '#0e958a',
+  blueGreenDarker: '#053833',
   red: '#CB2E34',
   secundary: '#CB2E34',
   lightRed: '#F05359',
@@ -34,7 +36,9 @@ export interface IColors {
     | 'navyBlue'
     | 'blue'
     | 'lightBlue'
+    | 'blueGreenLighter'
     | 'blueGreenLight'
+    | 'blueGreenDarker'
     | 'red'
     | 'lightRed'
     | 'orange'

@@ -35,7 +35,7 @@ const ConfigRoutes = () => {
               path={routesType.AUTH_REGISTER}
               element={<RegisterPage />}
             />
-         
+
             {/* <Route
               exact
               path={routesType.USER_PROFILE}
@@ -47,11 +47,13 @@ const ConfigRoutes = () => {
               element={<UserProfilePage />}
             />
 
-            {!isAuthenticated && (
+            {!isAuthenticated ? (
               <Route
                 path="*"
                 element={<Navigate to={routesType.AUTH_ROOT} replace />}
               />
+            ) : (
+              <></>
             )}
 
             {/* <Route

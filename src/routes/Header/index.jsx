@@ -1,23 +1,52 @@
 import { Link } from "react-router-dom";
 import { routesType } from "../../resources/routesTypes";
-import {
-  Container
-} from './styles'
+import { Container, UlCustom, Li } from "./styles";
+import { useAuth } from "../../contexts/auth.context";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+  const { isAuthenticated, onLogout } = useAuth();
+  const navigate = useNavigate();
+
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+    <nav className="navbar">
       <Container class="container">
-        <ul className="nnavbar-nav">
-          <li className="nav-item mx-3">
-            <Link to={routesType.ROOT}>root (change)</Link>
-          </li>
-          <li className="nav-item mx-3">
+        <UlCustom className="menu">
+          {!isAuthenticated && (
+            <Li className="nav-item mx-3">
+              <Link to={routesType.AUTH_ROOT}>Login</Link>
+            </Li>
+          )}
+          {!isAuthenticated && (
+            <Li className="nav-item mx-3">
+              <Link to={routesType.AUTH_REGISTER}>Registro</Link>
+            </Li>
+          )}
+
+          {/* <Li className="nav-item mx-3">
             <Link to={routesType.HOME}>home</Link>
-          </li>
-          <li className="nav-item mx-3">
-            <Link to={routesType.USER_EDIT}>edit profile</Link>
-          </li>
-        </ul>
+          </Li> */}
+          {isAuthenticated && (
+            <Li className="nav-item mx-3">
+              <Link to={routesType.USER_EDIT}>Perfil</Link>
+            </Li>
+          )}
+
+          {isAuthenticated && (
+            <Li className="nav-item mx-3">
+              <span
+                onClick={() => {
+                  onLogout().then(() => {
+                    console.log("then");
+                    navigate(routesType.USER_EDIT);
+                  });
+                }}
+              >
+                Logout
+              </span>
+            </Li>
+          )}
+        </UlCustom>
       </Container>
     </nav>
   );

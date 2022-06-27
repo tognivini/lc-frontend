@@ -33,6 +33,7 @@ export const HeaderTitle = styled(TitleOneComponent)`
   font-family: 'Open Sans';
   font-size: 40px;
   margin-bottom: 0;
+  text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff;
 `
 export const SubTitle = styled(TitleOneComponent)`
   text-align: left;
