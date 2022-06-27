@@ -1,18 +1,20 @@
-import { api } from '../../../axios'
-import { routes } from '../../types/endpoints'
+import { api } from "../../../axios";
+import { routes } from "../../types/endpoints";
 
-// async function onListAllUsers(onlyUsers:any, params:any) {
-//   try {
-//     if (onlyUsers) {
-//       const { data } = (await api.get(routes.LIST_USERS, { params })).data
-//       return data
-//     } else {
-//       return (await api.get(routes.LIST_USERS, { params })).data
-//     }
-//   } catch (error) {
-//     throw new Error(error)
-//   }
-// }
+interface IUserParams {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password?: string;
+}
+
+async function onGetAllUsers(params: IUserParams) {
+  try {
+    return (await api.get(routes.LIST_USERS, { params })).data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 // async function onCreateUser(payload) {
 //   try {
@@ -22,16 +24,16 @@ import { routes } from '../../types/endpoints'
 //   }
 // }
 
-// const onCreateUser = payload => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .post(routes.CREATE_USER, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
+const onCreateUser = (payload: IUserParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(routes.CREATE_USER, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 
 // const onGetUserDataById = userId => {
 //   return new Promise((resolve, reject) => {
@@ -43,16 +45,16 @@ import { routes } from '../../types/endpoints'
 //       .catch(reject)
 //   })
 // }
-// const onUpdateUser = ({ payload, userId }) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .put('/api/users/' + userId, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
+const onUpdateUser = (payload: IUserParams, userId: string) => {
+  return new Promise((resolve, reject) => {
+    api
+      .put(routes.EDIT_USER + userId, payload)
+      .then((data: any) => {
+        resolve(data?.data);
+      })
+      .catch(reject);
+  });
+};
 
 // const onUpdateProfile = ({ payload, userId }) => {
 //   return new Promise((resolve, reject) => {
@@ -66,9 +68,9 @@ import { routes } from '../../types/endpoints'
 // }
 
 export {
-  // onListAllUsers,
-  // onCreateUser,
+  onGetAllUsers,
+  onCreateUser,
   // onGetUserDataById,
-  // onUpdateUser,
+  onUpdateUser,
   // onUpdateProfile
-}
+};

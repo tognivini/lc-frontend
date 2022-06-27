@@ -8,6 +8,9 @@ const colors = {
   navyBlue: '#162056',
   blue: '#01339B',
   lightBlue: '#1ABCFE',
+  blueGreenLighter: '#12bbad',
+  blueGreenLight: '#0e958a',
+  blueGreenDarker: '#053833',
   red: '#CB2E34',
   secundary: '#CB2E34',
   lightRed: '#F05359',
@@ -20,7 +23,7 @@ const colors = {
   cyan: '#09A68A',
   black: '#272727',
   crmBackgroudColor: '#fafafa',
-  backgroundGray: '#f9f9f9',
+  backgroundGray: '#eaeaea ',
   borderColor: 'rgba(0, 0, 0, 0.25)'
 }
 
@@ -33,6 +36,9 @@ export interface IColors {
     | 'navyBlue'
     | 'blue'
     | 'lightBlue'
+    | 'blueGreenLighter'
+    | 'blueGreenLight'
+    | 'blueGreenDarker'
     | 'red'
     | 'lightRed'
     | 'orange'

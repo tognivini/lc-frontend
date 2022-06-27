@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Container,
@@ -14,17 +15,12 @@ import {
   SpamLink,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
-// import { brand } from '../../../common/images'
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-// import { useMessage } from '../../../contexts/message.context'
 
-// import { Form } from '@unform/web'
 import { routesType } from "../../../resources/routesTypes";
 
-// import * as Yup from 'yup'
-
 const LoginPage = ({ ...props }) => {
-  const { history } = props;
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState();
   const [errorEmail, setErrorEmail] = useState();
@@ -32,76 +28,25 @@ const LoginPage = ({ ...props }) => {
   const [password, setPassword] = useState();
   const [errorPassword, setErrorPassword] = useState();
 
-  // const formRef = useRef(null)
-
   const { onLogin } = useAuth();
-
-  // const { onSignal, onMessageSucess, onMessageFailed } = useMessage()
 
   const [disabled, setDisabled] = useState(false);
 
-  // const handleSubmit = data => {
-  //   const schema = Yup.object().shape({
-  //     user: Yup.string().required('Este campo é obrigatório'),
-  //     password: Yup.string().required('Este campo é obrigatório')
-  //   })
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  //   // formRef.current.setErrors({})
-
-  //   schema
-  //     .validate(data, {
-  //       abortEarly: false
-  //     })
-  //     .then(() => {
-  //       onSignal()
-  //       setDisabled(true)
-  //       onLogin(data)
-  //         .then(res => {
-  //           onMessageSucess('Logado com sucesso', 1500)
-  //           if (props.location.state?.from) {
-  //             const { pathname, search } = props.location.state.from
-  //             return history.push(pathname + search)
-  //           }
-  //           history.push(routesType.CRM_INITIAL)
-  //         })
-  //         .catch(error => {
-  //           const { response } = error || {}
-  //           setDisabled(false)
-  //           onMessageFailed(
-  //             (response?.data?.messages && response?.data?.messages[0]) ||
-  //               'Houve um erro inesperado com seu login'
-  //           )
-  //         })
-  //     })
-  //     .catch(err => {
-  //       onMessageFailed('Verifique os campos do formulário.')
-  //       const validationErrors = {}
-  //       if (err instanceof Yup.ValidationError) {
-  //         err.inner.forEach(error => {
-  //           validationErrors[error.path] = error.message
-  //         })
-
-  //         formRef.current.setErrors(validationErrors)
-  //       }
-  //     })
-  // }
-
-  const handleSubmit = (data) => {
     if (email && password) {
-      console.log("aa", email, password);
       const body = {
         email,
         password,
       };
-      onLogin(body)
-        .then((res) => {
-          // history.push(routesType.CRM_INITIAL)
-          console.log("nice", res);
-        })
+      onLogin(body).then((res) => {
+        navigate(routesType.USER_EDIT);
+      });
     }
   };
   return (
-    <Container>
+    <Container imgOpacity={"0.5"}>
       <TitleGrid>
         <HeaderTitle>Lavanderia CEU</HeaderTitle>
         <SubTitle>UFSM</SubTitle>
@@ -121,9 +66,10 @@ const LoginPage = ({ ...props }) => {
               <CardTitle>LOGIN</CardTitle>
             </BrandView>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div style={{ width: "100%" }}>
               <LoginInput
+                label="E-mail"
                 placeholder="E-mail"
                 name="email"
                 onChange={(e) => {
@@ -132,8 +78,9 @@ const LoginPage = ({ ...props }) => {
                 error={errorEmail}
               />
               <PasswordInput
-                password
+                label="Senha"
                 placeholder="Senha"
+                password
                 name="password"
                 onChange={(e) => {
                   setPassword(e?.target?.value);
@@ -145,12 +92,18 @@ const LoginPage = ({ ...props }) => {
               disabled={disabled}
               type="submit"
               fullWidth
-              color="secundary"
+              color="blueGreenLight"
               style={{ height: 40, fontSize: 20 }}
             >
               Entrar
             </Button>
-            <SpamLink>Não possui uma conta?</SpamLink>
+            <SpamLink
+              onClick={() => {
+                navigate(routesType.AUTH_REGISTER);
+              }}
+            >
+              Não possui uma conta?
+            </SpamLink>
           </form>
         </Content>
       </FormGrid>

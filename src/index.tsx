@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Routes } from './routes';
+import { ConfigRoutes } from './routes';
 import { AuthProvider } from './contexts/auth.context'
 
 
@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     {/* <App /> */}
     <AuthProvider>
-      <Routes />
+      <ConfigRoutes />
     </AuthProvider>
 
   </React.StrictMode>
