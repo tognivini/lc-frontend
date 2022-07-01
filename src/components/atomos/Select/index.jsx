@@ -5,8 +5,9 @@ import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 import { Label } from "../Label";
 import { FlexRow } from "../FlexRow";
+import { SignalCellularConnectedNoInternet4BarOutlined } from "@material-ui/icons";
 
-const Select = ({ value, initialValue, displayValue, label, ...props }) => {
+const Select = ({ value, initialValue, displayValue, label, onSelect, ...props }) => {
   const [dropDown, setDropDown] = useState(false);
   const [option, setOption] = useState(
     initialValue ? initialValue[displayValue] : "Selecione..."
@@ -28,7 +29,7 @@ const Select = ({ value, initialValue, displayValue, label, ...props }) => {
   }, [displayValue, initialValue, value]);
 
   const handleChange = async (e) => {
-    props.onSelect(e);
+    onSelect(e);
   };
 
   if (props.options) {

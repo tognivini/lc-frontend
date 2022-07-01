@@ -39,25 +39,28 @@ const UserSchedulePage = ({ ...props }) => {
 
   const navigate = useNavigate();
 
-  const setUser = useCallback(async () => {
-    if (user) {
-      const userId = user.userId;
-      await onGetAllUsers({ userId }).then((res) => {
-        setName(res[0]?.name);
-        setEmail(res[0]?.email);
-        setPhoneNumber(res[0]?.phoneNumber);
-      });
-    }
-  }, [user]);
+  // const setUser = useCallback(async () => {
+  //   if (user) {
+  //     const userId = user.userId;
+  //     await onGetAllUsers({ userId }).then((res) => {
+  //       setName(res[0]?.name);
+  //       setEmail(res[0]?.email);
+  //       setPhoneNumber(res[0]?.phoneNumber);
+  //     });
+  //   }
+  // }, [user]);
 
-  useEffect(() => {
-    if (user) {
-      setUser();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setUser();
+  //   }
+  // }, [user]);
 
-  const [name, setName] = useState();
   const [laundry, setLaundry] = useState();
+  const [time, setTime] = useState();
+
+  const [washMachine, setWashMachine] = useState();
+
   const [errorName, setErrorName] = useState(false);
   const [email, setEmail] = useState();
   const [errorEmail, setErrorEmail] = useState(false);
@@ -67,24 +70,32 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [oppenedView, setOppenedView] = useState(false);
 
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (laundry && washMachine) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [laundry, washMachine]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const payload = {
-      name,
-      email,
-      phoneNumber,
-    };
-    const userId = user.userId;
-    onUpdateUser(payload, userId).then((res) => {
-      Swal.fire({
-        title: "Sucesso!",
-        text: "Usuário editado com sucesso!",
-        icon: "success",
-        confirmButtonText: "Ok",
-      });
-    });
+    // const payload = {
+    //   name,
+    //   email,
+    //   phoneNumber,
+    // };
+    // const userId = user.userId;
+    // onUpdateUser(payload, userId).then((res) => {
+    //   Swal.fire({
+    //     title: "Sucesso!",
+    //     text: "Usuário editado com sucesso!",
+    //     icon: "success",
+    //     confirmButtonText: "Ok",
+    //   });
+    // });
   };
 
   return (
@@ -105,7 +116,7 @@ const UserSchedulePage = ({ ...props }) => {
           </div>
           <form onSubmit={(e) => handleSubmit(e)}>
             <div style={{ width: "100%" }}>
-              <InputCustom
+              {/* <InputCustom
                 label="Nome"
                 placeholder="Nome"
                 name="name"
@@ -114,18 +125,63 @@ const UserSchedulePage = ({ ...props }) => {
                   setName(e?.target?.value);
                 }}
                 error={errorName}
-              />
+              /> */}
 
               <SelectCustom
                 style={{ marginBottom: 25 }}
                 label="Selecione a lavanderia"
                 options={Object.values(LaundryEnum)}
                 displayValue="label"
-                value="value"
+                value={laundry}
                 name="laundry"
                 initialValue={null}
-                onSelect={(e) => {
-                  setLaundry(e?.target?.value);
+                onSelect={({ label }) => {
+                  setLaundry(label);
+                }}
+                //  initialValue={
+                //    isEdit
+                //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
+                //      : null
+                //  }
+              />
+              <SpacedView>
+                <InputCustom
+                  label="Escolha a DATA desejada"
+                  placeholder="--:--"
+                  // style={{ width: "90%", marginRight:'10%' }}
+                  name="time"
+                  time={true}
+                  value={time}
+                  onChange={(e) => {
+                    setTime(e?.target?.value);
+                  }}
+                  // error={errorName}
+                />
+
+                <InputCustom
+                  label="Escolha a hora desejada"
+                  placeholder="--:--"
+                  // style={{ width: "90%" }}
+                  name="time"
+                  time={true}
+                  value={time}
+                  onChange={(e) => {
+                    setTime(e?.target?.value);
+                  }}
+                  // error={errorName}
+                />
+              </SpacedView>
+
+              <SelectCustom
+                style={{ marginBottom: 25, width: "50%" }}
+                label="Selecione a máquina disponível"
+                options={Object.values(LaundryEnum)}
+                displayValue="label"
+                value={washMachine}
+                name="washMachine"
+                initialValue={null}
+                onSelect={({ label }) => {
+                  setWashMachine(label);
                 }}
                 //  initialValue={
                 //    isEdit
@@ -160,9 +216,9 @@ const UserSchedulePage = ({ ...props }) => {
               <Button
                 disabled={disabled}
                 type="submit"
-                // fullWidth
+                fullWidth
                 color="blueGreenLight"
-                style={{ height: 30, fontSize: 20, with: 30 }}
+                style={{ height: 40, fontSize: 25, with: 30 }}
               >
                 Agendar
               </Button>

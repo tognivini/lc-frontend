@@ -70,7 +70,7 @@ const Input = ({
         }
       >
         <Container className={upperCase ? 'all-upper-case' : ''}>
-          {props.time ? (
+          {props?.time ? (
             <InputDefault
               autoComplete="off"
               type="text"
