@@ -34,48 +34,12 @@ const Input = ({
 
   const inputRef = useRef(null)
 
-  // const { fieldName, registerField, error } = useField(name)
-
-  // useEffect(() => {
-  //   registerField({
-  //     name: fieldName,
-  //     path: 'value',
-  //     ref: inputRef.current
-  //   })
-  // }, [fieldName, registerField])
-  // const error = ''
-
   const onChange = e => {
     setValue(mask(e.target.value, ['99:99']))
     if (props?.onChange && typeof props?.onChange == 'function') {
       props.onChange(e)
     }
   }
-
-  // useEffect(() => {
-  //   if (typeof value === 'string' && props.time) {
-  //     inputRef.current.value = value
-  //     if (value.substring(0, 1) > 3) {
-  //       setValue(
-  //         mask(0 + value.substring(0, 1) + value.substring(2, 5), ['99:99'])
-  //       )
-  //     } else {
-  //       if (value.substring(0, 2) > 23) {
-  //         setValue(mask(23 + value.substring(2, 5), ['99:99']))
-  //       }
-  //     }
-  //     if (value.substring(3, 5) > 59) {
-  //       setValue(mask(value.substring(0, 3) + 59, ['99:99']))
-  //     }
-  //   }
-  // }, [value])
-
-  // useEffect(() => {
-  //   if (initialValue) inputRef.current.value = initialValue
-  // }, [initialValue])
-
-  // if (error) {
-  // }
 
   return (
     <div style={hidden ? { display: 'none' } : { width: '100%' }}>

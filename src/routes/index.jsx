@@ -13,6 +13,7 @@ import { routesType } from "../resources/routesTypes";
 import Header from "./Header";
 
 import { useAuth } from "../contexts/auth.context";
+import { UserSchedulePage } from "../pages/CommonPage/UserSchedulePage";
 
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
@@ -41,10 +42,17 @@ const ConfigRoutes = () => {
               path={routesType.USER_PROFILE}
               element={<UserProfilePage />}
             /> */}
+
             <Route
               exact
               path={routesType.USER_EDIT}
               element={<UserProfilePage />}
+            />
+            
+            <Route
+              exact
+              path={routesType.USER_SCHEDULE}
+              element={<UserSchedulePage />}
             />
 
             {!isAuthenticated ? (
