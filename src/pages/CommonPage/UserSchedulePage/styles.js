@@ -4,6 +4,7 @@ import { Input } from "../../../components/atomos/Input";
 import { InputMask } from "../../../components/atomos/InputMask";
 import { TitleOneComponent } from "../../../components/atomos/TitleOne";
 import { Select } from "../../../components/atomos/Select";
+import { DateInput } from "../../../components/atomos/DateInput";
 import ArrowForwardIos from "@material-ui/icons/ArrowForwardIos";
 
 export const Container = styled.div`
@@ -75,11 +76,14 @@ export const CardTitle = styled(TitleOneComponent)`
 
 export const BrandView = styled.div``;
 
-export const InputCustom = styled(Input)``;
+export const InputC = styled(Input)``;
 
 export const InputMasked = styled(InputMask)``;
 
-export const SelectCustom = styled(Select)``;
+export const SelectInput = styled(Select)``;
+export const DateInputC = styled(DateInput)``;
+
+
 
 export const ContainerButton = styled.div`
   display: flex;

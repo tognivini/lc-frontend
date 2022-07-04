@@ -10,10 +10,11 @@ import {
   // SubTitle,
   FormGrid,
   // TitleGrid,
-  InputCustom,
-  SelectCustom,
+  InputC,
+  SelectInput,
   // PasswordInput,
   InputMasked,
+  DateInputC,
   ContainerButton,
   NextScheduleGrid,
   ArrowForwardIosIcon,
@@ -58,6 +59,7 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [laundry, setLaundry] = useState();
   const [time, setTime] = useState();
+  const [date, setDate] = useState();
 
   const [washMachine, setWashMachine] = useState();
 
@@ -87,6 +89,10 @@ const UserSchedulePage = ({ ...props }) => {
     //   email,
     //   phoneNumber,
     // };
+    
+    const d = new Date(date).toISOString();
+    console.log(d, "d");
+
     // const userId = user.userId;
     // onUpdateUser(payload, userId).then((res) => {
     //   Swal.fire({
@@ -116,18 +122,7 @@ const UserSchedulePage = ({ ...props }) => {
           </div>
           <form onSubmit={(e) => handleSubmit(e)}>
             <div style={{ width: "100%" }}>
-              {/* <InputCustom
-                label="Nome"
-                placeholder="Nome"
-                name="name"
-                value={name}
-                onChange={(e) => {
-                  setName(e?.target?.value);
-                }}
-                error={errorName}
-              /> */}
-
-              <SelectCustom
+              <SelectInput
                 style={{ marginBottom: 25 }}
                 label="Selecione a lavanderia"
                 options={Object.values(LaundryEnum)}
@@ -145,23 +140,23 @@ const UserSchedulePage = ({ ...props }) => {
                 //  }
               />
               <SpacedView>
-                <InputCustom
-                  label="Escolha a DATA desejada"
-                  placeholder="--:--"
-                  // style={{ width: "90%", marginRight:'10%' }}
-                  name="time"
-                  time={true}
-                  value={time}
-                  onChange={(e) => {
-                    setTime(e?.target?.value);
-                  }}
-                  // error={errorName}
+                <DateInputC
+                  name="visitDate"
+                  // style={{ width: "95%" }}
+                  label="Data da visita"
+                  value={date}
+                  setValue={setDate}
+                  // initialValue={
+                  //   isEdit
+                  //     ? format(new Date(editModal.historyDate), "dd/MM/yyyy")
+                  //     : null
+                  // }
                 />
 
-                <InputCustom
+                <InputC
                   label="Escolha a hora desejada"
                   placeholder="--:--"
-                  // style={{ width: "90%" }}
+                  style={{ marginLeft: "5%" }}
                   name="time"
                   time={true}
                   value={time}
@@ -172,25 +167,28 @@ const UserSchedulePage = ({ ...props }) => {
                 />
               </SpacedView>
 
-              <SelectCustom
-                style={{ marginBottom: 25, width: "50%" }}
-                label="Selecione a máquina disponível"
-                options={Object.values(LaundryEnum)}
-                displayValue="label"
-                value={washMachine}
-                name="washMachine"
-                initialValue={null}
-                onSelect={({ label }) => {
-                  setWashMachine(label);
-                }}
-                //  initialValue={
-                //    isEdit
-                //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
-                //      : null
-                //  }
-              />
+              <SpacedView>
+                <SelectInput
+                  style={{ marginBottom: 25 }}
+                  label="Selecione a máquina disponível"
+                  options={Object.values(LaundryEnum)}
+                  displayValue="label"
+                  value={washMachine}
+                  name="washMachine"
+                  initialValue={null}
+                  onSelect={({ label }) => {
+                    setWashMachine(label);
+                  }}
+                  //  initialValue={
+                  //    isEdit
+                  //      ? Enum[data.reason] || undefined
+                  //      : null
+                  //  }
+                />
+                <span style={{ width: "100%" }}></span>
+              </SpacedView>
 
-              {/* <InputCustom
+              {/* <InputInput
                 label="E-mail"
                 placeholder="E-mail"
                 name="email"
