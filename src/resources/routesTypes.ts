@@ -10,4 +10,6 @@ export enum routesType {
   SCHEDULE_LIST = "/schedule/",
   USER_SCHEDULE = "/schedule/user/:id",
   SCHEDULE_EDIT = "/schedule/edit/:id",
+  LAUNDRY_LIST = "/laundry",
+
 }

@@ -27,9 +27,9 @@ const DateInput = ({
   //   props.initialValue ? props.initialValue : null
   // )
 
-  const [returnValue, setReturnForm] = useState(
-    props.initialValue ? props.initialValue : null
-  );
+  // const [returnValue, setReturnForm] = useState(
+  //   props.initialValue ? props.initialValue : null
+  // );
 
   const onShowItems = (value) => toggleShowItems(value);
 
@@ -85,7 +85,7 @@ const DateInput = ({
               right: 0,
               margin: 8,
               cursor: !readOnly ? "pointer" : "default",
-              color: readOnly ? "#595959" : colors.red,
+              color: readOnly ? "#595959" : colors.blueGreenLighter,
             }}
             onClick={() => (!readOnly ? onShowItems(true) : undefined)}
           />

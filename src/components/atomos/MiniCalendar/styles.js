@@ -165,7 +165,7 @@ export const Container = styled.div`
       align-items: center;
       .react-calendar__navigation__label {
         font-size: 20px;
-        color: ${colors.secundary};
+        /* color: ${colors.secundary}; */
         font-weight: bold;
       }
 
@@ -175,7 +175,7 @@ export const Container = styled.div`
 
     }
     .react-calendar__navigation__arrow {
-      color: ${colors.secundary};
+      /* color: ${colors.secundary}; */
       font-size: 30px;
     }
     .react-calendar__tile--now {
@@ -188,7 +188,7 @@ export const Container = styled.div`
       }
     } */
     .react-calendar__tile--active {
-      background: #e70220;
+      /* background: #e70220; */
       color: white;
       font-weight: bold;
       border-radius: 10px;
@@ -198,7 +198,7 @@ export const Container = styled.div`
     }
     .react-calendar__tile--active:enabled:hover,
     .react-calendar__tile--active:enabled:focus {
-      background: #e70220;
+      /* background: #e70220; */
       border-radius: 10px;
     }
     .react-calendar__navigation__next2-button {

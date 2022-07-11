@@ -40,6 +40,12 @@ const Header = () => {
 
           {isAuthenticated && (
             <Li className="nav-item mx-3">
+              <Link to={routesType.LAUNDRY_LIST}>Lavanderias</Link>
+            </Li>
+          )}
+
+          {isAuthenticated && (
+            <Li className="nav-item mx-3">
               <span
                 onClick={() => {
                   onLogout().then(() => {
