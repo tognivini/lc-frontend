@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 import {
   Container,
@@ -22,40 +23,26 @@ import {
   SpacedView,
   NextScheduleContent,
   CardTitleNextSchedule,
+  ContainerNexSchedule,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
+import { Table } from "../../../components/molecules/Table";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+import { colors } from "../../../common/types/IColors";
 
 import {
-  onGetAllUsers,
-  onUpdateUser,
+  onGetAllNextSchedules,
+  // onUpdateUser,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
 
 import { routesType } from "../../../resources/routesTypes";
-import { LaundryEnum } from "../../../services/enums";
+import { LaundryEnum, SituationScheduleEnum } from "../../../services/enums";
 
 const UserSchedulePage = ({ ...props }) => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
-
-  // const setUser = useCallback(async () => {
-  //   if (user) {
-  //     const userId = user.userId;
-  //     await onGetAllUsers({ userId }).then((res) => {
-  //       setName(res[0]?.name);
-  //       setEmail(res[0]?.email);
-  //       setPhoneNumber(res[0]?.phoneNumber);
-  //     });
-  //   }
-  // }, [user]);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     setUser();
-  //   }
-  // }, [user]);
 
   const [laundry, setLaundry] = useState();
   const [time, setTime] = useState();
@@ -66,6 +53,7 @@ const UserSchedulePage = ({ ...props }) => {
   const [errorName, setErrorName] = useState(false);
   const [email, setEmail] = useState();
   const [errorEmail, setErrorEmail] = useState(false);
+  const [nextSchedules, setNextSchedules] = useState(false);
 
   const [phoneNumber, setPhoneNumber] = useState();
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
@@ -73,6 +61,22 @@ const UserSchedulePage = ({ ...props }) => {
   const [oppenedView, setOppenedView] = useState(false);
 
   const [disabled, setDisabled] = useState(true);
+
+  const onGetNextSchedules = useCallback(async () => {
+    if (user) {
+      const userId = user.userId;
+      //verificar
+      await onGetAllNextSchedules({userId}).then((res) => {
+        setNextSchedules(res?.data);
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      onGetNextSchedules();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (laundry && washMachine) {
@@ -89,7 +93,7 @@ const UserSchedulePage = ({ ...props }) => {
     //   email,
     //   phoneNumber,
     // };
-    
+
     const d = new Date(date).toISOString();
     console.log(d, "d");
 
@@ -233,12 +237,61 @@ const UserSchedulePage = ({ ...props }) => {
         >
           <>
             {oppenedView ? (
-              <SpacedView>
-                <CardTitleNextSchedule>
-                  Proximos Agendamentos
-                </CardTitleNextSchedule>
-                <ArrowForwardIosIconDown />
-              </SpacedView>
+              <ContainerNexSchedule>
+                <SpacedView>
+                  <CardTitleNextSchedule>
+                    Proximos agendamentos
+                  </CardTitleNextSchedule>
+                  <ArrowForwardIosIconDown />
+                </SpacedView>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Status</th>
+                      <th style={{ width: 170 }}>Endereço</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {nextSchedules ? (
+                      nextSchedules?.map((schedule, key) => {
+                        const newDate = new Date().toISOString();
+                        const formatedDate = format(
+                          new Date(newDate),
+                          "MM/dd/yyyy"
+                        );
+
+                        return (
+                          <tr key={key}>
+                            <td>{formatedDate}</td>
+                            <td>{schedule?.laundry?.address}</td>
+                            <td>
+                              {schedule?.situation ? SituationScheduleEnum[schedule?.situation].label : '-'}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <></>
+                    )}
+                  </tbody>
+                  {!nextSchedules && (
+                    <tfoot>
+                      <tr>
+                        <td
+                          colspan="3"
+                          style={{
+                            fontSize: 20,
+                            backgroundColor: `${colors.lightGray}`,
+                          }}
+                        >
+                          Não há agendamentos futuros
+                        </td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </Table>
+              </ContainerNexSchedule>
             ) : (
               <SpacedView>
                 <CardTitleNextSchedule>

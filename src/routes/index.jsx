@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   BrowserRouter as Router,
@@ -68,7 +68,10 @@ const ConfigRoutes = () => {
                 element={<Navigate to={routesType.AUTH_ROOT} replace />}
               />
             ) : (
-              <></>
+              <Route
+                path="*"
+                element={<Navigate to={routesType.USER_EDIT} replace />}
+              />
             )}
 
             {/* <Route

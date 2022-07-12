@@ -94,10 +94,7 @@ export const DefaultButton = styled.button`
     const key = color || 'blueGreenLight'
     return colors[key]
   }};
-  color: ${colors.white};
   line-height: 14px;
-  /* width: ${customWidth => customWidth ? customWidth  : 'fit-content' } ; */
-
   ${({ fullWidth }) => fullWidth && fullWidthStyle}
 
   display: flex;
@@ -142,9 +139,9 @@ export const DefaultButton = styled.button`
   }
 
   :disabled {
-    background: ${colors.lightGray};
+    background: ${colors.gray};
     border: none;
-    color: ${colors.gray};
+    color: ${colors.white};
     cursor: default;
   }
 

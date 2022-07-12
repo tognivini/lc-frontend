@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useState
 } from 'react'
-import { useField } from '@unform/core'
+// import { useField } from '@unform/core'
 
 import { AreaText, Container } from './styles'
 
@@ -32,7 +32,7 @@ const TextArea = ({
   const valueLength = useRef(null)
   const [textLengthValue, setTextLengthValue] = useState(0)
   const textLength = useRef(0)
-  const { fieldName, registerField, error } = useField(name)
+  // const { fieldName, registerField, error } = useField(name)
 
   const onSetValueLength = useCallback(value => {
     textLength.current = value
@@ -41,13 +41,13 @@ const TextArea = ({
 
   useImperativeHandle(valueLength, () => ({ onSetValueLength }))
 
-  useEffect(() => {
-    registerField({
-      name: fieldName,
-      path: 'value',
-      ref: inputRef.current
-    })
-  }, [fieldName, registerField])
+  // useEffect(() => {
+  //   registerField({
+  //     name: fieldName,
+  //     path: 'value',
+  //     ref: inputRef.current
+  //   })
+  // }, [fieldName, registerField])
   return (
     <div style={hidden ? { display: 'none' } : { width: '100%' }}>
       <FlexRow>
@@ -89,7 +89,7 @@ const TextArea = ({
         }
       >
         <Container noMargin>
-          <AreaText
+          {/* <AreaText
             error={Boolean(error) || textLengthValue > Number(maxLength)}
             ref={inputRef}
             {...props}
@@ -103,10 +103,10 @@ const TextArea = ({
                 valueLength.current.onSetValueLength(event.target.value.length)
               }
             }}
-          />
+          /> */}
           {children}
         </Container>
-        {(error || textLengthValue > Number(maxLength)) && (
+        {/* {(error || textLengthValue > Number(maxLength)) && (
           <span
             style={{
               position: 'absolute',
@@ -123,7 +123,7 @@ const TextArea = ({
               : textLengthValue > Number(maxLength) &&
                 'Número máximo de caracteres excedido.'}
           </span>
-        )}
+        )} */}
       </div>
     </div>
   )

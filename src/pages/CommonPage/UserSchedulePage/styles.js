@@ -121,6 +121,11 @@ export const NextScheduleContent = styled.div`
   width: 70vw;
 `;
 
+export const ContainerNexSchedule = styled.div`
+display: flex;
+flex-direction: column;
+`
+
 export const CardTitleNextSchedule = styled(TitleOneComponent)`
   /* text-align: left; */
   color: ${colors.darkGray};

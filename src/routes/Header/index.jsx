@@ -3,10 +3,33 @@ import { routesType } from "../../resources/routesTypes";
 import { Container, UlCustom, Li } from "./styles";
 import { useAuth } from "../../contexts/auth.context";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { TypeUserEnum } from "../../services/enums";
 
 const Header = () => {
-  const { isAuthenticated, onLogout } = useAuth();
+  const { isAuthenticated, onLogout, user } = useAuth();
+
   const navigate = useNavigate();
+
+  const [isAdmin, setIsAdmin] = useState();
+  const [isBolsista, setIsBolsista] = useState();
+
+  useEffect(() => {
+    if (user) {
+      if (user?.permissionType === TypeUserEnum.ADMIN) {
+        setIsAdmin(true);
+      } else if (user?.permissionType === TypeUserEnum.BOLSISTA) {
+        setIsAdmin(false);
+        setIsBolsista(true);
+      } else {
+        setIsAdmin(false);
+        setIsBolsista(false);
+      }
+    } else {
+      setIsAdmin(false);
+      setIsBolsista(false);
+    }
+  }, [user]);
 
   return (
     <nav className="navbar">
@@ -38,9 +61,15 @@ const Header = () => {
             </Li>
           )}
 
-          {isAuthenticated && (
+          {isAuthenticated && isAdmin && (
             <Li className="nav-item mx-3">
               <Link to={routesType.LAUNDRY_LIST}>Lavanderias</Link>
+            </Li>
+          )}
+
+          {isAuthenticated && (isBolsista || isAdmin) && (
+            <Li className="nav-item mx-3">
+              <Link to={routesType.BOLSISTA_AREA}>Área Bolsista</Link>
             </Li>
           )}
 
@@ -49,7 +78,6 @@ const Header = () => {
               <span
                 onClick={() => {
                   onLogout().then(() => {
-                    console.log("then");
                     navigate(routesType.USER_EDIT);
                   });
                 }}
