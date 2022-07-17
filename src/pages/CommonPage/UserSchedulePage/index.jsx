@@ -43,15 +43,25 @@ const UserSchedulePage = ({ ...props }) => {
 
   const navigate = useNavigate();
 
-  const [laundry, setLaundry] = useState();
+  const [arrayLaundryes, setArrayLaundryes] = useState();
   const [allLaundryes, setAllLaundryes] = useState();
+  const [selectedLaundry, setSelectedLaundry] = useState();
+
+  const [arrayWashMachines, setArrayWashMachines] = useState();
+  const [allWashMachines, setAllWashMachines] = useState();
+  const [selectedWashMachine, setSelectedWashMachine] = useState();
+  const [arrayAvailableWashMachines, setArrayAvailableWashMachines] = useState(
+    []
+  );
+
+  const [selectedHour, setSelectedHour] = useState();
+
+
   const [time, setTime] = useState();
   const [date, setDate] = useState();
 
-  const [washMachine, setWashMachine] = useState();
-
   const [nextSchedules, setNextSchedules] = useState(false);
-  const [availableLaundryes, setAvailableLaundryes] = useState(false);
+  const [availableWashMachines, setAvailableWashMachines] = useState(false);
 
   const [oppenedView, setOppenedView] = useState(false);
 
@@ -60,52 +70,69 @@ const UserSchedulePage = ({ ...props }) => {
   const onGetNextSchedules = useCallback(async () => {
     if (user) {
       const userId = user.userId;
-      //verificar
       await onGetAllNextSchedules({ userId }).then((res) => {
         setNextSchedules(res?.data);
       });
     }
   }, [user]);
 
-  const onGetAllLaundryes =  useCallback(async() => {
-    await onGetAllLaundrys().then((res) => {
-      setAllLaundryes(res?.data);
+  const onGetAllLaundryes = useCallback(async () => {
+    await onGetAllLaundrys().then((data) => {
+      if (data?.data) {
+        const arr = [];
+        data?.data.map((thisLaundry) => {
+          return arr.push({
+            label: thisLaundry?.name,
+            value: thisLaundry?.id,
+          });
+        });
+        setArrayLaundryes(arr);
+        setAllLaundryes(data?.data);
+      }
     });
-}, []);
+  }, []);
 
   useEffect(() => {
     if (user) {
       onGetNextSchedules();
-      onGetAllLaundryes()
+      onGetAllLaundryes();
     }
   }, [user]);
 
   useEffect(() => {
-    if (laundry && washMachine) {
+    if (selectedLaundry && selectedWashMachine && selectedHour) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [laundry, washMachine]);
+  }, [selectedLaundry, selectedWashMachine, selectedHour]);
 
-console.log(allLaundryes)
-
-  const getAvailableLaundryes =  useCallback(async() => {
-    console.log("checke", laundry);
-    if (laundry) {
-      const laundryId = '990be513-c70e-45c0-8ffd-3a978e801bca'
-      await onGetAllLaundrys({laundryId}).then((res) => {
-        console.log(res, 'res')
-        setAvailableLaundryes(res?.data?.washMachines);
-      });
+  const getAvailableMachinesByLaundryId = useCallback(async () => {
+    if (selectedLaundry) {
+      const laundryFinded = allLaundryes.find(
+        (thisLaundry) => thisLaundry.id === selectedLaundry.value
+      );
+      if (laundryFinded?.washMachines) {
+        const arr = [];
+        laundryFinded?.washMachines.map((thisWashMachine) => {
+          return arr.push({
+            label: `Máquina ${thisWashMachine?.number}`,
+            value: thisWashMachine?.id,
+          });
+        });
+        setArrayAvailableWashMachines(arr);
+        setAvailableWashMachines(laundryFinded?.washMachines);
+      } else {
+        setAvailableWashMachines([]);
+      }
     }
-  }, [laundry]);
+  }, [allLaundryes, selectedLaundry]);
 
-  useEffect(()=>{
-    if (laundry && date) {
-      getAvailableLaundryes()
+  useEffect(() => {
+    if (selectedLaundry && date) {
+      getAvailableMachinesByLaundryId();
     }
-  }, [laundry, date]);
+  }, [selectedLaundry, date]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -150,13 +177,13 @@ console.log(allLaundryes)
               <SelectInput
                 style={{ marginBottom: 25 }}
                 label="Selecione a lavanderia"
-                options={Object.values(LaundryEnum)}
+                options={arrayLaundryes}
                 displayValue="label"
-                value={laundry}
-                name="laundry"
+                value={selectedLaundry}
+                name="selectedLaundry"
                 initialValue={null}
-                onSelect={({ label }) => {
-                  setLaundry(label);
+                onSelect={(selected) => {
+                  setSelectedLaundry(selected);
                 }}
                 //  initialValue={
                 //    isEdit
@@ -171,51 +198,39 @@ console.log(allLaundryes)
                   label="Data da visita"
                   value={date}
                   setValue={setDate}
-                  // initialValue={
-                  //   isEdit
-                  //     ? format(new Date(editModal.historyDate), "dd/MM/yyyy")
-                  //     : null
-                  // }
                 />
 
+                <div style={{ width: "100%", marginLeft: "5%" }}>
+                  <SelectInput
+                    label="Selecione a máquina disponível"
+                    options={arrayAvailableWashMachines}
+                    displayValue="label"
+                    value={selectedWashMachine}
+                    name="washMachine"
+                    initialValue={null}
+                    onSelect={(selected) => {
+                      setSelectedWashMachine(selected);
+                    }}
+                  />
+                </div>
+              </SpacedView>
+
+              <SpacedView>
                 <SelectInput
-                  style={{ marginLeft: "5%" }}
-                  label="Escolha a hora desejada"
+                  style={{ marginBottom: 25 }}
+                  label="Escolha a hora de início"
                   options={Object.values(LaundryEnum)}
                   displayValue="label"
                   value={time}
                   name="time"
                   initialValue={null}
                   onSelect={({ label }) => {
-                    setTime(label);
+                    setSelectedHour(label);
                   }}
-                  //  initialValue={
-                  //    isEdit
-                  //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
-                  //      : null
-                  //  }
                 />
-              </SpacedView>
-
-              <SpacedView>
-                <SelectInput
-                  style={{ marginBottom: 25 }}
-                  label="Selecione a máquina disponível"
-                  options={Object.values(LaundryEnum)}
-                  displayValue="label"
-                  value={washMachine}
-                  name="washMachine"
-                  initialValue={null}
-                  onSelect={({ label }) => {
-                    setWashMachine(label);
-                  }}
-                  //  initialValue={
-                  //    isEdit
-                  //      ? Enum[data.reason] || undefined
-                  //      : null
-                  //  }
-                />
-                <span style={{ width: "100%" }}></span>
+                <div style={{ width: "100%", marginLeft: "5%", marginTop: "4%", color: 'red' }}>
+                  Por padrão será reservado um espaço de 2h por agendamento (conforme o ciclo das máquinas)
+                </div>
               </SpacedView>
             </div>
             <ContainerButton>
