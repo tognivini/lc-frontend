@@ -11,10 +11,8 @@ import {
   // SubTitle,
   FormGrid,
   // TitleGrid,
-  InputC,
   SelectInput,
   // PasswordInput,
-  InputMasked,
   DateInputC,
   ContainerButton,
   NextScheduleGrid,
@@ -32,6 +30,7 @@ import { colors } from "../../../common/types/IColors";
 
 import {
   onGetAllNextSchedules,
+  onGetAllLaundrys,
   // onUpdateUser,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
@@ -45,18 +44,14 @@ const UserSchedulePage = ({ ...props }) => {
   const navigate = useNavigate();
 
   const [laundry, setLaundry] = useState();
+  const [allLaundryes, setAllLaundryes] = useState();
   const [time, setTime] = useState();
   const [date, setDate] = useState();
 
   const [washMachine, setWashMachine] = useState();
 
-  const [errorName, setErrorName] = useState(false);
-  const [email, setEmail] = useState();
-  const [errorEmail, setErrorEmail] = useState(false);
   const [nextSchedules, setNextSchedules] = useState(false);
-
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
+  const [availableLaundryes, setAvailableLaundryes] = useState(false);
 
   const [oppenedView, setOppenedView] = useState(false);
 
@@ -66,15 +61,22 @@ const UserSchedulePage = ({ ...props }) => {
     if (user) {
       const userId = user.userId;
       //verificar
-      await onGetAllNextSchedules({userId}).then((res) => {
+      await onGetAllNextSchedules({ userId }).then((res) => {
         setNextSchedules(res?.data);
       });
     }
   }, [user]);
 
+  const onGetAllLaundryes =  useCallback(async() => {
+    await onGetAllLaundrys().then((res) => {
+      setAllLaundryes(res?.data);
+    });
+}, []);
+
   useEffect(() => {
     if (user) {
       onGetNextSchedules();
+      onGetAllLaundryes()
     }
   }, [user]);
 
@@ -85,6 +87,25 @@ const UserSchedulePage = ({ ...props }) => {
       setDisabled(true);
     }
   }, [laundry, washMachine]);
+
+console.log(allLaundryes)
+
+  const getAvailableLaundryes =  useCallback(async() => {
+    console.log("checke", laundry);
+    if (laundry) {
+      const laundryId = '990be513-c70e-45c0-8ffd-3a978e801bca'
+      await onGetAllLaundrys({laundryId}).then((res) => {
+        console.log(res, 'res')
+        setAvailableLaundryes(res?.data?.washMachines);
+      });
+    }
+  }, [laundry]);
+
+  useEffect(()=>{
+    if (laundry && date) {
+      getAvailableLaundryes()
+    }
+  }, [laundry, date]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -157,17 +178,22 @@ const UserSchedulePage = ({ ...props }) => {
                   // }
                 />
 
-                <InputC
-                  label="Escolha a hora desejada"
-                  placeholder="--:--"
+                <SelectInput
                   style={{ marginLeft: "5%" }}
-                  name="time"
-                  time={true}
+                  label="Escolha a hora desejada"
+                  options={Object.values(LaundryEnum)}
+                  displayValue="label"
                   value={time}
-                  onChange={(e) => {
-                    setTime(e?.target?.value);
+                  name="time"
+                  initialValue={null}
+                  onSelect={({ label }) => {
+                    setTime(label);
                   }}
-                  // error={errorName}
+                  //  initialValue={
+                  //    isEdit
+                  //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
+                  //      : null
+                  //  }
                 />
               </SpacedView>
 
@@ -191,28 +217,6 @@ const UserSchedulePage = ({ ...props }) => {
                 />
                 <span style={{ width: "100%" }}></span>
               </SpacedView>
-
-              {/* <InputInput
-                label="E-mail"
-                placeholder="E-mail"
-                name="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e?.target?.value);
-                }}
-                error={errorEmail}
-              />
-              <InputMasked
-                label="Telefone"
-                mask="cellPhone"
-                placeholder="(99) 99999-9999"
-                name="phoneNumber"
-                controlledValue={phoneNumber}
-                onChange={(e) => {
-                  setPhoneNumber(e?.target?.value);
-                }}
-                error={errorPhoneNumber}
-              /> */}
             </div>
             <ContainerButton>
               <Button
@@ -266,7 +270,10 @@ const UserSchedulePage = ({ ...props }) => {
                             <td>{formatedDate}</td>
                             <td>{schedule?.laundry?.address}</td>
                             <td>
-                              {schedule?.situation ? SituationScheduleEnum[schedule?.situation].label : '-'}
+                              {schedule?.situation
+                                ? SituationScheduleEnum[schedule?.situation]
+                                    .label
+                                : "-"}
                             </td>
                           </tr>
                         );

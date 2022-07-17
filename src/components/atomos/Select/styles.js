@@ -110,7 +110,7 @@ export const Div = styled.div`
   }
 
   .open {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
     transition: transform 0.3s;
   }
 
