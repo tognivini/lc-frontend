@@ -8,7 +8,7 @@ interface IUserInterface {
   password?: string;
 }
 
-interface ILaundryParams {
+interface ILaundryInterface {
   address: string;
   name: string;
   responsible: IUserInterface;
@@ -16,8 +16,19 @@ interface ILaundryParams {
   washMachines: [];
 }
 
-//mudar
-async function onGetAllNextSchedules(params: ILaundryParams) {
+interface IWashMachineInterface {}
+
+interface IScheduleParams {
+  laundry: ILaundryInterface;
+  client: IUserInterface;
+  responsible: IUserInterface;
+  washMachine: IWashMachineInterface;
+  startHour: string;
+  endHour: string;
+  date: Date;
+}
+
+async function onGetAllNextSchedules(params: IScheduleParams) {
   try {
     return (await api.get(routes.LIST_SCHEDULES, { params })).data;
   } catch (error) {
@@ -25,18 +36,18 @@ async function onGetAllNextSchedules(params: ILaundryParams) {
   }
 }
 
-// const onCreateUser = (payload: ILaundryParams) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .post(routes.CREATE_USER, payload)
-//       .then(({ data }) => {
-//         resolve(data);
-//       })
-//       .catch(reject);
-//   });
-// };
+const onCreateSchedule = (payload: IScheduleParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(routes.CREATE_SCHEDULE, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 
-// const onUpdateUser = (payload: ILaundryParams, userId: string) => {
+// const onUpdateUser = (payload: IScheduleParams, userId: string) => {
 //   return new Promise((resolve, reject) => {
 //     api
 //       .put(routes.EDIT_USER + userId, payload)
@@ -49,5 +60,5 @@ async function onGetAllNextSchedules(params: ILaundryParams) {
 
 export {
   onGetAllNextSchedules,
-  // onUpdateProfile
+  onCreateSchedule
 };

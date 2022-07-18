@@ -100,7 +100,13 @@ const DateInput = ({
               selectRange={false}
               onChange={(date) => {
                 // setReturnForm(date);
-                onSetInputValue(format(date, "dd/MM/yyyy"));
+                // const newObject = {
+                //   value: format(date, "yyyy-MM-dd"),
+                //   label:format(date, "dd/MM/yyyy")
+                //  }
+                onSetInputValue(format(date, "yyyy-MM-dd"));
+                // onSetInputValue(format(date, "dd/MM/yyyy"));
+                // onSetInputValue(newObject);
               }}
             />
           </Items>

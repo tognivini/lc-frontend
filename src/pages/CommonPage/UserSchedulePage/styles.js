@@ -138,3 +138,7 @@ export const SpacedView = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const VisibleSpan = styled.span`
+  ${(props) => props.visible ? '' : 'display: none' };
+`

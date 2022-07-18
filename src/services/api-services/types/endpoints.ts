@@ -7,10 +7,10 @@ const routes = {
 
   // Schedules
   LIST_SCHEDULES: '/api/schedule',
-  CREATE_SCHEDULE: '/api/schedules',
+  CREATE_SCHEDULE: '/api/schedule/create',
   // GET_NEXT_SCHEDULES: '/api/schedules/next-visits',
-  EDIT_SCHEDULE: '/api/schedules',
-  DELETE_SCHEDULE: '/api/schedules',
+  EDIT_SCHEDULE: '/api/schedule/:id',
+  DELETE_SCHEDULE: '/api/schedule',
 
    // Laundry
    LIST_LAUNDRY: '/api/laundry',

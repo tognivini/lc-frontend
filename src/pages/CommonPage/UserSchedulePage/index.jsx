@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { parseISO } from "date-fns";
+import { format, utcToZonedTime } from "date-fns-tz";
 
 import {
   Container,
@@ -22,6 +23,7 @@ import {
   NextScheduleContent,
   CardTitleNextSchedule,
   ContainerNexSchedule,
+  VisibleSpan,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
@@ -31,12 +33,16 @@ import { colors } from "../../../common/types/IColors";
 import {
   onGetAllNextSchedules,
   onGetAllLaundrys,
-  // onUpdateUser,
+  onCreateSchedule,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
 
 import { routesType } from "../../../resources/routesTypes";
-import { LaundryEnum, SituationScheduleEnum } from "../../../services/enums";
+import {
+  LaundryEnum,
+  MockedBaseHourEnum,
+  SituationScheduleEnum,
+} from "../../../services/enums";
 
 const UserSchedulePage = ({ ...props }) => {
   const { user } = useAuth();
@@ -49,6 +55,9 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [arrayWashMachines, setArrayWashMachines] = useState();
   const [allWashMachines, setAllWashMachines] = useState();
+
+  const [responsible, setResponsible] = useState();
+
   const [selectedWashMachine, setSelectedWashMachine] = useState();
   const [arrayAvailableWashMachines, setArrayAvailableWashMachines] = useState(
     []
@@ -56,9 +65,10 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [selectedHour, setSelectedHour] = useState();
 
-
   const [time, setTime] = useState();
+
   const [date, setDate] = useState();
+  const [selectedDate, setSelectedDate] = useState();
 
   const [nextSchedules, setNextSchedules] = useState(false);
   const [availableWashMachines, setAvailableWashMachines] = useState(false);
@@ -122,6 +132,7 @@ const UserSchedulePage = ({ ...props }) => {
         });
         setArrayAvailableWashMachines(arr);
         setAvailableWashMachines(laundryFinded?.washMachines);
+        setResponsible(laundryFinded?.responsible);
       } else {
         setAvailableWashMachines([]);
       }
@@ -134,16 +145,55 @@ const UserSchedulePage = ({ ...props }) => {
     }
   }, [selectedLaundry, date]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // const payload = {
-    //   name,
-    //   email,
-    //   phoneNumber,
-    // };
+  useEffect(() => {
+    // selectedDate
+      console.log(selectedDate, 'test')
+    }, [selectedDate]);
 
-    const d = new Date(date).toISOString();
-    console.log(d, "d");
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const parsedTime = parseISO(date);
+    const formatInTimeZone = (date, fmt, tz) =>
+      format(utcToZonedTime(date, tz), fmt, { timeZone: tz });
+      const formattedTime = formatInTimeZone(parsedTime, "yyyy-MM-dd kk:mm:ss xxx", "UTC");
+
+    // const formatedDate = new Date(date);
+    const payload = {
+      laundry: {
+        id: selectedLaundry?.value,
+      },
+      // date,
+      washMachine: {
+        id: selectedWashMachine?.value,
+      },
+      startHour: selectedHour,
+      endHour: selectedHour,
+      responsible: { id: responsible.id },
+      date: formattedTime,
+      client: { id: user?.userId },
+    };
+
+    // await onCreateSchedule(payload).then((data) => {
+    //   console.log("rres:", data);
+    //   if (data?.statusCode === 200 && data?.success) {
+    //     Swal.fire({
+    //       title: "Sucesso!",
+    //       text: "Agendamento criado com sucesso!",
+    //       icon: "success",
+    //       confirmButtonText: "Ok",
+    //     });
+    //   } else {
+    //     Swal.fire({
+    //       title: "Erro!",
+    //       text: "Ocorreu um problema ao criar o agendamento!",
+    //       icon: "error",
+    //       confirmButtonText: "Ok",
+    //     });
+    //   }
+    // });
 
     // const userId = user.userId;
     // onUpdateUser(payload, userId).then((res) => {
@@ -198,6 +248,8 @@ const UserSchedulePage = ({ ...props }) => {
                   label="Data da visita"
                   value={date}
                   setValue={setDate}
+                  // value={selectedDate}
+                  // setValue={setSelectedDate}
                 />
 
                 <div style={{ width: "100%", marginLeft: "5%" }}>
@@ -219,7 +271,7 @@ const UserSchedulePage = ({ ...props }) => {
                 <SelectInput
                   style={{ marginBottom: 25 }}
                   label="Escolha a hora de início"
-                  options={Object.values(LaundryEnum)}
+                  options={Object.values(MockedBaseHourEnum)}
                   displayValue="label"
                   value={time}
                   name="time"
@@ -228,8 +280,20 @@ const UserSchedulePage = ({ ...props }) => {
                     setSelectedHour(label);
                   }}
                 />
-                <div style={{ width: "100%", marginLeft: "5%", marginTop: "4%", color: 'red' }}>
-                  Por padrão será reservado um espaço de 2h por agendamento (conforme o ciclo das máquinas)
+                <div
+                  style={{
+                    width: "100%",
+                    marginLeft: "5%",
+                    marginTop: "4%",
+                    color: "red",
+                  }}
+                >
+                  <VisibleSpan
+                    visible={selectedLaundry && selectedWashMachine && date}
+                  >
+                    Por padrão será reservado um espaço de 2h por agendamento
+                    (conforme o ciclo das máquinas)
+                  </VisibleSpan>
                 </div>
               </SpacedView>
             </div>
