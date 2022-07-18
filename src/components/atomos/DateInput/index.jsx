@@ -5,7 +5,7 @@ import { MiniCalendar } from "../MiniCalendar";
 import { format } from "date-fns";
 import { ClickAwayListener } from "@material-ui/core";
 import { Label } from "../Label";
-import * as remask from "remask";
+// import * as remask from "remask";
 
 import TodayIcon from "@material-ui/icons/Today";
 import { colors } from "../../../common/types/IColors";
@@ -20,16 +20,9 @@ const DateInput = ({
   readOnly,
   ...props
 }) => {
-  const dateRegex =
-    /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
+  // const dateRegex =
+  //   /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
   const [showItems, toggleShowItems] = useState(false);
-  // const [value, setValue] = useState(
-  //   props.initialValue ? props.initialValue : null
-  // )
-
-  // const [returnValue, setReturnForm] = useState(
-  //   props.initialValue ? props.initialValue : null
-  // );
 
   const onShowItems = (value) => toggleShowItems(value);
 
@@ -41,7 +34,6 @@ const DateInput = ({
   useEffect(() => {
     if (props.initialValue) {
       setValue(props.initialValue);
-      // setReturnForm(props.initialValue);
     }
   }, [props.initialValue]);
 
@@ -58,20 +50,11 @@ const DateInput = ({
           <UnconnectedInput
             {...props}
             placeholder="dd/mm/aaaa"
-            onChange={({ target: { value } }) => {
-              const dateMask = remask.mask(value, ["99/99/9999"]);
-
-              onSetInputValue(dateMask);
-
-              // if (dateMask.length === "dd/mm/yyyy".length) {
-              //   if (dateRegex.test(dateMask)) {
-              //     setReturnForm(dateMask);
-              //   }
-              // } else {
-              //   setReturnForm(null);
-              // }
-            }}
-            value={value ? value : ""}
+            // onChange={({ target: { value } }) => {
+            //   const dateMask = remask.mask(value, ["99/99/9999"]);
+            //   // onSetInputValue(dateMask);
+            // }}
+            value={value ? value?.label : ""}
             name="dateRoot"
             maxLength={"99/99/9999".length}
             readOnly={readOnly}
@@ -99,14 +82,11 @@ const DateInput = ({
               view="month"
               selectRange={false}
               onChange={(date) => {
-                // setReturnForm(date);
-                // const newObject = {
-                //   value: format(date, "yyyy-MM-dd"),
-                //   label:format(date, "dd/MM/yyyy")
-                //  }
-                onSetInputValue(format(date, "yyyy-MM-dd"));
-                // onSetInputValue(format(date, "dd/MM/yyyy"));
-                // onSetInputValue(newObject);
+                const newObject = {
+                  value: format(date, "yyyy-MM-dd"),
+                  label:format(date, "dd/MM/yyyy")
+                 }
+                onSetInputValue(newObject);
               }}
             />
           </Items>

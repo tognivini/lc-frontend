@@ -65,9 +65,7 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [selectedHour, setSelectedHour] = useState();
 
-  const [time, setTime] = useState();
 
-  const [date, setDate] = useState();
   const [selectedDate, setSelectedDate] = useState();
 
   const [nextSchedules, setNextSchedules] = useState(false);
@@ -140,70 +138,50 @@ const UserSchedulePage = ({ ...props }) => {
   }, [allLaundryes, selectedLaundry]);
 
   useEffect(() => {
-    if (selectedLaundry && date) {
+    if (selectedLaundry && selectedDate) {
       getAvailableMachinesByLaundryId();
     }
-  }, [selectedLaundry, date]);
-
-  useEffect(() => {
-    // selectedDate
-      console.log(selectedDate, 'test')
-    }, [selectedDate]);
-
-
+  }, [selectedLaundry, selectedDate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const parsedTime = parseISO(date);
+    const parsedTime = parseISO(selectedDate?.value);
     const formatInTimeZone = (date, fmt, tz) =>
       format(utcToZonedTime(date, tz), fmt, { timeZone: tz });
       const formattedTime = formatInTimeZone(parsedTime, "yyyy-MM-dd kk:mm:ss xxx", "UTC");
 
-    // const formatedDate = new Date(date);
     const payload = {
+      date: formattedTime,
       laundry: {
         id: selectedLaundry?.value,
       },
-      // date,
       washMachine: {
         id: selectedWashMachine?.value,
       },
       startHour: selectedHour,
       endHour: selectedHour,
       responsible: { id: responsible.id },
-      date: formattedTime,
       client: { id: user?.userId },
     };
 
-    // await onCreateSchedule(payload).then((data) => {
-    //   console.log("rres:", data);
-    //   if (data?.statusCode === 200 && data?.success) {
-    //     Swal.fire({
-    //       title: "Sucesso!",
-    //       text: "Agendamento criado com sucesso!",
-    //       icon: "success",
-    //       confirmButtonText: "Ok",
-    //     });
-    //   } else {
-    //     Swal.fire({
-    //       title: "Erro!",
-    //       text: "Ocorreu um problema ao criar o agendamento!",
-    //       icon: "error",
-    //       confirmButtonText: "Ok",
-    //     });
-    //   }
-    // });
-
-    // const userId = user.userId;
-    // onUpdateUser(payload, userId).then((res) => {
-    //   Swal.fire({
-    //     title: "Sucesso!",
-    //     text: "Usuário editado com sucesso!",
-    //     icon: "success",
-    //     confirmButtonText: "Ok",
-    //   });
-    // });
+    await onCreateSchedule(payload).then((data) => {
+      if (data?.statusCode === 200 && data?.success) {
+        Swal.fire({
+          title: "Sucesso!",
+          text: "Agendamento criado com sucesso!",
+          icon: "success",
+          confirmButtonText: "Ok",
+        });
+      } else {
+        Swal.fire({
+          title: "Erro!",
+          text: "Ocorreu um problema ao criar o agendamento!",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      }
+    });
   };
 
   return (
@@ -246,10 +224,10 @@ const UserSchedulePage = ({ ...props }) => {
                   name="visitDate"
                   // style={{ width: "95%" }}
                   label="Data da visita"
-                  value={date}
-                  setValue={setDate}
-                  // value={selectedDate}
-                  // setValue={setSelectedDate}
+                  // value={date}
+                  // setValue={setDate}
+                  value={selectedDate}
+                  setValue={setSelectedDate}
                 />
 
                 <div style={{ width: "100%", marginLeft: "5%" }}>
@@ -273,8 +251,8 @@ const UserSchedulePage = ({ ...props }) => {
                   label="Escolha a hora de início"
                   options={Object.values(MockedBaseHourEnum)}
                   displayValue="label"
-                  value={time}
-                  name="time"
+                  value={selectedHour}
+                  name="selectedHour"
                   initialValue={null}
                   onSelect={({ label }) => {
                     setSelectedHour(label);
@@ -289,7 +267,7 @@ const UserSchedulePage = ({ ...props }) => {
                   }}
                 >
                   <VisibleSpan
-                    visible={selectedLaundry && selectedWashMachine && date}
+                    visible={selectedLaundry && selectedWashMachine && selectedDate}
                   >
                     Por padrão será reservado um espaço de 2h por agendamento
                     (conforme o ciclo das máquinas)
