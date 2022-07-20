@@ -49,7 +49,8 @@ const DateInput = ({
         >
           <UnconnectedInput
             {...props}
-            placeholder="dd/mm/aaaa"
+            placeholder="Clique no ícone para selecionar a data"
+            // placeholder="dd/mm/aaaa"
             // onChange={({ target: { value } }) => {
             //   const dateMask = remask.mask(value, ["99/99/9999"]);
             //   // onSetInputValue(dateMask);

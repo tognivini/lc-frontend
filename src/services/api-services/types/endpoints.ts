@@ -13,7 +13,8 @@ const routes = {
   DELETE_SCHEDULE: '/api/schedule',
 
    // Laundry
-   LIST_LAUNDRY: '/api/laundry',
+   LIST_ALL_LAUNDRY: '/api/laundry',
+   LIST_AVAILABLE_LAUNDRY: '/api/laundry/get-available',
    CREATE_LAUNDRY: '/api/laundry',
    GET_LAUNDRY: '/api/laundry',
    EDIT_LAUNDRY: '/api/laundry',

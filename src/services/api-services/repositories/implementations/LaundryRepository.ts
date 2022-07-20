@@ -18,7 +18,15 @@ interface ILaundryParams {
 
 async function onGetAllLaundrys(params: ILaundryParams) {
   try {
-    return (await api.get(routes.LIST_LAUNDRY, { params })).data;
+    return (await api.get(routes.LIST_ALL_LAUNDRY, { params })).data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function onGetAvailableLaundrys(params: ILaundryParams) {
+  try {
+    return (await api.get(routes.LIST_AVAILABLE_LAUNDRY, { params })).data;
   } catch (error) {
     throw error;
   }
@@ -48,5 +56,6 @@ async function onGetAllLaundrys(params: ILaundryParams) {
 
 export {
   onGetAllLaundrys,
+  onGetAvailableLaundrys
   // onUpdateProfile
 };

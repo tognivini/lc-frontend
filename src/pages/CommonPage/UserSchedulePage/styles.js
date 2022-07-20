@@ -83,8 +83,6 @@ export const InputMasked = styled(InputMask)``;
 export const SelectInput = styled(Select)``;
 export const DateInputC = styled(DateInput)``;
 
-
-
 export const ContainerButton = styled.div`
   display: flex;
   justify-content: end;
@@ -122,9 +120,9 @@ export const NextScheduleContent = styled.div`
 `;
 
 export const ContainerNexSchedule = styled.div`
-display: flex;
-flex-direction: column;
-`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const CardTitleNextSchedule = styled(TitleOneComponent)`
   /* text-align: left; */
@@ -134,11 +132,24 @@ export const CardTitleNextSchedule = styled(TitleOneComponent)`
   margin-top: 0px !important;
 `;
 
+export const Thead = styled.thead`
+  /* display: block;
+  width: 100%; */
+`;
+
+export const Tbody = styled.tbody`
+  /* display: block;
+  width: 100%;
+  height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden; */
+`;
+
 export const SpacedView = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
 export const VisibleSpan = styled.span`
-  ${(props) => props.visible ? '' : 'display: none' };
-`
+  ${(props) => (props.visible ? "" : "display: none")};
+`;

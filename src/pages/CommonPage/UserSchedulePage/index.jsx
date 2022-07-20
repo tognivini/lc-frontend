@@ -23,16 +23,20 @@ import {
   NextScheduleContent,
   CardTitleNextSchedule,
   ContainerNexSchedule,
+  Thead,
+  Tbody,
   VisibleSpan,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
+import { Row } from "./components/Row";
+
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 import { colors } from "../../../common/types/IColors";
 
 import {
   onGetAllNextSchedules,
-  onGetAllLaundrys,
+  onGetAvailableLaundrys,
   onCreateSchedule,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
@@ -65,7 +69,6 @@ const UserSchedulePage = ({ ...props }) => {
 
   const [selectedHour, setSelectedHour] = useState();
 
-
   const [selectedDate, setSelectedDate] = useState();
 
   const [nextSchedules, setNextSchedules] = useState(false);
@@ -85,7 +88,7 @@ const UserSchedulePage = ({ ...props }) => {
   }, [user]);
 
   const onGetAllLaundryes = useCallback(async () => {
-    await onGetAllLaundrys().then((data) => {
+    await onGetAvailableLaundrys().then((data) => {
       if (data?.data) {
         const arr = [];
         data?.data.map((thisLaundry) => {
@@ -149,7 +152,11 @@ const UserSchedulePage = ({ ...props }) => {
     const parsedTime = parseISO(selectedDate?.value);
     const formatInTimeZone = (date, fmt, tz) =>
       format(utcToZonedTime(date, tz), fmt, { timeZone: tz });
-      const formattedTime = formatInTimeZone(parsedTime, "yyyy-MM-dd kk:mm:ss xxx", "UTC");
+    const formattedTime = formatInTimeZone(
+      parsedTime,
+      "yyyy-MM-dd kk:mm:ss xxx",
+      "UTC"
+    );
 
     const payload = {
       date: formattedTime,
@@ -267,7 +274,9 @@ const UserSchedulePage = ({ ...props }) => {
                   }}
                 >
                   <VisibleSpan
-                    visible={selectedLaundry && selectedWashMachine && selectedDate}
+                    visible={
+                      selectedLaundry && selectedWashMachine && selectedDate
+                    }
                   >
                     Por padrão será reservado um espaço de 2h por agendamento
                     (conforme o ciclo das máquinas)
@@ -305,15 +314,46 @@ const UserSchedulePage = ({ ...props }) => {
                   </CardTitleNextSchedule>
                   <ArrowForwardIosIconDown />
                 </SpacedView>
-                <Table>
-                  <thead>
+                <Table
+                  columns={[
+                    {
+                      displayName: "Data",
+                      columnName: "data",
+                    },
+
+                    {
+                      displayName: "Hora de início",
+                      columnName: "startHour",
+                    },
+                    {
+                      displayName: "Status",
+                      columnName: "status",
+                    },
+                    {
+                      displayName: "Endereço",
+                      columnName: "endereco",
+                    },
+                  ]}
+                >
+                  {nextSchedules &&
+                    nextSchedules?.map((thisSchedule, index) => {
+                      return (
+                        <Row
+                          key={Math.random()}
+                          rowData={thisSchedule}
+                          // isSelected={isSelected}
+                          // onSelectItems={handleSelectItems}
+                        />
+                      );
+                    })}
+                  {/* <Thead>
                     <tr>
                       <th>Data</th>
                       <th>Status</th>
                       <th style={{ width: 170 }}>Endereço</th>
                     </tr>
-                  </thead>
-                  <tbody>
+                  </Thead>
+                  <Tbody>
                     {nextSchedules ? (
                       nextSchedules?.map((schedule, key) => {
                         const newDate = new Date().toISOString();
@@ -338,7 +378,7 @@ const UserSchedulePage = ({ ...props }) => {
                     ) : (
                       <></>
                     )}
-                  </tbody>
+                  </Tbody>
                   {!nextSchedules && (
                     <tfoot>
                       <tr>
@@ -353,7 +393,7 @@ const UserSchedulePage = ({ ...props }) => {
                         </td>
                       </tr>
                     </tfoot>
-                  )}
+                  )} */}
                 </Table>
               </ContainerNexSchedule>
             ) : (
