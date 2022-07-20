@@ -17,6 +17,7 @@ import {
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+import { useParams } from "react-router";
 
 import { onGetAllUsers, onUpdateUser } from "../../../services/api-services/index";
 import Swal from 'sweetalert2'
@@ -27,6 +28,7 @@ import { useEffect } from "react";
 
 const UserProfilePage = ({ ...props }) => {
   const { user } = useAuth();
+  const params = useParams()
 
   const navigate = useNavigate();
 

@@ -51,7 +51,7 @@ const Header = () => {
           </Li> */}
           {isAuthenticated && (
             <Li className="nav-item mx-3">
-              <Link to={routesType.USER_EDIT}>Perfil</Link>
+              <Link to={`${routesType.USER_EDIT}/${user?.userId}`}>Perfil</Link>
             </Li>
           )}
 

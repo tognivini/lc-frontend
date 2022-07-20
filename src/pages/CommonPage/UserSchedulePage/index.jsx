@@ -30,7 +30,6 @@ import {
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
 import { Row } from "./components/Row";
-
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 import { colors } from "../../../common/types/IColors";
 

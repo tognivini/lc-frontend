@@ -46,7 +46,7 @@ const ConfigRoutes = () => {
 
             <Route
               exact
-              path={routesType.USER_EDIT}
+              path={`${routesType.USER_EDIT}/:id`}
               element={<UserProfilePage />}
             />
 
@@ -68,10 +68,7 @@ const ConfigRoutes = () => {
                 element={<Navigate to={routesType.AUTH_ROOT} replace />}
               />
             ) : (
-              <Route
-                path="*"
-                element={<Navigate to={routesType.USER_EDIT} replace />}
-              />
+              <></>
             )}
 
             {/* <Route
