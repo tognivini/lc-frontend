@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Container, Content, BrandView, CardTitle, FormGrid } from "./styles";
+import { Container, Content, BrandView, CardTitle, FormGrid, Tr } from "./styles";
 import { SwitchComponent } from "../../../components/atomos/Switch";
 import { Table } from "../../../components/molecules/Table";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
@@ -23,7 +23,6 @@ const ListUserPage = ({ ...props }) => {
     if (user.permissionType === "ADMIN") {
       await onGetAllUsers().then((res) => {
         setUsers(res);
-        console.log(res);
       });
     }
   }, [user]);
@@ -81,7 +80,7 @@ const ListUserPage = ({ ...props }) => {
                       isBolsista = false;
                     }
                     return (
-                      <tr key={key}>
+                      <Tr key={key}>
                         <td>{name}</td>
                         <td>{email}</td>
                         <td>{phoneNumber}</td>
@@ -107,7 +106,7 @@ const ListUserPage = ({ ...props }) => {
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
-                      </tr>
+                      </Tr>
                     );
                   }
                 )

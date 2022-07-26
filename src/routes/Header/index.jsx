@@ -55,7 +55,7 @@ const Header = () => {
             </Li>
           )}
 
-          {isAuthenticated && (
+          {isAuthenticated && !isAdmin && (
             <Li className="nav-item mx-3">
               <Link to={routesType.USER_SCHEDULE}>Agendamentos</Link>
             </Li>
@@ -67,9 +67,9 @@ const Header = () => {
             </Li>
           )}
 
-{isAuthenticated && isAdmin && (
+          {isAuthenticated && isAdmin && (
             <Li className="nav-item mx-3">
-              <Link to={routesType.USER_LIST}>Lavanderias</Link>
+              <Link to={routesType.LAUNDRY_LIST}>Lavanderias</Link>
             </Li>
           )}
 

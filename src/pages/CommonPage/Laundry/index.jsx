@@ -62,7 +62,7 @@ const ListLaundryPage = ({ ...props }) => {
             </thead>
             <tbody>
               {laundrys ? (
-                laundrys?.map(({ name, address, responsible }, key) => (
+                laundrys?.map(({ id, name, address, responsible }, key) => (
                   <tr key={key}>
                     <td>{name}</td>
                     <td>{address}</td>
@@ -73,6 +73,7 @@ const ListLaundryPage = ({ ...props }) => {
                         fullWidth
                         color="cyan"
                         // smallBotton
+                        onClick={()=> navigate(`${routesType.LAUNDRY_LIST}/${id}`)}
                         style={{ height: 40, fontSize: 22, with: 10 }}
                       >
                         Editar

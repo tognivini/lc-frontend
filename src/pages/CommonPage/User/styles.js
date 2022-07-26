@@ -46,3 +46,6 @@ export const CardTitle = styled(TitleOneComponent)`
 
 export const BrandView = styled.div``;
 
+export const Tr = styled.tr`
+
+`

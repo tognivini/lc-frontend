@@ -16,6 +16,8 @@ import { useAuth } from "../contexts/auth.context";
 import { UserSchedulePage } from "../pages/CommonPage/UserSchedulePage";
 import { ListLaundryPage } from "../pages/CommonPage/Laundry";
 import { ListUserPage } from "../pages/CommonPage/User";
+import { LaundryEditPage } from "../pages/CommonPage/LaundryEditPage";
+
 
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
@@ -67,6 +69,13 @@ const ConfigRoutes = () => {
               exact
               path={routesType.USER_LIST}
               element={<ListUserPage />}
+            />
+
+
+<Route
+              exact
+              path={routesType.LAUNDRY_EDIT}
+              element={<LaundryEditPage />}
             />
 
             {!isAuthenticated ? (

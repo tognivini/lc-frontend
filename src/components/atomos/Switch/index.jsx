@@ -9,6 +9,11 @@ const SwitchComponent = ({ ...props }) => {
     valueFalse: "Não",
   };
 
+  const inOpperation = {
+    valueTrue: "Operacional",
+    valueFalse: "Não operacional",
+  };
+
   const statusType = {
     valueTrue: "Ativo",
     valueFalse: "Inativo",
@@ -18,6 +23,8 @@ const SwitchComponent = ({ ...props }) => {
   useEffect(() => {
     if (props?.customLabel === "bolsista") {
       setUsableLabel(bolsistaType);
+    } else if (props?.customLabel === "inOpperation") {
+      setUsableLabel(inOpperation);
     } else if (props?.customLabel === "status") {
       setUsableLabel(statusType);
     } else {
