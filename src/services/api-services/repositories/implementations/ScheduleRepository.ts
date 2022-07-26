@@ -28,13 +28,13 @@ interface IScheduleParams {
   date: Date;
 }
 
-async function onGetAllNextSchedules(params: IScheduleParams) {
+const onGetAllNextSchedules = async (params: IScheduleParams) => {
   try {
     return (await api.get(routes.LIST_SCHEDULES, { params })).data;
   } catch (error) {
     throw error;
   }
-}
+};
 
 const onCreateSchedule = (payload: IScheduleParams) => {
   return new Promise((resolve, reject) => {
@@ -47,6 +47,16 @@ const onCreateSchedule = (payload: IScheduleParams) => {
   });
 };
 
+const onGetAvailableHours = async (payload: IScheduleParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(routes.CHECK_AVAILABLE_HOURS, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 // const onUpdateUser = (payload: IScheduleParams, userId: string) => {
 //   return new Promise((resolve, reject) => {
 //     api
@@ -58,7 +68,4 @@ const onCreateSchedule = (payload: IScheduleParams) => {
 //   });
 // };
 
-export {
-  onGetAllNextSchedules,
-  onCreateSchedule
-};
+export { onGetAllNextSchedules, onCreateSchedule, onGetAvailableHours };

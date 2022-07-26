@@ -8,7 +8,7 @@ const routes = {
   // Schedules
   LIST_SCHEDULES: '/api/schedule',
   CREATE_SCHEDULE: '/api/schedule/create',
-  // GET_NEXT_SCHEDULES: '/api/schedules/next-visits',
+  CHECK_AVAILABLE_HOURS: '/api/schedule/get-available-hours',
   EDIT_SCHEDULE: '/api/schedule/:id',
   DELETE_SCHEDULE: '/api/schedule',
 

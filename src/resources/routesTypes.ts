@@ -8,7 +8,7 @@ export enum routesType {
   USER_PROFILE = "/user/profile/:id",
   USER_EDIT = "/user/edit",
   SCHEDULE_LIST = "/schedule/",
-  USER_SCHEDULE = "/schedule/user/:id",
+  USER_SCHEDULE = "/schedule/user",
   SCHEDULE_EDIT = "/schedule/edit/:id",
   LAUNDRY_LIST = "/laundry",
   BOLSISTA_AREA = "/bolsista-area",

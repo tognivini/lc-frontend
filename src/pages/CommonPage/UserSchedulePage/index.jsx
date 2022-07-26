@@ -37,6 +37,7 @@ import {
   onGetAllNextSchedules,
   onGetAvailableLaundrys,
   onCreateSchedule,
+  onGetAvailableHours,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
 
@@ -67,6 +68,7 @@ const UserSchedulePage = ({ ...props }) => {
   );
 
   const [selectedHour, setSelectedHour] = useState();
+  const [availableHours, setAvailableHours] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState();
 
@@ -139,23 +141,46 @@ const UserSchedulePage = ({ ...props }) => {
     }
   }, [allLaundryes, selectedLaundry]);
 
+  const getAvailableHours = useCallback(async () => {
+    if (selectedLaundry && selectedDate && selectedWashMachine) {
+      const val = new Date(selectedDate?.value)
+      const formattedTime = format(val, "yyyy-MM-dd");
+      const payload = {
+        laundryId: selectedLaundry.value,
+        washMachineId: selectedWashMachine?.value,
+        date: `${formattedTime}T00:00:00.000-03:00`,
+      };
+      await onGetAvailableHours(payload).then((data) => {
+        const arr = [];
+        data?.data.map((thisHour) => {
+          return arr.push({
+            label: thisHour,
+            value: thisHour,
+          });
+        });
+        setAvailableHours(arr);
+      });
+    }
+  }, [selectedLaundry, selectedWashMachine, selectedDate]);
+
   useEffect(() => {
     if (selectedLaundry && selectedDate) {
       getAvailableMachinesByLaundryId();
     }
   }, [selectedLaundry, selectedDate]);
 
+  useEffect(() => {
+    if (selectedLaundry && selectedWashMachine && selectedDate) {
+      getAvailableHours();
+    }
+  }, [selectedLaundry, selectedWashMachine, selectedDate]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const parsedTime = parseISO(selectedDate?.value);
-    const formatInTimeZone = (date, fmt, tz) =>
-      format(utcToZonedTime(date, tz), fmt, { timeZone: tz });
-    const formattedTime = formatInTimeZone(
-      parsedTime,
-      "yyyy-MM-dd kk:mm:ss xxx",
-      "UTC"
-    );
+
+    const formattedTime = format(parsedTime, "yyyy-MM-dd");
 
     const payload = {
       date: formattedTime,
@@ -228,10 +253,7 @@ const UserSchedulePage = ({ ...props }) => {
               <SpacedView>
                 <DateInputC
                   name="visitDate"
-                  // style={{ width: "95%" }}
                   label="Data da visita"
-                  // value={date}
-                  // setValue={setDate}
                   value={selectedDate}
                   setValue={setSelectedDate}
                 />
@@ -255,7 +277,7 @@ const UserSchedulePage = ({ ...props }) => {
                 <SelectInput
                   style={{ marginBottom: 25 }}
                   label="Escolha a hora de início"
-                  options={Object.values(MockedBaseHourEnum)}
+                  options={Object.values(availableHours)}
                   displayValue="label"
                   value={selectedHour}
                   name="selectedHour"
@@ -340,59 +362,9 @@ const UserSchedulePage = ({ ...props }) => {
                         <Row
                           key={Math.random()}
                           rowData={thisSchedule}
-                          // isSelected={isSelected}
-                          // onSelectItems={handleSelectItems}
                         />
                       );
                     })}
-                  {/* <Thead>
-                    <tr>
-                      <th>Data</th>
-                      <th>Status</th>
-                      <th style={{ width: 170 }}>Endereço</th>
-                    </tr>
-                  </Thead>
-                  <Tbody>
-                    {nextSchedules ? (
-                      nextSchedules?.map((schedule, key) => {
-                        const newDate = new Date().toISOString();
-                        const formatedDate = format(
-                          new Date(newDate),
-                          "MM/dd/yyyy"
-                        );
-
-                        return (
-                          <tr key={key}>
-                            <td>{formatedDate}</td>
-                            <td>{schedule?.laundry?.address}</td>
-                            <td>
-                              {schedule?.situation
-                                ? SituationScheduleEnum[schedule?.situation]
-                                    .label
-                                : "-"}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    ) : (
-                      <></>
-                    )}
-                  </Tbody>
-                  {!nextSchedules && (
-                    <tfoot>
-                      <tr>
-                        <td
-                          colspan="3"
-                          style={{
-                            fontSize: 20,
-                            backgroundColor: `${colors.lightGray}`,
-                          }}
-                        >
-                          Não há agendamentos futuros
-                        </td>
-                      </tr>
-                    </tfoot>
-                  )} */}
                 </Table>
               </ContainerNexSchedule>
             ) : (
