@@ -35,8 +35,8 @@ const SwitchComponent = ({ ...props }) => {
   return (
     <FormGroup>
       <FormControlLabel
-        control={<Switch checked={props.value} onChange={props?.onChange} />}
-        label={props.value ? usableLabel?.valueTrue : usableLabel?.valueFalse}
+        control={<Switch checked={props.checked} onChange={props?.onChange} />}
+        label={props.checked ? usableLabel?.valueTrue : usableLabel?.valueFalse}
       />
     </FormGroup>
   );

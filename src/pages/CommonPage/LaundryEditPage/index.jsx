@@ -1,35 +1,34 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SwitchComponent } from "../../../components/atomos/Switch";
 
 import {
   Container,
   Content,
-  // HeaderTitle,
   BrandView,
   CardTitle,
-  // SubTitle,
   FormGrid,
-  // TitleGrid,
+  Tr,
   InputCustom,
-  // PasswordInput,
   ContainerButton,
   SelectInput,
 } from "./styles";
-import { Button } from "../../../components/atomos/Button";
+import { Table } from "../../../components/molecules/Table";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+import { TypeUserEnum } from "../../../services/enums";
+
+import { SwitchComponent } from "../../../components/atomos/Switch";
 import { useParams } from "react-router";
+
+import { routesType } from "../../../resources/routesTypes";
 import { colors } from "../../../common/types/IColors";
 
 import {
   onGetAllLaundrys,
   onUpdateUser,
 } from "../../../services/api-services/index";
-import Swal from "sweetalert2";
 
-import { routesType } from "../../../resources/routesTypes";
-import { useEffect } from "react";
-import { Table } from "@material-ui/core";
+import Swal from "sweetalert2";
+import { Button } from "../../../components/atomos/Button";
 
 const LaundryEditPage = ({ ...props }) => {
   const { user } = useAuth();
@@ -37,23 +36,7 @@ const LaundryEditPage = ({ ...props }) => {
 
   const navigate = useNavigate();
 
-  const setUser = useCallback(async () => {
-    if (params?.id) {
-      const laundryId = params.id;
-      await onGetAllLaundrys({ laundryId }).then((res) => {
-        setName(res?.data[0]?.name);
-        setAddress(res?.data[0]?.address);
-        setWashMachines(res?.data[0]?.washMachines);
-        // setPhoneNumber(res?.data[0]?.responsible);
-      });
-    }
-  }, [params]);
-
-  useEffect(() => {
-    if (user) {
-      setUser();
-    }
-  }, [user]);
+  const [users, setUsers] = useState();
 
   const [name, setName] = useState();
   const [errorName, setErrorName] = useState(false);
@@ -80,6 +63,42 @@ const LaundryEditPage = ({ ...props }) => {
 
   const [disabled, setDisabled] = useState(false);
 
+  const setUser = useCallback(async () => {
+    if (params?.id) {
+      const laundryId = params.id;
+      await onGetAllLaundrys({ laundryId }).then((res) => {
+        setName(res?.data[0]?.name);
+        setAddress(res?.data[0]?.address);
+        setWashMachines(res?.data[0]?.washMachines);
+        // setPhoneNumber(res?.data[0]?.responsible);
+      });
+    }
+  }, [params]);
+
+  useEffect(() => {
+    if (user) {
+      setUser();
+    }
+  }, [user]);
+
+  // const onGetLaundry = useCallback(async () => {
+  //   if (user.permissionType === "ADMIN") {
+  //     await onGetAllLaundrys().then((res) => {
+  //       setUsers(res);
+  //     });
+  //   }
+  // }, [user]);
+
+  const onHandleBolsistaType = useCallback(async () => {});
+
+  // useEffect(() => {
+  //   if (user.permissionType === TypeUserEnum.ADMIN) {
+  //     onGetLaundry();
+  //   } else {
+  //     setUsers([]);
+  //   }
+  // }, [user]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
@@ -98,13 +117,7 @@ const LaundryEditPage = ({ ...props }) => {
     });
   };
 
-
-  const handleWashMachineActivation = useCallback(() => {
-    
-  }) 
-
-  
-
+  const handleWashMachineActivation = useCallback(() => {});
 
   return (
     <Container>
@@ -170,7 +183,8 @@ const LaundryEditPage = ({ ...props }) => {
           </form>
         </Content>
       </FormGrid>
-      <FormGrid smallHeight>
+
+      <FormGrid>
         <Content>
           <div
             style={{
@@ -180,7 +194,7 @@ const LaundryEditPage = ({ ...props }) => {
             }}
           >
             <BrandView>
-              <CardTitle>Adicionar máquinas</CardTitle>
+              <CardTitle>Editar lavanderias</CardTitle>
             </BrandView>
           </div>
 
@@ -190,61 +204,50 @@ const LaundryEditPage = ({ ...props }) => {
                 <th>Id</th>
                 <th>Modelo</th>
                 <th>Número</th>
-                {/* <th>Status</th> */}
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              {washMachines ? (
-                washMachines?.map(({ id, number, model, inOpperation }, key) => {
-                  return (
-                    <tr key={key}>
-                      <td>id</td>
-                      <td>{model}</td>
-                      <td>{number}</td>
-                      <td>
-                      {/* <SwitchComponent
+              {washMachines &&
+                washMachines?.map(
+                  ({ id, number, model, inOpperation }, key) => {
+                    return (
+                      <Tr key={key}>
+                        <td>{id}</td>
+                        <td>{model}</td>
+                        <td>{number}</td>
+                        <td>
+                          <SwitchComponent
                             customLabel="inOpperation"
-                            value={inOpperation}
+                            checked={inOpperation}
                             onChange={handleWashMachineActivation}
                             style={{ height: 40, fontSize: 22, with: 10 }}
-                          ></SwitchComponent> */}
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <></>
-              )}
-              <tr>
-                <td>
-                  add
-                </td>
-                <td>
-                  add
-                </td>
-                <td>
-                  add
-                </td>
-                <td>
-                  add
-                </td>
-              </tr>
-            </tbody>
-            {!washMachines && (
-              <tfoot>
-                <tr>
-                  <td
-                    colspan="3"
-                    style={{
-                      fontSize: 24,
-                      backgroundColor: `${colors.lightGray}`,
-                    }}
-                  >
-                    Sem registros disponíveis na tabela de lavanderias
+                          ></SwitchComponent>
+                        </td>
+                      </Tr>
+                    );
+                  }
+                )}
+                <Tr>
+                  <td>
+                    add
                   </td>
-                </tr>
-              </tfoot>
-            )}
+                  <td>
+                    add
+                  </td>
+                  <td>
+                    add
+                  </td>
+                  <td>
+                  <SwitchComponent
+                            customLabel="inOpperation"
+                            // checked={inOpperation}
+                            onChange={handleWashMachineActivation}
+                            style={{ height: 40, fontSize: 22, with: 10 }}
+                          ></SwitchComponent>
+                  </td>
+                </Tr>
+            </tbody>
           </Table>
         </Content>
       </FormGrid>
