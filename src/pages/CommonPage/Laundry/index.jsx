@@ -12,7 +12,7 @@ import { onGetAllLaundrys } from "../../../services/api-services/index";
 import { routesType } from "../../../resources/routesTypes";
 import { colors } from "../../../common/types/IColors";
 
-const LaundryPage = ({ ...props }) => {
+const ListLaundryPage = ({ ...props }) => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
@@ -107,4 +107,4 @@ const LaundryPage = ({ ...props }) => {
   );
 };
 
-export { LaundryPage };
+export { ListLaundryPage };

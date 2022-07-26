@@ -63,7 +63,13 @@ const Header = () => {
 
           {isAuthenticated && isAdmin && (
             <Li className="nav-item mx-3">
-              <Link to={routesType.LAUNDRY_LIST}>Lavanderias</Link>
+              <Link to={routesType.USER_LIST}>Usuários</Link>
+            </Li>
+          )}
+
+{isAuthenticated && isAdmin && (
+            <Li className="nav-item mx-3">
+              <Link to={routesType.USER_LIST}>Lavanderias</Link>
             </Li>
           )}
 
