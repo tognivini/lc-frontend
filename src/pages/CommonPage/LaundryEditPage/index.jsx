@@ -15,20 +15,18 @@ import {
   InputMasked,
 } from "./styles";
 import { Table } from "../../../components/molecules/Table";
-import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+import { useAuth } from "../../../contexts/auth.context";
 import { TypeUserEnum } from "../../../services/enums";
 
 import { SwitchComponent } from "../../../components/atomos/Switch";
 import { useParams } from "react-router";
 
-import { routesType } from "../../../resources/routesTypes";
-import { colors } from "../../../common/types/IColors";
-
 import {
+  onCreateWashMachine,
   onGetAllLaundrys,
   onGetAllUsers,
   onUpdateLaundry,
-  onUpdateUser,
+  onUpdateWashMachine,
 } from "../../../services/api-services/index";
 
 import Swal from "sweetalert2";
@@ -38,8 +36,6 @@ const LaundryEditPage = ({ ...props }) => {
   const { user } = useAuth();
   const params = useParams();
 
-  const navigate = useNavigate();
-
   const [name, setName] = useState();
   const [address, setAddress] = useState();
   const [cep, setCep] = useState();
@@ -48,10 +44,12 @@ const LaundryEditPage = ({ ...props }) => {
   const [responsible, setResponsible] = useState({});
   const [arrayResponsibles, setArrayResponsibles] = useState([]);
 
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
+  const [newStateModel, setNewStateModel] = useState("");
+  const [newStateNumber, setNewStateNumber] = useState("");
+  const [newStateInOpperation, setNewStateInOpperation] = useState(false);
 
   const [disabled, setDisabled] = useState(false);
+  const [newStateDisabled, setNewStateDisabled] = useState(false);
 
   const onGetLaundrys = useCallback(async () => {
     if (params?.id) {
@@ -91,23 +89,6 @@ const LaundryEditPage = ({ ...props }) => {
     }
   }, [user]);
 
-  // const onGetLaundry = useCallback(async () => {
-  //   if (user.permissionType === "ADMIN") {
-  //     await onGetAllLaundrys().then((res) => {
-  //       onGets(res);
-  //     });
-  //   }
-  // }, [user]);
-
-  const onHandleBolsistaType = useCallback(async () => {});
-
-  // useEffect(() => {
-  //   if (user.permissionType === TypeUserEnum.ADMIN) {
-  //     onGetLaundry();
-  //   } else {
-  //     setUsers([]);
-  //   }
-  // }, [user]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -131,11 +112,72 @@ const LaundryEditPage = ({ ...props }) => {
     });
   };
 
-  const handleWashMachineActivation = useCallback(() => {});
+  useEffect(() => {
+    if (name && address && cep && selectedResponsible) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, address, cep, selectedResponsible]);
+
+  useEffect(() => {
+    if (newStateModel && newStateNumber) {
+      setNewStateDisabled(false);
+    } else {
+      setNewStateDisabled(true);
+    }
+  }, [newStateModel, newStateNumber]);
+
+  const handleWashMachineActivation = ({ washMachineId, inOpperation }) => {
+    const payload = {
+      inOpperation: inOpperation,
+    };
+    onUpdateWashMachine(payload, washMachineId).then((res) => {
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Máquina de lavar editada com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        onGetLaundrys();
+      });
+    });
+  };
+
+  const handleWashMachineCreate = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      if (newStateModel && newStateNumber) {
+        const payload = {
+          model: newStateModel,
+          number: newStateNumber,
+          inOpperation: newStateInOpperation,
+          laundry: {
+            id: params?.id,
+          },
+        };
+        onCreateWashMachine(payload).then((res) => {
+          Swal.fire({
+            title: "Sucesso!",
+            text: "Máquina de lavar cadastrada com sucesso!",
+            icon: "success",
+            confirmButtonText: "Ok",
+          }).then(() => {
+            setNewStateDisabled(true);
+            setNewStateModel("");
+            setNewStateNumber("");
+            onGetLaundrys();
+          });
+        });
+      }
+    },
+    [params, newStateModel, newStateNumber, newStateInOpperation]
+  );
 
   return (
     <Container>
-      <FormGrid>
+      <FormGrid smallHeight>
         <Content>
           <div
             style={{
@@ -200,8 +242,9 @@ const LaundryEditPage = ({ ...props }) => {
               <Button
                 disabled={disabled}
                 type="submit"
+                fullWidth
                 color="blueGreenLight"
-                style={{ height: 40, fontSize: 20, with: 50 }}
+                style={{ height: 45, fontSize: 25, with: 70 }}
               >
                 Salvar
               </Button>
@@ -220,7 +263,7 @@ const LaundryEditPage = ({ ...props }) => {
             }}
           >
             <BrandView>
-              <CardTitle>Editar lavanderias</CardTitle>
+              <CardTitle>Editar Máquinas de lavar</CardTitle>
             </BrandView>
           </div>
 
@@ -246,7 +289,12 @@ const LaundryEditPage = ({ ...props }) => {
                           <SwitchComponent
                             customLabel="inOpperation"
                             checked={inOpperation}
-                            onChange={handleWashMachineActivation}
+                            onChange={(e) =>
+                              handleWashMachineActivation({
+                                washMachineId: id,
+                                inOpperation: e.target.checked,
+                              })
+                            }
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
@@ -255,25 +303,46 @@ const LaundryEditPage = ({ ...props }) => {
                   }
                 )}
               <Tr>
-                <td>add</td>
+                <td>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={newStateDisabled}
+                    color="blueGreenLight"
+                    smallButton
+                    onClick={handleWashMachineCreate}
+                    style={{ height: 40, fontSize: 22, with: 10 }}
+                  >
+                    Cadastrar
+                  </Button>
+                </td>
                 <td>
                   <InputCustom
                     label="Modelo"
                     placeholder="Preencha com o modelo"
-                    name="newModel"
-                    // value={newModel}
+                    name="newStateModel"
+                    value={newStateModel}
                     onChange={(e) => {
-                      // setNewModel(e?.target?.value);
+                      setNewStateModel(e?.target?.value);
                     }}
-                    // error={errorEmail}
                   />
                 </td>
-                <td>add</td>
+                <td>
+                  <InputCustom
+                    label="Número"
+                    placeholder="Preencha com o numeração"
+                    name="newStateNumber"
+                    value={newStateNumber}
+                    onChange={(e) => {
+                      setNewStateNumber(e?.target?.value);
+                    }}
+                  />
+                </td>
                 <td>
                   <SwitchComponent
                     customLabel="inOpperation"
                     // checked={inOpperation}
-                    onChange={handleWashMachineActivation}
+                    onChange={(e) => setNewStateInOpperation(e.target.checked)}
                     style={{ height: 40, fontSize: 22, with: 10 }}
                   ></SwitchComponent>
                 </td>

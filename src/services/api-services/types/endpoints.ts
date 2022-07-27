@@ -20,6 +20,10 @@ const routes = {
    GET_LAUNDRY: '/api/laundry',
    EDIT_LAUNDRY: '/api/laundry',
    DELETE_LAUNDRY: '/api/laundry',
+
+   // WashMachine
+   CREATE_WASH_MACHINE: '/api/wash-machine/create',
+   UPDATE_WASH_MACHINE: '/api/wash-machine/update',
 }
 
 export { routes }

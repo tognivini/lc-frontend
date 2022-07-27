@@ -78,7 +78,7 @@ const LaundryCreatePage = ({ ...props }) => {
   }, [user]);
 
   useEffect(() => {
-    if (name && address && cep &&selectedResponsible) {
+    if (name && address && cep && selectedResponsible) {
       setDisabled(false);
     } else {
       setDisabled(true);
@@ -92,8 +92,8 @@ const LaundryCreatePage = ({ ...props }) => {
       address,
       cep,
       responsible: {
-        id: selectedResponsible.value
-      }
+        id: selectedResponsible.value,
+      },
     };
     onCreateLaundry(payload).then((res) => {
       Swal.fire({
@@ -106,7 +106,6 @@ const LaundryCreatePage = ({ ...props }) => {
       });
     });
   };
-  
 
   return (
     <Container>

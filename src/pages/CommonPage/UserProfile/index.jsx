@@ -19,16 +19,18 @@ import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 import { useParams } from "react-router";
 
-import { onGetAllUsers, onUpdateUser } from "../../../services/api-services/index";
-import Swal from 'sweetalert2'
-
+import {
+  onGetAllUsers,
+  onUpdateUser,
+} from "../../../services/api-services/index";
+import Swal from "sweetalert2";
 
 import { routesType } from "../../../resources/routesTypes";
 import { useEffect } from "react";
 
 const UserProfilePage = ({ ...props }) => {
   const { user } = useAuth();
-  const params = useParams()
+  const params = useParams();
 
   const navigate = useNavigate();
 
@@ -59,6 +61,14 @@ const UserProfilePage = ({ ...props }) => {
 
   const [disabled, setDisabled] = useState(false);
 
+  useEffect(() => {
+    if (name && email && phoneNumber) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, email, phoneNumber]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
@@ -66,14 +76,14 @@ const UserProfilePage = ({ ...props }) => {
       email,
       phoneNumber,
     };
-    const userId = user.userId
+    const userId = user.userId;
     onUpdateUser(payload, userId).then((res) => {
       Swal.fire({
-        title: 'Sucesso!',
-        text: 'Usuário editado com sucesso!',
-        icon: 'success',
-        confirmButtonText: 'Ok'
-      })
+        title: "Sucesso!",
+        text: "Usuário editado com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
     });
   };
 
@@ -131,9 +141,9 @@ const UserProfilePage = ({ ...props }) => {
               <Button
                 disabled={disabled}
                 type="submit"
-                // fullWidth
+                fullWidth
                 color="blueGreenLight"
-                style={{ height: 40, fontSize: 20, with: 50 }}
+                style={{ height: 45, fontSize: 25, with: 50 }}
               >
                 Editar
               </Button>

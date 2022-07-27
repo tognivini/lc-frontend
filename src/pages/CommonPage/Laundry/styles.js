@@ -21,7 +21,7 @@ export const Container = styled.div`
 export const FormGrid = styled.div`
   display: flex;
   align-content: center;
-  height: 50vh;
+  height: 65vh;
 `;
 
 export const Content = styled.div`
