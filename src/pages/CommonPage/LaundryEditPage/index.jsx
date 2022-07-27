@@ -57,6 +57,7 @@ const LaundryEditPage = ({ ...props }) => {
       label: "bb",
     },
   ]);
+  // permissionType
 
   const [phoneNumber, setPhoneNumber] = useState();
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);

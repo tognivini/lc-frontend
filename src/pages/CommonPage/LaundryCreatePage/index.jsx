@@ -22,10 +22,12 @@ import { routesType } from "../../../resources/routesTypes";
 import {
   onCreateLaundry,
   onGetAllLaundrys,
+  onGetAllUsers,
 } from "../../../services/api-services/index";
 
 import Swal from "sweetalert2";
 import { Button } from "../../../components/atomos/Button";
+import { TypeUserEnum } from "../../../services/enums";
 
 const LaundryCreatePage = ({ ...props }) => {
   const { user } = useAuth();
@@ -37,27 +39,14 @@ const LaundryCreatePage = ({ ...props }) => {
   const [address, setAddress] = useState();
   const [cep, setCep] = useState();
   const [selectedResponsible, setSelectedResponsible] = useState({});
-  const [arrayResponsibles, setArrayResponsibles] = useState([
-    {
-      label: "Sem responsável",
-    },
-    {
-      value: "aa",
-      label: "aa",
-    },
-    {
-      value: "bb",
-      label: "bb",
-    },
-  ]);
+  const [arrayResponsibles, setArrayResponsibles] = useState([]);
 
   const [disabled, setDisabled] = useState(false);
 
-  const setUser = useCallback(async () => {
+  const onGetLaundrys = useCallback(async () => {
     if (params?.id) {
       const laundryId = params.id;
       await onGetAllLaundrys({ laundryId }).then((res) => {
-        console.log(res);
         setName(res?.data[0]?.name);
         setAddress(res?.data[0]?.address);
         setCep(res?.data[0]?.cep);
@@ -65,19 +54,36 @@ const LaundryCreatePage = ({ ...props }) => {
     }
   }, [params]);
 
+  const onGetResponsibles = useCallback(async () => {
+    const payload = {
+      permissionType: TypeUserEnum.BOLSISTA,
+    };
+    await onGetAllUsers(payload).then((res) => {
+      const arr = [];
+      res?.map((thisResponsible) => {
+        return arr.push({
+          label: thisResponsible?.name,
+          value: thisResponsible?.id,
+        });
+      });
+      setArrayResponsibles(arr);
+    });
+  }, []);
+
   useEffect(() => {
-    if (user) {
-      setUser();
+    if (user?.permissionType === "ADMIN") {
+      onGetLaundrys();
+      onGetResponsibles();
     }
   }, [user]);
 
-  // const onGetLaundry = useCallback(async () => {
-  //   if (user.permissionType === "ADMIN") {
-  //     await onGetAllLaundrys().then((res) => {
-  //       setUsers(res);
-  //     });
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (name && address && cep &&selectedResponsible) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, address, cep, selectedResponsible]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,6 +91,9 @@ const LaundryCreatePage = ({ ...props }) => {
       name,
       address,
       cep,
+      responsible: {
+        id: selectedResponsible.value
+      }
     };
     onCreateLaundry(payload).then((res) => {
       Swal.fire({
@@ -97,6 +106,7 @@ const LaundryCreatePage = ({ ...props }) => {
       });
     });
   };
+  
 
   return (
     <Container>
@@ -142,7 +152,7 @@ const LaundryCreatePage = ({ ...props }) => {
                   displayValue="label"
                   value={selectedResponsible}
                   name="selectedResponsible"
-                  initialValue={arrayResponsibles[1]}
+                  initialValue={null}
                   onSelect={(selected) => {
                     setSelectedResponsible(selected);
                   }}
