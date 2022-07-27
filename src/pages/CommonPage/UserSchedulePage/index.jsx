@@ -6,14 +6,11 @@ import { format, utcToZonedTime } from "date-fns-tz";
 import {
   Container,
   Content,
-  // HeaderTitle,
   BrandView,
   CardTitle,
-  // SubTitle,
   FormGrid,
-  // TitleGrid,
   SelectInput,
-  // PasswordInput,
+  InputC,
   DateInputC,
   ContainerButton,
   NextScheduleGrid,
@@ -143,7 +140,7 @@ const UserSchedulePage = ({ ...props }) => {
 
   const getAvailableHours = useCallback(async () => {
     if (selectedLaundry && selectedDate && selectedWashMachine) {
-      const val = new Date(selectedDate?.value)
+      const val = new Date(selectedDate?.value);
       const formattedTime = format(val, "yyyy-MM-dd");
       const payload = {
         laundryId: selectedLaundry.value,
@@ -259,33 +256,50 @@ const UserSchedulePage = ({ ...props }) => {
                 />
 
                 <div style={{ width: "100%", marginLeft: "5%" }}>
-                  <SelectInput
-                    label="Selecione a máquina disponível"
-                    options={arrayAvailableWashMachines}
-                    displayValue="label"
-                    value={selectedWashMachine}
-                    name="washMachine"
-                    initialValue={null}
-                    onSelect={(selected) => {
-                      setSelectedWashMachine(selected);
-                    }}
-                  />
+                  {selectedLaundry && selectedDate ? (
+                    <SelectInput
+                      label="Selecione a máquina disponível"
+                      options={arrayAvailableWashMachines}
+                      displayValue="label"
+                      value={selectedWashMachine}
+                      name="washMachine"
+                      initialValue={null}
+                      onSelect={(selected) => {
+                        setSelectedWashMachine(selected);
+                      }}
+                    />
+                  ) : (
+                    <InputC
+                      label="Selecione a máquina disponível"
+                      placeholder="Selecione a lavanderia e a data"
+                      disabled
+                    />
+                  )}
                 </div>
               </SpacedView>
 
               <SpacedView>
-                <SelectInput
-                  style={{ marginBottom: 25 }}
-                  label="Escolha a hora de início"
-                  options={Object.values(availableHours)}
-                  displayValue="label"
-                  value={selectedHour}
-                  name="selectedHour"
-                  initialValue={null}
-                  onSelect={({ label }) => {
-                    setSelectedHour(label);
-                  }}
-                />
+                {selectedLaundry && selectedDate && selectedWashMachine ? (
+                  <SelectInput
+                    style={{ marginBottom: 25 }}
+                    label="Escolha a hora de início"
+                    options={Object.values(availableHours)}
+                    displayValue="label"
+                    value={selectedHour}
+                    name="selectedHour"
+                    initialValue={null}
+                    onSelect={({ label }) => {
+                      setSelectedHour(label);
+                    }}
+                  />
+                ) : (
+                  <InputC
+                    label="Escolha a hora de início"
+                    placeholder="Selecione a lavanderia, a data e a máquina"
+                    disabled
+                  />
+                )}
+
                 <div
                   style={{
                     width: "100%",
@@ -358,12 +372,7 @@ const UserSchedulePage = ({ ...props }) => {
                 >
                   {nextSchedules &&
                     nextSchedules?.map((thisSchedule, index) => {
-                      return (
-                        <Row
-                          key={Math.random()}
-                          rowData={thisSchedule}
-                        />
-                      );
+                      return <Row key={Math.random()} rowData={thisSchedule} />;
                     })}
                 </Table>
               </ContainerNexSchedule>

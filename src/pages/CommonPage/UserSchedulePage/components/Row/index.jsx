@@ -4,7 +4,7 @@ import { format,  } from "date-fns-tz";
 function Row(props) {
   const { rowData } = props;
 
-  const formatedDate = format(new Date(rowData?.date), "MM/dd/yyyy");
+  const formatedDate = format(new Date(rowData?.date), "dd/MM/yyyy");
 
   return (
     <tr>

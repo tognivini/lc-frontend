@@ -144,7 +144,7 @@ const Input = ({
           <div
             style={{
               position: 'absolute',
-              fontSize: 10,
+              fontSize: 15,
               fontWeight: 500,
               fontFamily: 'Montserrat'
             }}
