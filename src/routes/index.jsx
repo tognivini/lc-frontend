@@ -17,7 +17,7 @@ import { UserSchedulePage } from "../pages/CommonPage/UserSchedulePage";
 import { ListLaundryPage } from "../pages/CommonPage/Laundry";
 import { ListUserPage } from "../pages/CommonPage/User";
 import { LaundryEditPage } from "../pages/CommonPage/LaundryEditPage";
-
+import { LaundryCreatePage } from "../pages/CommonPage/LaundryCreatePage";
 
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
@@ -71,8 +71,13 @@ const ConfigRoutes = () => {
               element={<ListUserPage />}
             />
 
+            <Route
+              exact
+              path={routesType.LAUNDRY_CREATE}
+              element={<LaundryCreatePage />}
+            />
 
-<Route
+            <Route
               exact
               path={routesType.LAUNDRY_EDIT}
               element={<LaundryEditPage />}

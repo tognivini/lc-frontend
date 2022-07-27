@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { colors } from "../../../common/types/IColors";
 import { TitleOneComponent } from "../../../components/atomos/TitleOne";
+import { Input } from "../../../components/atomos/Input";
+import { Select } from "../../../components/atomos/Select";
+import { InputMask } from "../../../components/atomos/InputMask";
 
 export const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  height: 100vh;
   width: 100vw;
-  height: 90vh;
   padding-top: 5vh;
   border-bottom-right-radius: 2.5px;
   border-top-right-radius: 2.5px;
@@ -21,7 +22,8 @@ export const Container = styled.div`
 export const FormGrid = styled.div`
   display: flex;
   align-content: center;
-  height: 50vh;
+  height: 65vh;
+  margin: 5vw 2vw 1vw 2vw;
 `;
 
 export const Content = styled.div`
@@ -47,3 +49,18 @@ export const CardTitle = styled(TitleOneComponent)`
 
 export const BrandView = styled.div``;
 
+export const InputCustom = styled(Input)``;
+
+export const ContainerButton = styled.div`
+  display: flex;
+  justify-content: end;
+`;
+
+export const SelectInput = styled(Select)``;
+
+export const SpacedView = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const InputMasked = styled(InputMask)``;

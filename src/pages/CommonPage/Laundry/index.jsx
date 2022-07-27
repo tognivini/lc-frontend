@@ -48,7 +48,7 @@ const ListLaundryPage = ({ ...props }) => {
             }}
           >
             <BrandView>
-              <CardTitle>Editar lavanderias</CardTitle>
+              <CardTitle>Lista de Lavanderias</CardTitle>
             </BrandView>
           </div>
 
@@ -71,9 +71,11 @@ const ListLaundryPage = ({ ...props }) => {
                       <Button
                         type="submit"
                         fullWidth
-                        color="cyan"
+                        color="blueGreenLight"
                         // smallBotton
-                        onClick={()=> navigate(`${routesType.LAUNDRY_LIST}/${id}`)}
+                        onClick={() =>
+                          navigate(`${routesType.LAUNDRY_LIST}/${id}`)
+                        }
                         style={{ height: 40, fontSize: 22, with: 10 }}
                       >
                         Editar
@@ -93,7 +95,6 @@ const ListLaundryPage = ({ ...props }) => {
                     style={{
                       fontSize: 24,
                       backgroundColor: `${colors.lightGray}`,
-
                     }}
                   >
                     Sem registros disponíveis na tabela de lavanderias
@@ -104,6 +105,18 @@ const ListLaundryPage = ({ ...props }) => {
           </Table>
         </Content>
       </FormGrid>
+      <div>
+        <Button
+          type="submit"
+          fullWidth
+          color="blueGreenLight"
+          // smallBotton
+          onClick={() => navigate(`${routesType.LAUNDRY_CREATE}`)}
+          style={{ height: 40, fontSize: 22, with: 10 }}
+        >
+          Cadastrar nova lavanderia
+        </Button>
+      </div>
     </Container>
   );
 };

@@ -84,10 +84,10 @@ export const DefaultButton = styled.button`
   outline: none;
   border-radius: 8px;
   width: fit-content;
-
+  
   display: flex;
   align-items: center;
-
+  
   cursor: pointer;
   letter-spacing: 0.16px;
   background: ${({ color }) => {
@@ -96,7 +96,7 @@ export const DefaultButton = styled.button`
   }};
   line-height: 14px;
   ${({ fullWidth }) => fullWidth && fullWidthStyle}
-
+  
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -104,23 +104,27 @@ export const DefaultButton = styled.button`
   font-size: 17px;
   padding: 5px 12px;
   height: 37px;
-
+  
   @media (max-width: 600px) {
     height: 30px;
     font-size: 15px !important;
-
+    
     img {
       width: 23px !important;
     }
   }
-
+  
   @media (max-width: 500px) {
     height: 30px;
     font-size: 14px !important;
-
+    
     img {
       width: 20px !important;
     }
+  }
+  
+  div {
+    color: ${props => props.color === 'blueGreenLight' ? 'white': 'black' }
   }
 
   svg {

@@ -52,7 +52,7 @@ const ListUserPage = ({ ...props }) => {
             }}
           >
             <BrandView>
-              <CardTitle>Editar usuários</CardTitle>
+              <CardTitle>Lista de usuários</CardTitle>
             </BrandView>
           </div>
 
