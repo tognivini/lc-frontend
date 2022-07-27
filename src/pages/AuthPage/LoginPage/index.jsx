@@ -41,7 +41,9 @@ const LoginPage = ({ ...props }) => {
         password,
       };
       onLogin(body).then((res) => {
-        navigate(routesType.USER_EDIT);
+        if(res?.userId){
+          navigate(`${routesType.USER_EDIT}/${res.userId}`);
+        }
       });
     }
   };

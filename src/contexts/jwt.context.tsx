@@ -15,8 +15,6 @@ const JwtContextProvider: React.FC<IProps> = props => {
   
   useEffect(() => {
     setAccessToken({
-      // oldAccessTokenInterceptor: 0,
-      // tokenCallback: setToken,
       onLogout: () => {
         onLogout()
       },

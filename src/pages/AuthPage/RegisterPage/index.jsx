@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -45,13 +45,21 @@ const RegisterPage = ({ ...props }) => {
 
   const [disabled, setDisabled] = useState(false);
 
+  useEffect(() => {
+    if (name && email && phoneNumber && password && rePassword) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, email, phoneNumber, password, rePassword]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (name && email && password && rePassword) {
       if (password === rePassword) {
-        setErrorPassword()
-        setErrorRePassword()
+        setErrorPassword();
+        setErrorRePassword();
         const body = {
           name,
           email,
@@ -125,28 +133,28 @@ const RegisterPage = ({ ...props }) => {
                 }}
                 error={errorPhoneNumber}
               />
-
-              <PasswordInput
-                label="Senha"
-                password
-                placeholder="Preencha com sua senha."
-                name="password"
-                onChange={(e) => {
-                  setPassword(e?.target?.value);
-                }}
-                error={errorPassword}
-              />
-
-              <PasswordInput
-                label="Confirmar senha"
-                password
-                placeholder="Preencha com sua senha novamente."
-                name="rePassword"
-                onChange={(e) => {
-                  setRePassword(e?.target?.value);
-                }}
-                error={errorRePassword}
-              />
+              <div style={{ marginTop: -20 }}>
+                <PasswordInput
+                  label="Senha"
+                  password
+                  placeholder="Preencha com sua senha."
+                  name="password"
+                  onChange={(e) => {
+                    setPassword(e?.target?.value);
+                  }}
+                  error={errorPassword}
+                />
+                <PasswordInput
+                  label="Confirmar senha"
+                  password
+                  placeholder="Preencha com sua senha novamente."
+                  name="rePassword"
+                  onChange={(e) => {
+                    setRePassword(e?.target?.value);
+                  }}
+                  error={errorRePassword}
+                />
+              </div>
             </div>
             <Button
               disabled={disabled}

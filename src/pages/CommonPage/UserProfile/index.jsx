@@ -4,29 +4,30 @@ import { useNavigate } from "react-router-dom";
 import {
   Container,
   Content,
-  // HeaderTitle,
   BrandView,
   CardTitle,
-  // SubTitle,
   FormGrid,
-  // TitleGrid,
   InputCustom,
-  // PasswordInput,
   InputMasked,
   ContainerButton,
+  PasswordInput,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
+import { useParams } from "react-router";
 
-import { onGetAllUsers, onUpdateUser } from "../../../services/api-services/index";
-import Swal from 'sweetalert2'
-
+import {
+  onGetAllUsers,
+  onUpdateUser,
+} from "../../../services/api-services/index";
+import Swal from "sweetalert2";
 
 import { routesType } from "../../../resources/routesTypes";
 import { useEffect } from "react";
 
 const UserProfilePage = ({ ...props }) => {
   const { user } = useAuth();
+  const params = useParams();
 
   const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ const UserProfilePage = ({ ...props }) => {
         setName(res[0]?.name);
         setEmail(res[0]?.email);
         setPhoneNumber(res[0]?.phoneNumber);
+        setPassword(res[0]?.password);
       });
     }
   }, [user]);
@@ -52,10 +54,20 @@ const UserProfilePage = ({ ...props }) => {
   const [email, setEmail] = useState();
   const [errorEmail, setErrorEmail] = useState(false);
 
+  const [password, setPassword] = useState();
+
   const [phoneNumber, setPhoneNumber] = useState();
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
 
   const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    if (name && email && phoneNumber && password) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, email, phoneNumber, password]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,15 +75,16 @@ const UserProfilePage = ({ ...props }) => {
       name,
       email,
       phoneNumber,
+      password
     };
-    const userId = user.userId
+    const userId = user.userId;
     onUpdateUser(payload, userId).then((res) => {
       Swal.fire({
-        title: 'Sucesso!',
-        text: 'Usuário editado com sucesso!',
-        icon: 'success',
-        confirmButtonText: 'Ok'
-      })
+        title: "Sucesso!",
+        text: "Usuário editado com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
     });
   };
 
@@ -107,11 +120,12 @@ const UserProfilePage = ({ ...props }) => {
                 label="E-mail"
                 placeholder="E-mail"
                 name="email"
+                disabled
                 value={email}
-                onChange={(e) => {
-                  setEmail(e?.target?.value);
-                }}
-                error={errorEmail}
+                // onChange={(e) => {
+                //   setEmail(e?.target?.value);
+                // }}
+                // error={errorEmail}
               />
               <InputMasked
                 label="Telefone"
@@ -124,14 +138,27 @@ const UserProfilePage = ({ ...props }) => {
                 }}
                 error={errorPhoneNumber}
               />
+              <div style={{ marginTop: -20 }}>
+                <PasswordInput
+                  label="Senha"
+                  placeholder="Senha"
+                  password
+                  value={password}
+                  name="password"
+                  onChange={(e) => {
+                    setPassword(e?.target?.value);
+                  }}
+                  // error={errorPassword}
+                />
+              </div>
             </div>
             <ContainerButton>
               <Button
                 disabled={disabled}
                 type="submit"
-                // fullWidth
+                fullWidth
                 color="blueGreenLight"
-                style={{ height: 40, fontSize: 20, with: 50 }}
+                style={{ height: 45, fontSize: 25, with: 50 }}
               >
                 Editar
               </Button>

@@ -35,6 +35,7 @@ const InputMask = ({
     return String(text).replace(/[^\d]+/g, "");
   };
 
+
   const setMaks = (valueInputed) => {
     const maskValue = {
       cpf: () => remask.mask(valueInputed, [CPF_MASK]),

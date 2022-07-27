@@ -84,22 +84,19 @@ export const DefaultButton = styled.button`
   outline: none;
   border-radius: 8px;
   width: fit-content;
-
+  
   display: flex;
   align-items: center;
-
+  
   cursor: pointer;
   letter-spacing: 0.16px;
   background: ${({ color }) => {
     const key = color || 'blueGreenLight'
     return colors[key]
   }};
-  color: ${colors.white};
   line-height: 14px;
-  /* width: ${customWidth => customWidth ? customWidth  : 'fit-content' } ; */
-
   ${({ fullWidth }) => fullWidth && fullWidthStyle}
-
+  
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -107,23 +104,27 @@ export const DefaultButton = styled.button`
   font-size: 17px;
   padding: 5px 12px;
   height: 37px;
-
+  
   @media (max-width: 600px) {
     height: 30px;
     font-size: 15px !important;
-
+    
     img {
       width: 23px !important;
     }
   }
-
+  
   @media (max-width: 500px) {
     height: 30px;
     font-size: 14px !important;
-
+    
     img {
       width: 20px !important;
     }
+  }
+  
+  div {
+    color: ${props => props.color === 'blueGreenLight' ? 'white': 'black' }
   }
 
   svg {
@@ -142,9 +143,9 @@ export const DefaultButton = styled.button`
   }
 
   :disabled {
-    background: ${colors.lightGray};
+    background: ${colors.gray};
     border: none;
-    color: ${colors.gray};
+    color: ${colors.white};
     cursor: default;
   }
 

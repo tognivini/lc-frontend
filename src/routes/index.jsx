@@ -1,21 +1,17 @@
-import React from "react";
-
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import { LoginPage } from "../pages/AuthPage/LoginPage";
-import { RegisterPage } from "../pages/AuthPage/RegisterPage";
-import { UserProfilePage } from "../pages/CommonPage/UserProfile";
-import { routesType } from "../resources/routesTypes";
+import { BrowserRouter as Router } from "react-router-dom";
 import Header from "./Header";
 
 import { useAuth } from "../contexts/auth.context";
+import AuthenticatedStacks from "./stacks/AuthenticatedStacks";
+import UnauthenticatedStacks from "./stacks/UnauthenticatedStacks";
+import { useEffect } from "react";
 
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    console.log(user, "user on route");
+  }, [user]);
 
   return (
     <Router>
@@ -24,52 +20,11 @@ const ConfigRoutes = () => {
           <Header />
         </header>
         <main>
-          <Routes>
-            <Route
-              path={routesType.ROOT}
-              element={<Navigate to={routesType.AUTH_ROOT} replace />}
-            />
-            <Route exact path={routesType.AUTH_ROOT} element={<LoginPage />} />
-            <Route
-              exact
-              path={routesType.AUTH_REGISTER}
-              element={<RegisterPage />}
-            />
-
-            {/* <Route
-              exact
-              path={routesType.USER_PROFILE}
-              element={<UserProfilePage />}
-            /> */}
-            <Route
-              exact
-              path={routesType.USER_EDIT}
-              element={<UserProfilePage />}
-            />
-
-            {!isAuthenticated ? (
-              <Route
-                path="*"
-                element={<Navigate to={routesType.AUTH_ROOT} replace />}
-              />
-            ) : (
-              <></>
-            )}
-
-            {/* <Route
-              path="*"
-              element={
-                <Navigate
-                  to={
-                    isAuthenticated
-                      ? routesType.USER_PROFILE
-                      : routesType.AUTH_ROOT
-                  }
-                  replace
-                />
-              }
-            /> */}
-          </Routes>
+          {user?.userId && isAuthenticated ? (
+            <AuthenticatedStacks />
+          ) : (
+            <UnauthenticatedStacks />
+          )}
         </main>
         {/* <footer>
           <Footer />
