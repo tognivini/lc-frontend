@@ -10,6 +10,7 @@ interface IUserInterface {
 
 interface ILaundryParams {
   address: string;
+  cep: string;
   name: string;
   responsible: IUserInterface;
   status: boolean;
@@ -32,30 +33,31 @@ async function onGetAvailableLaundrys(params: ILaundryParams) {
   }
 }
 
-// const onCreateUser = (payload: ILaundryParams) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .post(routes.CREATE_USER, payload)
-//       .then(({ data }) => {
-//         resolve(data);
-//       })
-//       .catch(reject);
-//   });
-// };
+const onCreateLaundry = (payload: ILaundryParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .post(routes.CREATE_LAUNDRY, payload)
+      .then(({ data }) => {
+        resolve(data);
+      })
+      .catch(reject);
+  });
+};
 
-// const onUpdateUser = (payload: ILaundryParams, userId: string) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .put(routes.EDIT_USER + userId, payload)
-//       .then((data: any) => {
-//         resolve(data?.data);
-//       })
-//       .catch(reject);
-//   });
-// };
+const onUpdateLaundry = (payload: ILaundryParams, laundryId: string) => {
+  return new Promise((resolve, reject) => {
+    api
+      .put(`${routes.UPDATE_LAUNDRY}/${laundryId}`, payload)
+      .then((data: any) => {
+        resolve(data?.data);
+      })
+      .catch(reject);
+  });
+};
 
 export {
   onGetAllLaundrys,
-  onGetAvailableLaundrys
-  // onUpdateProfile
+  onGetAvailableLaundrys,
+  onCreateLaundry,
+  onUpdateLaundry
 };

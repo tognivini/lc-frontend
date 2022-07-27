@@ -11,6 +11,8 @@ import {
   InputCustom,
   ContainerButton,
   SelectInput,
+  SpacedView,
+  InputMasked,
 } from "./styles";
 import { Table } from "../../../components/molecules/Table";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
@@ -24,6 +26,7 @@ import { colors } from "../../../common/types/IColors";
 
 import {
   onGetAllLaundrys,
+  onUpdateLaundry,
   onUpdateUser,
 } from "../../../services/api-services/index";
 
@@ -36,14 +39,11 @@ const LaundryEditPage = ({ ...props }) => {
 
   const navigate = useNavigate();
 
-  const [users, setUsers] = useState();
-
   const [name, setName] = useState();
-  const [errorName, setErrorName] = useState(false);
   const [address, setAddress] = useState();
+  const [cep, setCep] = useState();
   const [selectedResponsible, setSelectedResponsible] = useState({});
   const [washMachines, setWashMachines] = useState([]);
-  const [errorEmail, setErrorEmail] = useState(false);
   const [arrayResponsibles, setArrayResponsibles] = useState([
     {
       label: "Sem responsável",
@@ -67,10 +67,11 @@ const LaundryEditPage = ({ ...props }) => {
     if (params?.id) {
       const laundryId = params.id;
       await onGetAllLaundrys({ laundryId }).then((res) => {
+        console.log(res);
         setName(res?.data[0]?.name);
         setAddress(res?.data[0]?.address);
         setWashMachines(res?.data[0]?.washMachines);
-        // setPhoneNumber(res?.data[0]?.responsible);
+        setCep(res?.data[0]?.cep);
       });
     }
   }, [params]);
@@ -104,13 +105,13 @@ const LaundryEditPage = ({ ...props }) => {
     const payload = {
       name,
       address,
-      phoneNumber,
+      cep,
     };
-    const userId = user.userId;
-    onUpdateUser(payload, userId).then((res) => {
+    console.log(payload)
+    onUpdateLaundry(payload, params.id).then((res) => {
       Swal.fire({
         title: "Sucesso!",
-        text: "Usuário editado com sucesso!",
+        text: "Lavanderia editada com sucesso!",
         icon: "success",
         confirmButtonText: "Ok",
       });
@@ -145,7 +146,6 @@ const LaundryEditPage = ({ ...props }) => {
                 onChange={(e) => {
                   setName(e?.target?.value);
                 }}
-                error={errorName}
               />
               <InputCustom
                 label="Endereço"
@@ -155,20 +155,33 @@ const LaundryEditPage = ({ ...props }) => {
                 onChange={(e) => {
                   setAddress(e?.target?.value);
                 }}
-                error={errorEmail}
               />
-              <SelectInput
-                style={{ marginBottom: 25 }}
-                label="Selecionar bolsista responsável"
-                options={arrayResponsibles}
-                displayValue="label"
-                value={selectedResponsible}
-                name="selectedResponsible"
-                initialValue={arrayResponsibles[1]}
-                onSelect={(selected) => {
-                  setSelectedResponsible(selected);
-                }}
-              />
+              <SpacedView>
+                <SelectInput
+                  style={{ marginBottom: 25 }}
+                  label="Selecionar bolsista responsável"
+                  options={arrayResponsibles}
+                  displayValue="label"
+                  value={selectedResponsible}
+                  name="selectedResponsible"
+                  initialValue={arrayResponsibles[1]}
+                  onSelect={(selected) => {
+                    setSelectedResponsible(selected);
+                  }}
+                />
+                <div style={{ width: "100%", marginLeft: "5%" }}>
+                  <InputMasked
+                    label="CEP"
+                    mask="cep"
+                    placeholder="99999-999"
+                    name="cep"
+                    controlledValue={cep}
+                    onChange={(e) => {
+                      setCep(e?.target?.value);
+                    }}
+                  />
+                </div>
+              </SpacedView>
             </div>
             <ContainerButton>
               <Button
@@ -228,25 +241,30 @@ const LaundryEditPage = ({ ...props }) => {
                     );
                   }
                 )}
-                <Tr>
-                  <td>
-                    add
-                  </td>
-                  <td>
-                    add
-                  </td>
-                  <td>
-                    add
-                  </td>
-                  <td>
+              <Tr>
+                <td>add</td>
+                <td>
+                  <InputCustom
+                    label="Modelo"
+                    placeholder="Preencha com o modelo"
+                    name="newModel"
+                    // value={newModel}
+                    onChange={(e) => {
+                      // setNewModel(e?.target?.value);
+                    }}
+                    // error={errorEmail}
+                  />
+                </td>
+                <td>add</td>
+                <td>
                   <SwitchComponent
-                            customLabel="inOpperation"
-                            // checked={inOpperation}
-                            onChange={handleWashMachineActivation}
-                            style={{ height: 40, fontSize: 22, with: 10 }}
-                          ></SwitchComponent>
-                  </td>
-                </Tr>
+                    customLabel="inOpperation"
+                    // checked={inOpperation}
+                    onChange={handleWashMachineActivation}
+                    style={{ height: 40, fontSize: 22, with: 10 }}
+                  ></SwitchComponent>
+                </td>
+              </Tr>
             </tbody>
           </Table>
         </Content>

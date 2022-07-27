@@ -15,7 +15,8 @@ const routes = {
    // Laundry
    LIST_ALL_LAUNDRY: '/api/laundry',
    LIST_AVAILABLE_LAUNDRY: '/api/laundry/get-available',
-   CREATE_LAUNDRY: '/api/laundry',
+   CREATE_LAUNDRY: '/api/laundry/create',
+   UPDATE_LAUNDRY: '/api/laundry/update',
    GET_LAUNDRY: '/api/laundry',
    EDIT_LAUNDRY: '/api/laundry',
    DELETE_LAUNDRY: '/api/laundry',

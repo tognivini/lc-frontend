@@ -3,7 +3,7 @@ import { colors } from "../../../common/types/IColors";
 import { TitleOneComponent } from "../../../components/atomos/TitleOne";
 import { Input } from '../../../components/atomos/Input'
 import { Select } from "../../../components/atomos/Select";
-
+import { InputMask } from '../../../components/atomos/InputMask'
 
 export const Container = styled.div`
   display: flex;
@@ -65,3 +65,10 @@ justify-content: end;
 `
 
 export const SelectInput = styled(Select)``;
+
+export const SpacedView = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const InputMasked = styled(InputMask)``;
