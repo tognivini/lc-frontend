@@ -27,9 +27,20 @@ const ListUserPage = ({ ...props }) => {
     }
   }, [user]);
 
-  const onHandleBolsistaType = useCallback(async ()=>{
-
-
+  const onHandleBolsistaType = ((type)=>{
+    // const payload = {
+    //   inOpperation: inOpperation,
+    // };
+    // onUpdateWashMachine(payload, washMachineId).then((res) => {
+    //   Swal.fire({
+    //     title: "Sucesso!",
+    //     text: "Máquina de lavar editada com sucesso!",
+    //     icon: "success",
+    //     confirmButtonText: "Ok",
+    //   }).then(() => {
+    //     onGetLaundrys();
+    //   });
+    // });
   })
 
   useEffect(() => {
@@ -90,8 +101,8 @@ const ListUserPage = ({ ...props }) => {
                             fullWidth
                             color="cyan"
                             customLabel="bolsista"
-                            value={isBolsista}
-                            onChange={onHandleBolsistaType}
+                            checked={isBolsista}
+                            onChange={(e)=> onHandleBolsistaType(e.target.checked)}
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
@@ -101,7 +112,7 @@ const ListUserPage = ({ ...props }) => {
                             fullWidth
                             color="cyan"
                             customLabel="status"
-                            value={status}
+                            checked={status}
                             // onChange={handleChange}
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>

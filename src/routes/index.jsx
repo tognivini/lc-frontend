@@ -15,7 +15,7 @@ import Header from "./Header";
 import { useAuth } from "../contexts/auth.context";
 import { UserSchedulePage } from "../pages/CommonPage/UserSchedulePage";
 import { ListLaundryPage } from "../pages/CommonPage/Laundry";
-import { ListUserPage } from "../pages/CommonPage/User";
+import { ListUserPage } from "../pages/CommonPage/UserList";
 import { LaundryEditPage } from "../pages/CommonPage/LaundryEditPage";
 import { LaundryCreatePage } from "../pages/CommonPage/LaundryCreatePage";
 

@@ -58,7 +58,7 @@ export const Content = styled.div`
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
-  /* height: 100%; */
+  height: 70vh;
   width: 70vw;
 `
 
@@ -82,4 +82,9 @@ export const InputMasked = styled(InputMask)`
 export const ContainerButton = styled.div`
 display: flex;
 justify-content: end;
+`
+export const PasswordInput = styled(Input)`
+  border-right-color: transparent;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 `
