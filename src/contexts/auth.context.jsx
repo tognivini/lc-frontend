@@ -88,6 +88,8 @@ const AuthProvider = ({ children }) => {
     localStorage.clear();
     setUser(null);
     setToken(null);
+    console.log("aqui");
+    // window.location.reload();
     // setRefreshToken(null)
   }, []);
 

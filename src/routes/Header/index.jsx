@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { routesType } from "../../resources/routesTypes";
 import { Container, UlCustom, Li } from "./styles";
 import { useAuth } from "../../contexts/auth.context";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { TypeUserEnum } from "../../services/enums";
 
 const Header = () => {
@@ -46,9 +46,6 @@ const Header = () => {
             </Li>
           )}
 
-          {/* <Li className="nav-item mx-3">
-            <Link to={routesType.HOME}>home</Link>
-          </Li> */}
           {isAuthenticated && (
             <Li className="nav-item mx-3">
               <Link to={`${routesType.USER_EDIT}/${user?.userId}`}>Perfil</Link>
@@ -83,9 +80,8 @@ const Header = () => {
             <Li className="nav-item mx-3">
               <span
                 onClick={() => {
-                  onLogout().then(() => {
-                    navigate(routesType.USER_EDIT);
-                  });
+                  navigate(routesType.AUTH_ROOT);
+                  onLogout();
                 }}
               >
                 Logout
