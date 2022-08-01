@@ -20,7 +20,7 @@ const ListUserPage = ({ ...props }) => {
   const [users, setUsers] = useState();
 
   const onGetLaundry = useCallback(async () => {
-    if (user.permissionType === "ADMIN") {
+    if (user.permissionType === TypeUserEnum.ADMIN) {
       await onGetAllUsers().then((res) => {
         setUsers(res);
       });

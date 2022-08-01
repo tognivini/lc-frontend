@@ -31,7 +31,7 @@ import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 import { colors } from "../../../common/types/IColors";
 
 import {
-  onGetAllNextSchedules,
+  onGetAllSchedules,
   onGetAvailableLaundrys,
   onCreateSchedule,
   onGetAvailableHours,
@@ -79,7 +79,7 @@ const UserSchedulePage = ({ ...props }) => {
   const onGetNextSchedules = useCallback(async () => {
     if (user) {
       const userId = user.userId;
-      await onGetAllNextSchedules({ userId }).then((res) => {
+      await onGetAllSchedules({ userId }).then((res) => {
         setNextSchedules(res?.data);
       });
     }

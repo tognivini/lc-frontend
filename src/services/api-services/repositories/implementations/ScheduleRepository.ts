@@ -28,7 +28,7 @@ interface IScheduleParams {
   date: Date;
 }
 
-const onGetAllNextSchedules = async (params: IScheduleParams) => {
+const onGetAllSchedules = async (params: IScheduleParams) => {
   try {
     return (await api.get(routes.LIST_SCHEDULES, { params })).data;
   } catch (error) {
@@ -57,15 +57,16 @@ const onGetAvailableHours = async (payload: IScheduleParams) => {
       .catch(reject);
   });
 };
-// const onUpdateUser = (payload: IScheduleParams, userId: string) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .put(routes.EDIT_USER + userId, payload)
-//       .then((data: any) => {
-//         resolve(data?.data);
-//       })
-//       .catch(reject);
-//   });
-// };
 
-export { onGetAllNextSchedules, onCreateSchedule, onGetAvailableHours };
+const onUpdateSchedule = (payload: IScheduleParams, scheduleId: string) => {
+  return new Promise((resolve, reject) => {
+    api
+      .put(`${routes.EDIT_SCHEDULE}/${scheduleId}`, payload)
+      .then((data: any) => {
+        resolve(data?.data);
+      })
+      .catch(reject);
+  });
+};
+
+export { onGetAllSchedules, onCreateSchedule, onGetAvailableHours, onUpdateSchedule };

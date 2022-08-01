@@ -9,7 +9,7 @@ const routes = {
   LIST_SCHEDULES: '/api/schedule',
   CREATE_SCHEDULE: '/api/schedule/create',
   CHECK_AVAILABLE_HOURS: '/api/schedule/get-available-hours',
-  EDIT_SCHEDULE: '/api/schedule/:id',
+  EDIT_SCHEDULE: '/api/schedule/update',
   DELETE_SCHEDULE: '/api/schedule',
 
    // Laundry
