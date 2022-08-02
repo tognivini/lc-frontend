@@ -70,7 +70,7 @@ const Header = () => {
             </Li>
           )}
 
-          {isAuthenticated && (isBolsista || isAdmin) && (
+          {isAuthenticated && (isBolsista) && (
             <Li className="nav-item mx-3">
               <Link to={routesType.BOLSISTA_AREA}>Área Bolsista</Link>
             </Li>

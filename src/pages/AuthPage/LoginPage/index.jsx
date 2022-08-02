@@ -18,6 +18,8 @@ import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 
 import { routesType } from "../../../resources/routesTypes";
+import Swal from "sweetalert2";
+
 
 const LoginPage = ({ ...props }) => {
   const navigate = useNavigate();
@@ -44,6 +46,13 @@ const LoginPage = ({ ...props }) => {
         if(res?.userId){
           navigate(`${routesType.USER_EDIT}/${res.userId}`);
         }
+      }).catch((error)=>{
+        Swal.fire({
+          title: "Erro!",
+          text: "Credenciais inválidas ou usuário inativo",
+          icon: "error",
+          confirmButtonText: "Ok",
+        })
       });
     }
   };

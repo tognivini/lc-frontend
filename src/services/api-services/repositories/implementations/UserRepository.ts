@@ -16,14 +16,6 @@ async function onGetAllUsers(params: IUserParams) {
   }
 }
 
-// async function onCreateUser(payload) {
-//   try {
-//     return (await api.post(routes.CREATE_USER, payload)).data
-//   } catch (error) {
-//     return { ...error.response.data, data: [], error: true }
-//   }
-// }
-
 const onCreateUser = (payload: IUserParams) => {
   return new Promise((resolve, reject) => {
     api
@@ -35,16 +27,6 @@ const onCreateUser = (payload: IUserParams) => {
   });
 };
 
-// const onGetUserDataById = userId => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .get('/api/users/' + userId)
-//       .then(({ data }) => {
-//         resolve(data.data)
-//       })
-//       .catch(reject)
-//   })
-// }
 const onUpdateUser = (payload: IUserParams, userId: string) => {
   return new Promise((resolve, reject) => {
     api
@@ -56,21 +38,8 @@ const onUpdateUser = (payload: IUserParams, userId: string) => {
   });
 };
 
-// const onUpdateProfile = ({ payload, userId }) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .patch('/api/users/' + userId, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
-
 export {
   onGetAllUsers,
   onCreateUser,
-  // onGetUserDataById,
   onUpdateUser,
-  // onUpdateProfile
 };

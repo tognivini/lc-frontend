@@ -36,7 +36,6 @@ const BolsistAreaPage = ({ ...props }) => {
 
   const onHandleGetSchedule = useCallback(async () => {
     if (
-      user.permissionType === TypeUserEnum.ADMIN ||
       user.permissionType === TypeUserEnum.BOLSISTA
     ) {
       const today = new Date();
@@ -69,7 +68,6 @@ const BolsistAreaPage = ({ ...props }) => {
 
   useEffect(() => {
     if (
-      user.permissionType === TypeUserEnum.ADMIN ||
       user.permissionType === TypeUserEnum.BOLSISTA
     ) {
       onHandleGetSchedule();

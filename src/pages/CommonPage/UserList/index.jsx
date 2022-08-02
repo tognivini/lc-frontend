@@ -1,16 +1,27 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Container, Content, BrandView, CardTitle, FormGrid, Tr } from "./styles";
+import {
+  Container,
+  Content,
+  BrandView,
+  CardTitle,
+  FormGrid,
+  Tr,
+} from "./styles";
 import { SwitchComponent } from "../../../components/atomos/Switch";
 import { Table } from "../../../components/molecules/Table";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-import { TypeUserEnum } from "../../../services/enums";
+import { StatusEnum, TypeUserEnum } from "../../../services/enums";
 
-import { onGetAllUsers } from "../../../services/api-services/index";
+import {
+  onGetAllUsers,
+  onUpdateUser,
+} from "../../../services/api-services/index";
 
 import { routesType } from "../../../resources/routesTypes";
 import { colors } from "../../../common/types/IColors";
+import Swal from "sweetalert2";
 
 const ListUserPage = ({ ...props }) => {
   const { user } = useAuth();
@@ -19,7 +30,7 @@ const ListUserPage = ({ ...props }) => {
 
   const [users, setUsers] = useState();
 
-  const onGetLaundry = useCallback(async () => {
+  const onGetUsers = useCallback(async () => {
     if (user.permissionType === TypeUserEnum.ADMIN) {
       await onGetAllUsers().then((res) => {
         setUsers(res);
@@ -27,25 +38,41 @@ const ListUserPage = ({ ...props }) => {
     }
   }, [user]);
 
-  const onHandleBolsistaType = ((type)=>{
-    // const payload = {
-    //   inOpperation: inOpperation,
-    // };
-    // onUpdateWashMachine(payload, washMachineId).then((res) => {
-    //   Swal.fire({
-    //     title: "Sucesso!",
-    //     text: "Máquina de lavar editada com sucesso!",
-    //     icon: "success",
-    //     confirmButtonText: "Ok",
-    //   }).then(() => {
-    //     onGetLaundrys();
-    //   });
-    // });
-  })
+  const onHandleBolsistaType = ({ userId, userType }) => {
+    const payload = {
+      userType: userType ? TypeUserEnum.BOLSISTA : TypeUserEnum.CLIENTE,
+    };
+    onUpdateUser(payload, userId).then((res) => {
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Usuário editado com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        onGetUsers();
+      });
+    });
+  };
+
+  const onHandleUserStatus = ({ userId, status }) => {
+    const payload = {
+      status: status ? StatusEnum.ATIVO : StatusEnum.INATIVO,
+    };
+    onUpdateUser(payload, userId).then((res) => {
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Usuário editado com sucesso!",
+        icon: "success",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        onGetUsers();
+      });
+    });
+  };
 
   useEffect(() => {
     if (user.permissionType === TypeUserEnum.ADMIN) {
-      onGetLaundry();
+      onGetUsers();
     } else {
       setUsers([]);
     }
@@ -81,11 +108,11 @@ const ListUserPage = ({ ...props }) => {
               {users ? (
                 users?.map(
                   (
-                    { name, email, phoneNumber, status, userPermission },
+                    { id, name, email, phoneNumber, status, userPermission },
                     key
                   ) => {
                     let isBolsista = false;
-                    if (userPermission?.type === TypeUserEnum.BOLSISTA) {
+                    if (userPermission?.userType === TypeUserEnum.BOLSISTA) {
                       isBolsista = true;
                     } else {
                       isBolsista = false;
@@ -102,7 +129,12 @@ const ListUserPage = ({ ...props }) => {
                             color="cyan"
                             customLabel="bolsista"
                             checked={isBolsista}
-                            onChange={(e)=> onHandleBolsistaType(e.target.checked)}
+                            onChange={(e) =>
+                              onHandleBolsistaType({
+                                userId: id,
+                                userType: e.target.checked,
+                              })
+                            }
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
@@ -113,7 +145,12 @@ const ListUserPage = ({ ...props }) => {
                             color="cyan"
                             customLabel="status"
                             checked={status}
-                            // onChange={handleChange}
+                            onChange={(e) =>
+                              onHandleUserStatus({
+                                userId: id,
+                                status: e.target.checked,
+                              })
+                            }
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
