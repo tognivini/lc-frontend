@@ -15,7 +15,11 @@ import { SwitchComponent } from "../../../components/atomos/Switch";
 import { Table } from "../../../components/molecules/Table";
 import { Button } from "../../../components/atomos/Button";
 import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-import { SituationScheduleEnum, TypeUserEnum } from "../../../services/enums";
+import {
+  SituationScheduleEnum,
+  StatusEnum,
+  TypeUserEnum,
+} from "../../../services/enums";
 
 import {
   onGetAllSchedules,
@@ -26,8 +30,12 @@ import { routesType } from "../../../resources/routesTypes";
 import { colors } from "../../../common/types/IColors";
 import { format, utcToZonedTime } from "date-fns-tz";
 import Swal from "sweetalert2";
+// import emailjs from '@emailjs/browser';
+import emailjs from "emailjs-com";
 
 const BolsistAreaPage = ({ ...props }) => {
+  // const { EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, EMAIL_PUBLIC_KEY } = process.env;
+
   const { user } = useAuth();
 
   const [schedules, setSchedules] = useState([]);
@@ -35,9 +43,7 @@ const BolsistAreaPage = ({ ...props }) => {
   let thisDay = new Date();
 
   const onHandleGetSchedule = useCallback(async () => {
-    if (
-      user.permissionType === TypeUserEnum.BOLSISTA
-    ) {
+    if (user.permissionType === TypeUserEnum.BOLSISTA) {
       const today = new Date();
       const formattedTime = format(today, "yyyy-MM-dd");
       const payload = {
@@ -50,7 +56,41 @@ const BolsistAreaPage = ({ ...props }) => {
     }
   }, [user]);
 
-  const onHandleScheduleSituation = (data) => {
+  const sendEmail = (e, thisSchedule) => {
+    e.preventDefault();
+    console.log("start send");
+
+    const fromName = "Lavanderia CEU";
+    const toName = `${thisSchedule?.client?.name}`;
+    // const toEmail = "thisSchedule?.client?.email";
+    const toEmail = "tognivini@hotmail.com";
+    const subject = "finalizado";
+    const message = `Agendamento no horário de ${thisSchedule?.startHour} até ${thisSchedule?.endHour} na ${thisSchedule?.laundry.name}`;
+
+    let templateParams = {
+      from_name: fromName,
+      to_name: toName,
+      to_email: toEmail,
+      subject: subject,
+      message: message,
+    };
+    // console.log("ids ", EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, EMAIL_PUBLIC_KEY);
+    // emailjs.send(
+    //   EMAIL_SERVICE_ID,
+    //   EMAIL_TEMPLATE_ID,
+    //   templateParams,
+    //   EMAIL_PUBLIC_KEY
+    // );
+
+    emailjs.send(
+      "service_kdy70dx",
+      "template_ilaqkun",
+      templateParams,
+      "r89jayx6hnLe0Qthk"
+    );
+  };
+
+  const onHandleScheduleSituation = (e, data, schedule) => {
     const payload = {
       situation: data.situation,
     };
@@ -62,14 +102,15 @@ const BolsistAreaPage = ({ ...props }) => {
         confirmButtonText: "Ok",
       }).then(() => {
         onHandleGetSchedule();
+        if (data.situation === SituationScheduleEnum.FINALIZADO.value) {
+          sendEmail(e, schedule);
+        }
       });
     });
   };
 
   useEffect(() => {
-    if (
-      user.permissionType === TypeUserEnum.BOLSISTA
-    ) {
+    if (user.permissionType === TypeUserEnum.BOLSISTA) {
       onHandleGetSchedule();
     } else {
       setSchedules([]);
@@ -110,77 +151,69 @@ const BolsistAreaPage = ({ ...props }) => {
             </thead>
             <tbody>
               {schedules ? (
-                schedules?.map(
-                  (
-                    {
-                      id,
-                      laundry,
-                      washMachine,
-                      startHour,
-                      endHour,
-                      client,
-                      situation,
-                    },
-                    key
-                  ) => {
-                    let isScheduleEnded = false;
-                    if (SituationScheduleEnum.FINALIZADO.value === situation) {
-                      isScheduleEnded = true;
-                    }
-                    return (
-                      <Tr key={key}>
-                        <td>{laundry?.name}</td>
-                        <td>Máquina {washMachine?.number}</td>
-                        <td>
-                          {startHour} - {endHour}
-                        </td>
-                        <td>{client.name}</td>
-                        <td>
-                          <SpacedView>
-                            <DivMargin>
-                              {SituationScheduleEnum[situation].label}
-                            </DivMargin>
-                            {!isScheduleEnded && (
-                              <Button
-                                type="submit"
-                                // fullWidth
-                                disabled={isScheduleEnded}
-                                color="blueGreenLight"
-                                onClick={() => {
-                                  if (
-                                    situation ===
-                                    SituationScheduleEnum.EM_ANDAMENTO.value
-                                  ) {
-                                    const data = {
-                                      situation: "FINALIZADO",
-                                      scheduleId: id,
-                                    };
-                                    onHandleScheduleSituation(data);
-                                  } else if (
-                                    situation ===
-                                    SituationScheduleEnum.NAO_INICIADO.value
-                                  ) {
-                                    const data = {
-                                      situation: "EM_ANDAMENTO",
-                                      scheduleId: id,
-                                    };
-                                    onHandleScheduleSituation(data);
-                                  }
-                                }}
-                                style={{ height: 40, fontSize: 22, with: 10 }}
-                              >
-                                {situation ===
-                                SituationScheduleEnum.NAO_INICIADO.value
-                                  ? "Iniciar"
-                                  : "Finalizar"}
-                              </Button>
-                            )}
-                          </SpacedView>
-                        </td>
-                      </Tr>
-                    );
+                schedules?.map((schedule, key) => {
+                  let isScheduleEnded = false;
+                  if (
+                    SituationScheduleEnum.FINALIZADO.value ===
+                    schedule?.situation
+                  ) {
+                    isScheduleEnded = true;
                   }
-                )
+                  return (
+                    <Tr key={key}>
+                      <td>{schedule?.laundry?.name}</td>
+                      <td>Máquina {schedule?.washMachine?.number}</td>
+                      <td>
+                        {schedule?.startHour} - {schedule?.endHour}
+                      </td>
+                      <td>{schedule?.client.name}</td>
+                      <td>
+                        <SpacedView>
+                          <DivMargin>
+                            {SituationScheduleEnum[schedule?.situation].label}
+                          </DivMargin>
+                          {!isScheduleEnded && (
+                            <Button
+                              type="submit"
+                              // fullWidth
+                              disabled={isScheduleEnded}
+                              color="blueGreenLight"
+                              name="to_name"
+                              value="gabriela"
+                              onClick={(e) => {
+                                if (
+                                  schedule?.situation ===
+                                  SituationScheduleEnum.EM_ANDAMENTO.value
+                                ) {
+                                  const data = {
+                                    situation: "FINALIZADO",
+                                    scheduleId: schedule?.id,
+                                  };
+                                  onHandleScheduleSituation(e, data, schedule);
+                                } else if (
+                                  schedule?.situation ===
+                                  SituationScheduleEnum.NAO_INICIADO.value
+                                ) {
+                                  const data = {
+                                    situation: "EM_ANDAMENTO",
+                                    scheduleId: schedule?.id,
+                                  };
+                                  onHandleScheduleSituation(e, data, schedule);
+                                }
+                              }}
+                              style={{ height: 40, fontSize: 22, with: 10 }}
+                            >
+                              {schedule?.situation ===
+                              SituationScheduleEnum.NAO_INICIADO.value
+                                ? "Iniciar"
+                                : "Finalizar"}
+                            </Button>
+                          )}
+                        </SpacedView>
+                      </td>
+                    </Tr>
+                  );
+                })
               ) : (
                 <></>
               )}
