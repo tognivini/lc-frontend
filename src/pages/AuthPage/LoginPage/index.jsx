@@ -19,6 +19,7 @@ import { useAuth, AuthProvider } from "../../../contexts/auth.context";
 
 import { routesType } from "../../../resources/routesTypes";
 import Swal from "sweetalert2";
+import { TypeUserEnum } from "../../../services/enums";
 
 
 const LoginPage = ({ ...props }) => {
@@ -44,7 +45,13 @@ const LoginPage = ({ ...props }) => {
       };
       onLogin(body).then((res) => {
         if(res?.userId){
-          navigate(`${routesType.USER_EDIT}/${res.userId}`);
+          if(res.permissionType === TypeUserEnum.CLIENTE){
+            navigate(`${routesType.USER_SCHEDULE}`);
+          } else if(res.permissionType === TypeUserEnum.BOLSISTA){
+            navigate(`${routesType.BOLSISTA_AREA}`);
+          } else if(res.permissionType === TypeUserEnum.ADMIN){
+            navigate(`${routesType.LAUNDRY_LIST}`);
+          }
         }
       }).catch((error)=>{
         Swal.fire({

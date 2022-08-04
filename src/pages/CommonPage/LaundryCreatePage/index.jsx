@@ -176,7 +176,7 @@ const LaundryCreatePage = ({ ...props }) => {
                 type="submit"
                 color="blueGreenLight"
                 fullWidth
-                style={{ height: 50, fontSize: 25 }}
+                style={{ height: 50, fontSize: 25, }}
               >
                 Salvar
               </Button>

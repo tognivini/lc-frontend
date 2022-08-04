@@ -38,6 +38,18 @@ const ListLaundryPage = ({ ...props }) => {
 
   return (
     <Container>
+       <div>
+        <Button
+          type="submit"
+          fullWidth
+          color="blueGreenLight"
+          // smallBotton
+          onClick={() => navigate(`${routesType.LAUNDRY_CREATE}`)}
+          style={{ height: 40, fontSize: 22, with: 10 }}
+        >
+          Cadastrar lavanderia
+        </Button>
+      </div>
       <FormGrid>
         <Content>
           <div
@@ -105,18 +117,7 @@ const ListLaundryPage = ({ ...props }) => {
           </Table>
         </Content>
       </FormGrid>
-      <div>
-        <Button
-          type="submit"
-          fullWidth
-          color="blueGreenLight"
-          // smallBotton
-          onClick={() => navigate(`${routesType.LAUNDRY_CREATE}`)}
-          style={{ height: 40, fontSize: 22, with: 10 }}
-        >
-          Cadastrar nova lavanderia
-        </Button>
-      </div>
+     
     </Container>
   );
 };

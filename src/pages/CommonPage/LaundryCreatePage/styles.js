@@ -31,7 +31,7 @@ export const Content = styled.div`
   flex-direction: column;
   border-radius: 20px;
 
-  padding: 50px 50px 50px 50px;
+  padding: 50px 50px 450px 50px;
 
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);

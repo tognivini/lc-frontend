@@ -89,7 +89,6 @@ const LaundryEditPage = ({ ...props }) => {
     }
   }, [user]);
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const payload = {
@@ -270,10 +269,11 @@ const LaundryEditPage = ({ ...props }) => {
           <Table>
             <thead>
               <tr>
-                <th>Id</th>
+                {/* <th>Id</th> */}
                 <th>Modelo</th>
                 <th>Número</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -282,7 +282,7 @@ const LaundryEditPage = ({ ...props }) => {
                   ({ id, number, model, inOpperation }, key) => {
                     return (
                       <Tr key={key}>
-                        <td>{id}</td>
+                        {/* <td>{id}</td> */}
                         <td>{model}</td>
                         <td>{number}</td>
                         <td>
@@ -298,24 +298,24 @@ const LaundryEditPage = ({ ...props }) => {
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
+                        <td>
+                          <Button
+                            type="submit"
+                            fullWidth
+                            // disabled={newStateDisabled}
+                            color="blueGreenLight"
+                            smallButton
+                            // onClick={handleWashMachineCreate}
+                            style={{ height: 40, fontSize: 22, with: 10 }}
+                          >
+                            Editar
+                          </Button>
+                        </td>
                       </Tr>
                     );
                   }
                 )}
               <Tr>
-                <td>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={newStateDisabled}
-                    color="blueGreenLight"
-                    smallButton
-                    onClick={handleWashMachineCreate}
-                    style={{ height: 40, fontSize: 22, with: 10 }}
-                  >
-                    Cadastrar
-                  </Button>
-                </td>
                 <td>
                   <InputCustom
                     label="Modelo"
@@ -341,10 +341,22 @@ const LaundryEditPage = ({ ...props }) => {
                 <td>
                   <SwitchComponent
                     customLabel="inOpperation"
-                    // checked={inOpperation}
                     onChange={(e) => setNewStateInOpperation(e.target.checked)}
                     style={{ height: 40, fontSize: 22, with: 10 }}
                   ></SwitchComponent>
+                </td>
+                <td>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={newStateDisabled}
+                    color="blueGreenLight"
+                    smallButton
+                    onClick={handleWashMachineCreate}
+                    style={{ height: 40, fontSize: 22, with: 10 }}
+                  >
+                    Cadastrar
+                  </Button>
                 </td>
               </Tr>
             </tbody>

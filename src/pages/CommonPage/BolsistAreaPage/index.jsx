@@ -58,7 +58,6 @@ const BolsistAreaPage = ({ ...props }) => {
 
   const sendEmail = (e, thisSchedule) => {
     e.preventDefault();
-    console.log("start send");
 
     const fromName = "Lavanderia CEU";
     const toName = `${thisSchedule?.client?.name}`;
