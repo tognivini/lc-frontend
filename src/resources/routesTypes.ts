@@ -18,6 +18,9 @@ export enum routesType {
   LAUNDRY_LIST = "/laundry",
   LAUNDRY_CREATE = "/laundry/create",
   LAUNDRY_EDIT = "/laundry/:id",
+
+  WASH_MACHINE_BASE = "/wash-machine/edit",
+  WASH_MACHINE_EDIT = "/wash-machine/edit/:id",
   
   BOLSISTA_AREA = "/bolsista-area",
 }

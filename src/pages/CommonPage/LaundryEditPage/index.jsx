@@ -31,10 +31,12 @@ import {
 
 import Swal from "sweetalert2";
 import { Button } from "../../../components/atomos/Button";
+import { routesType } from "../../../resources/routesTypes";
 
 const LaundryEditPage = ({ ...props }) => {
   const { user } = useAuth();
   const params = useParams();
+  const navigate = useNavigate();
 
   const [name, setName] = useState();
   const [address, setAddress] = useState();
@@ -276,7 +278,6 @@ const LaundryEditPage = ({ ...props }) => {
           <Table>
             <thead>
               <tr>
-                {/* <th>Id</th> */}
                 <th>Modelo</th>
                 <th>Número</th>
                 <th>Status</th>
@@ -289,7 +290,6 @@ const LaundryEditPage = ({ ...props }) => {
                   ({ id, number, model, inOpperation }, key) => {
                     return (
                       <Tr key={key}>
-                        {/* <td>{id}</td> */}
                         <td>{model}</td>
                         <td>{number}</td>
                         <td>
@@ -312,7 +312,9 @@ const LaundryEditPage = ({ ...props }) => {
                             // disabled={newStateDisabled}
                             color="blueGreenLight"
                             smallButton
-                            // onClick={handleWashMachineCreate}
+                            onClick={() =>
+                              navigate(`${routesType.WASH_MACHINE_BASE}/${id}`)
+                            }
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           >
                             Editar
@@ -339,6 +341,7 @@ const LaundryEditPage = ({ ...props }) => {
                     label="Número"
                     placeholder="Preencha com o numeração"
                     name="newStateNumber"
+                    type="number"
                     value={newStateNumber}
                     onChange={(e) => {
                       setNewStateNumber(e?.target?.value);

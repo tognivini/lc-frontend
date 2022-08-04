@@ -80,7 +80,7 @@ const LaundryCreatePage = ({ ...props }) => {
   }, [user]);
 
   useEffect(() => {
-    if (name && address && cep && selectedResponsible) {
+    if (name && address && cep && selectedResponsible?.value) {
       setDisabled(false);
     } else {
       setDisabled(true);

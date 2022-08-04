@@ -23,6 +23,7 @@ const routes = {
    DELETE_LAUNDRY: '/api/laundry',
 
    // WashMachine
+   GET_WASH_MACHINE: '/api/wash-machine',
    CREATE_WASH_MACHINE: '/api/wash-machine/create',
    UPDATE_WASH_MACHINE: '/api/wash-machine/update',
 }

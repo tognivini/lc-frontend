@@ -123,36 +123,44 @@ const ListUserPage = ({ ...props }) => {
                         <td>{email}</td>
                         <td>{phoneNumber}</td>
                         <td>
-                          <SwitchComponent
-                            type="submit"
-                            fullWidth
-                            color="cyan"
-                            customLabel="bolsista"
-                            checked={isBolsista}
-                            onChange={(e) =>
-                              onHandleBolsistaType({
-                                userId: id,
-                                userType: e.target.checked,
-                              })
-                            }
-                            style={{ height: 40, fontSize: 22, with: 10 }}
-                          ></SwitchComponent>
+                          {userPermission?.userType === TypeUserEnum.ADMIN ? (
+                            <span> - </span>
+                          ) : (
+                            <SwitchComponent
+                              type="submit"
+                              fullWidth
+                              color="cyan"
+                              customLabel="bolsista"
+                              checked={isBolsista}
+                              onChange={(e) =>
+                                onHandleBolsistaType({
+                                  userId: id,
+                                  userType: e.target.checked,
+                                })
+                              }
+                              style={{ height: 40, fontSize: 22, with: 10 }}
+                            ></SwitchComponent>
+                          )}
                         </td>
                         <td>
-                          <SwitchComponent
-                            type="submit"
-                            fullWidth
-                            color="cyan"
-                            customLabel="status"
-                            checked={status}
-                            onChange={(e) =>
-                              onHandleUserStatus({
-                                userId: id,
-                                status: e.target.checked,
-                              })
-                            }
-                            style={{ height: 40, fontSize: 22, with: 10 }}
-                          ></SwitchComponent>
+                          {userPermission?.userType === TypeUserEnum.ADMIN ? (
+                            <span> - </span>
+                          ) : (
+                            <SwitchComponent
+                              type="submit"
+                              fullWidth
+                              color="cyan"
+                              customLabel="status"
+                              checked={status}
+                              onChange={(e) =>
+                                onHandleUserStatus({
+                                  userId: id,
+                                  status: e.target.checked,
+                                })
+                              }
+                              style={{ height: 40, fontSize: 22, with: 10 }}
+                            ></SwitchComponent>
+                          )}
                         </td>
                       </Tr>
                     );
