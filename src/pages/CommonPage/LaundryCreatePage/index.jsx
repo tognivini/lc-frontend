@@ -23,6 +23,7 @@ import {
   onCreateLaundry,
   onGetAllLaundrys,
   onGetAllUsers,
+  onGetResponsibles,
 } from "../../../services/api-services/index";
 
 import Swal from "sweetalert2";
@@ -54,11 +55,12 @@ const LaundryCreatePage = ({ ...props }) => {
     }
   }, [params]);
 
-  const onGetResponsibles = useCallback(async () => {
+  const onGetAvailableResponsibles = useCallback(async () => {
     const payload = {
       permissionType: TypeUserEnum.BOLSISTA,
+      onlyAvailableResponsibles: true
     };
-    await onGetAllUsers(payload).then((res) => {
+    await onGetResponsibles(payload).then((res) => {
       const arr = [];
       res?.map((thisResponsible) => {
         return arr.push({
@@ -73,7 +75,7 @@ const LaundryCreatePage = ({ ...props }) => {
   useEffect(() => {
     if (user?.permissionType === "ADMIN") {
       onGetLaundrys();
-      onGetResponsibles();
+      onGetAvailableResponsibles();
     }
   }, [user]);
 
@@ -176,7 +178,7 @@ const LaundryCreatePage = ({ ...props }) => {
                 type="submit"
                 color="blueGreenLight"
                 fullWidth
-                style={{ height: 50, fontSize: 25, }}
+                style={{ height: 50, fontSize: 25 }}
               >
                 Salvar
               </Button>

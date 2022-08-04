@@ -24,7 +24,7 @@ import { useParams } from "react-router";
 import {
   onCreateWashMachine,
   onGetAllLaundrys,
-  onGetAllUsers,
+  onGetResponsibles,
   onUpdateLaundry,
   onUpdateWashMachine,
 } from "../../../services/api-services/index";
@@ -67,11 +67,12 @@ const LaundryEditPage = ({ ...props }) => {
     }
   }, [params]);
 
-  const onGetResponsibles = useCallback(async () => {
+  const onGetAvailableResponsibles = useCallback(async () => {
     const payload = {
       permissionType: TypeUserEnum.BOLSISTA,
+      onlyAvailableResponsibles: true,
     };
-    await onGetAllUsers(payload).then((res) => {
+    await onGetResponsibles(payload).then((res) => {
       const arr = [];
       res?.map((thisResponsible) => {
         return arr.push({
@@ -84,8 +85,14 @@ const LaundryEditPage = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (user?.permissionType === "ADMIN") {
-      onGetResponsibles().then(onGetLaundrys());
+    if (responsible && arrayResponsibles.length) {
+      setArrayResponsibles([responsible, ...arrayResponsibles]);
+    }
+  }, [responsible]);
+
+  useEffect(() => {
+    if (user?.permissionType === TypeUserEnum.ADMIN) {
+      onGetLaundrys().then(onGetAvailableResponsibles());
     }
   }, [user]);
 
