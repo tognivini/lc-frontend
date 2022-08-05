@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { parseISO } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
 
@@ -20,15 +19,12 @@ import {
   NextScheduleContent,
   CardTitleNextSchedule,
   ContainerNexSchedule,
-  Thead,
-  Tbody,
   VisibleSpan,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
 import { Row } from "./components/Row";
-import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-import { colors } from "../../../common/types/IColors";
+import { useAuth,  } from "../../../contexts/auth.context";
 
 import {
   onGetAllSchedules,
@@ -38,24 +34,12 @@ import {
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
 
-import { routesType } from "../../../resources/routesTypes";
-import {
-  LaundryEnum,
-  MockedBaseHourEnum,
-  SituationScheduleEnum,
-} from "../../../services/enums";
-
 const UserSchedulePage = ({ ...props }) => {
   const { user } = useAuth();
-
-  const navigate = useNavigate();
 
   const [arrayLaundryes, setArrayLaundryes] = useState();
   const [allLaundryes, setAllLaundryes] = useState();
   const [selectedLaundry, setSelectedLaundry] = useState();
-
-  const [arrayWashMachines, setArrayWashMachines] = useState();
-  const [allWashMachines, setAllWashMachines] = useState();
 
   const [responsible, setResponsible] = useState();
 
@@ -70,7 +54,8 @@ const UserSchedulePage = ({ ...props }) => {
   const [selectedDate, setSelectedDate] = useState();
 
   const [nextSchedules, setNextSchedules] = useState(false);
-  const [availableWashMachines, setAvailableWashMachines] = useState(false);
+
+  const [reloadRow, setReloadRow] = useState(false);
 
   const [oppenedView, setOppenedView] = useState(false);
 
@@ -109,6 +94,13 @@ const UserSchedulePage = ({ ...props }) => {
   }, [user]);
 
   useEffect(() => {
+    if (reloadRow) {
+      onGetNextSchedules();
+      setReloadRow(false);
+    }
+  }, [reloadRow]);
+
+  useEffect(() => {
     if (selectedLaundry && selectedWashMachine && selectedHour) {
       setDisabled(false);
     } else {
@@ -130,10 +122,9 @@ const UserSchedulePage = ({ ...props }) => {
           });
         });
         setArrayAvailableWashMachines(arr);
-        setAvailableWashMachines(laundryFinded?.washMachines);
         setResponsible(laundryFinded?.responsible);
       } else {
-        setAvailableWashMachines([]);
+        setArrayAvailableWashMachines([])
       }
     }
   }, [allLaundryes, selectedLaundry]);
@@ -200,6 +191,8 @@ const UserSchedulePage = ({ ...props }) => {
           text: "Agendamento criado com sucesso!",
           icon: "success",
           confirmButtonText: "Ok",
+        }).then(()=>{
+          onGetNextSchedules()
         });
       } else {
         Swal.fire({
@@ -241,11 +234,6 @@ const UserSchedulePage = ({ ...props }) => {
                 onSelect={(selected) => {
                   setSelectedLaundry(selected);
                 }}
-                //  initialValue={
-                //    isEdit
-                //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
-                //      : null
-                //  }
               />
               <SpacedView>
                 <DateInputC
@@ -336,9 +324,6 @@ const UserSchedulePage = ({ ...props }) => {
       <NextScheduleGrid>
         <NextScheduleContent
           oppenedView={oppenedView}
-          // onClick={() => {
-          //   setOppenedView(!oppenedView);
-          // }}
         >
           <>
             {oppenedView ? (
@@ -380,7 +365,13 @@ const UserSchedulePage = ({ ...props }) => {
                 >
                   {nextSchedules &&
                     nextSchedules?.map((thisSchedule, index) => {
-                      return <Row key={Math.random()} rowData={thisSchedule} />;
+                      return (
+                        <Row
+                          key={Math.random()}
+                          rowData={thisSchedule}
+                          setReloadRow={setReloadRow}
+                        />
+                      );
                     })}
                 </Table>
               </ContainerNexSchedule>

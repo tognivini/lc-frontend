@@ -5,50 +5,50 @@ import { Button } from "../../../../../components/atomos/Button";
 import { ContainerButton } from "./styles";
 import Swal from "sweetalert2";
 
-import {
-  onUpdateSchedule,
-} from "../../../../../services/api-services/index";
+import { onUpdateSchedule } from "../../../../../services/api-services/index";
 
 function Row(props) {
-  const { rowData } = props;
+  const { rowData, setReloadRow } = props;
 
   const formatedDate = format(new Date(rowData?.date), "dd/MM/yyyy");
 
   const onHandleCancelSchedule = async (event) => {
     event.preventDefault();
 
-    Swal.fire({
-      title: "Atenção!",
-      text: "Você realmente deseja cancelar o agendamento?",
-      icon: "warning",
-      reverseButtons: true,
-      showCancelButton: true,
-      cancelButtonText: "Não",
-      confirmButtonText: "Sim",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const payload = {
-          situation: SituationScheduleEnum.CANCELADO.value,
-        };
-        await onUpdateSchedule(payload, rowData.id).then((data) => {
-          if (data?.statusCode === 200 && data?.success) {
-            Swal.fire({
-              title: "Sucesso!",
-              text: "Agendamento cancelado com sucesso!",
-              icon: "success",
-              confirmButtonText: "Ok",
-            });
-          } else {
-            Swal.fire({
-              title: "Erro!",
-              text: "Ocorreu um problema ao cancelar o agendamento!",
-              icon: "error",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
-      }
-    });
+      Swal.fire({
+        title: "Atenção!",
+        text: "Você realmente deseja cancelar o agendamento?",
+        icon: "warning",
+        reverseButtons: true,
+        showCancelButton: true,
+        cancelButtonText: "Não",
+        confirmButtonText: "Sim",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const payload = {
+            situation: SituationScheduleEnum.CANCELADO.value,
+          };
+          await onUpdateSchedule(payload, rowData.id).then((data) => {
+            if (data?.statusCode === 200 && data?.success) {
+              Swal.fire({
+                title: "Sucesso!",
+                text: "Agendamento cancelado com sucesso!",
+                icon: "success",
+                confirmButtonText: "Ok",
+              }).then(()=>{
+                setReloadRow(true)
+              });
+            } else {
+              Swal.fire({
+                title: "Erro!",
+                text: "Ocorreu um problema ao cancelar o agendamento!",
+                icon: "error",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+        }
+      });
   };
   let isCanceled = false;
   if (rowData?.situation === SituationScheduleEnum.CANCELADO.value) {

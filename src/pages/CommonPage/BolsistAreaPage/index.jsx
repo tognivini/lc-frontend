@@ -11,26 +11,19 @@ import {
   SpacedView,
   DivMargin,
 } from "./styles";
-import { SwitchComponent } from "../../../components/atomos/Switch";
 import { Table } from "../../../components/molecules/Table";
 import { Button } from "../../../components/atomos/Button";
-import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-import {
-  SituationScheduleEnum,
-  StatusEnum,
-  TypeUserEnum,
-} from "../../../services/enums";
+import { useAuth } from "../../../contexts/auth.context";
+import { SituationScheduleEnum, TypeUserEnum } from "../../../services/enums";
 
 import {
   onGetAllSchedules,
   onUpdateSchedule,
 } from "../../../services/api-services/index";
 
-import { routesType } from "../../../resources/routesTypes";
 import { colors } from "../../../common/types/IColors";
 import { format, utcToZonedTime } from "date-fns-tz";
 import Swal from "sweetalert2";
-// import emailjs from '@emailjs/browser';
 import emailjs from "emailjs-com";
 
 const BolsistAreaPage = ({ ...props }) => {
@@ -108,6 +101,45 @@ const BolsistAreaPage = ({ ...props }) => {
     });
   };
 
+  const onHandleCancelSchedule = async (event, thisSchedule) => {
+    event.preventDefault();
+
+    Swal.fire({
+      title: "Atenção!",
+      text: "Você realmente deseja cancelar o agendamento?",
+      icon: "warning",
+      reverseButtons: true,
+      showCancelButton: true,
+      cancelButtonText: "Não",
+      confirmButtonText: "Sim",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const payload = {
+          situation: SituationScheduleEnum.CANCELADO.value,
+        };
+        await onUpdateSchedule(payload, thisSchedule.id).then((data) => {
+          if (data?.statusCode === 200 && data?.success) {
+            Swal.fire({
+              title: "Sucesso!",
+              text: "Agendamento cancelado com sucesso!",
+              icon: "success",
+              confirmButtonText: "Ok",
+            }).then(() => {
+              onHandleGetSchedule();
+            });
+          } else {
+            Swal.fire({
+              title: "Erro!",
+              text: "Ocorreu um problema ao cancelar o agendamento!",
+              icon: "error",
+              confirmButtonText: "Ok",
+            });
+          }
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (user.permissionType === TypeUserEnum.BOLSISTA) {
       onHandleGetSchedule();
@@ -144,8 +176,10 @@ const BolsistAreaPage = ({ ...props }) => {
                 <th style={{ width: 10 }}>Lavanderia</th>
                 <th>Máquina</th>
                 <th>Período</th>
-                <th style={{ width: 450 }}>Cliente</th>
-                <th style={{ width: 150 }}>Status</th>
+                <th style={{ width: 250 }}>Cliente</th>
+                <th style={{ width: 450 }}>Status</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -158,6 +192,17 @@ const BolsistAreaPage = ({ ...props }) => {
                   ) {
                     isScheduleEnded = true;
                   }
+                  let isCanceled = false;
+                  if (
+                    schedule?.situation ===
+                    SituationScheduleEnum.CANCELADO.value
+                  ) {
+                    isCanceled = true;
+                    isScheduleEnded = true
+                  } else {
+                    isCanceled = false;
+                  }
+
                   return (
                     <Tr key={key}>
                       <td>{schedule?.laundry?.name}</td>
@@ -177,8 +222,6 @@ const BolsistAreaPage = ({ ...props }) => {
                               // fullWidth
                               disabled={isScheduleEnded}
                               color="blueGreenLight"
-                              name="to_name"
-                              value="gabriela"
                               onClick={(e) => {
                                 if (
                                   schedule?.situation ===
@@ -209,6 +252,18 @@ const BolsistAreaPage = ({ ...props }) => {
                             </Button>
                           )}
                         </SpacedView>
+                      </td>
+                      <td>
+                        <Button
+                          disabled={isCanceled}
+                          onClick={(e) => onHandleCancelSchedule(e, schedule)}
+                          type="button"
+                          // fullWidth
+                          color="blueGreenLight"
+                          style={{ height: 40, fontSize: 22, with: 10 }}
+                        >
+                          Cancelar
+                        </Button>
                       </td>
                     </Tr>
                   );
