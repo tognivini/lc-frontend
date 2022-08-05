@@ -336,18 +336,26 @@ const UserSchedulePage = ({ ...props }) => {
       <NextScheduleGrid>
         <NextScheduleContent
           oppenedView={oppenedView}
-          onClick={() => {
-            setOppenedView(!oppenedView);
-          }}
+          // onClick={() => {
+          //   setOppenedView(!oppenedView);
+          // }}
         >
           <>
             {oppenedView ? (
               <ContainerNexSchedule>
                 <SpacedView>
-                  <CardTitleNextSchedule>
+                  <CardTitleNextSchedule
+                    onClick={() => {
+                      setOppenedView(!oppenedView);
+                    }}
+                  >
                     Proximos agendamentos
                   </CardTitleNextSchedule>
-                  <ArrowForwardIosIconDown />
+                  <ArrowForwardIosIconDown
+                    onClick={() => {
+                      setOppenedView(!oppenedView);
+                    }}
+                  />
                 </SpacedView>
                 <Table
                   columns={[
@@ -378,10 +386,18 @@ const UserSchedulePage = ({ ...props }) => {
               </ContainerNexSchedule>
             ) : (
               <SpacedView>
-                <CardTitleNextSchedule>
+                <CardTitleNextSchedule
+                  onClick={() => {
+                    setOppenedView(!oppenedView);
+                  }}
+                >
                   Visualizar agendamentos marcados
                 </CardTitleNextSchedule>
-                <ArrowForwardIosIcon />
+                <ArrowForwardIosIcon
+                  onClick={() => {
+                    setOppenedView(!oppenedView);
+                  }}
+                />
               </SpacedView>
             )}
           </>

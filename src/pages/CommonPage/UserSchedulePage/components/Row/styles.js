@@ -26,3 +26,8 @@ export const DetailsLink = styled(Link)`
     text-decoration: underline;
   }
 `
+
+export const ContainerButton = styled.div`
+  display: flex;
+  justify-content: end;
+`;

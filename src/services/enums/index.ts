@@ -16,6 +16,7 @@ export const LaundryEnum = {
 };
 
 export const SituationScheduleEnum = {
+  CANCELADO: { value: "CANCELADO", label: "Cancelado" },
   FINALIZADO: { value: "FINALIZADO", label: "Finalizado" },
   EM_ANDAMENTO: { value: "EM_ANDAMENTO", label: "Em andamento" },
   NAO_INICIADO: { value: "NAO_INICIADO", label: "Não iniciado" },
