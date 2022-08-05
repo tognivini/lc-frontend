@@ -2,7 +2,6 @@ import { SituationScheduleEnum } from "../../../../../services/enums";
 import { format } from "date-fns-tz";
 import { Button } from "../../../../../components/atomos/Button";
 
-import { ContainerButton } from "./styles";
 import Swal from "sweetalert2";
 
 import { onUpdateSchedule } from "../../../../../services/api-services/index";
@@ -73,18 +72,16 @@ function Row(props) {
       </td>
       <td heading={"btn"}>
         <td>
-          <ContainerButton>
             <Button
               disabled={isCanceled}
               onClick={(e) => onHandleCancelSchedule(e)}
               type="button"
               fullWidth
               color="blueGreenLight"
-              style={{ height: 45, fontSize: 25, with: 50 }}
+              style={{ height: 35, fontSize: 16, with: 10 }}
             >
               Cancelar
             </Button>
-          </ContainerButton>
         </td>
       </td>
     </tr>

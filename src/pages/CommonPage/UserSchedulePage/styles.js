@@ -94,8 +94,8 @@ export const NextScheduleContent = styled.div`
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
-  height: ${(props) => (props.oppenedView ? "40vh" : "2vh")};
-  width: 70vw;
+  height: ${(props) => (props.oppenedView ? "60vh" : "2vh")};
+  width: 40vw;
 `;
 
 export const ContainerNexSchedule = styled.div`
