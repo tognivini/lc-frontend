@@ -24,7 +24,7 @@ import {
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
 import { Row } from "./components/Row";
-import { useAuth,  } from "../../../contexts/auth.context";
+import { useAuth } from "../../../contexts/auth.context";
 
 import {
   onGetAllSchedules,
@@ -124,7 +124,7 @@ const UserSchedulePage = ({ ...props }) => {
         setArrayAvailableWashMachines(arr);
         setResponsible(laundryFinded?.responsible);
       } else {
-        setArrayAvailableWashMachines([])
+        setArrayAvailableWashMachines([]);
       }
     }
   }, [allLaundryes, selectedLaundry]);
@@ -169,6 +169,41 @@ const UserSchedulePage = ({ ...props }) => {
     const parsedTime = parseISO(selectedDate?.value);
 
     const formattedTime = format(parsedTime, "yyyy-MM-dd");
+    console.log(typeof selectedHour)
+
+    let endHour = selectedHour;
+    switch (selectedHour) {
+      case "08:00":
+        endHour = "10:00";
+        break;
+      case "10:00":
+        endHour = "12:00";
+        break;
+      case "14:00":
+        endHour = "16:00";
+        break;
+      case "16:00":
+        endHour = "18:00";
+        break;
+      case "18:00":
+        endHour = "20:00";
+        break;
+      case "20:00":
+        endHour = "22:00";
+        break;
+      case "22:00":
+        endHour = "00:00";
+        break;
+      default:
+        Swal.fire({
+          title: "Erro!",
+          text: "Horário inválido!",
+          icon: "error",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.reload();
+        });
+    }
 
     const payload = {
       date: formattedTime,
@@ -179,7 +214,7 @@ const UserSchedulePage = ({ ...props }) => {
         id: selectedWashMachine?.value,
       },
       startHour: selectedHour,
-      endHour: selectedHour,
+      endHour: endHour,
       responsible: { id: responsible.id },
       client: { id: user?.userId },
     };
@@ -322,9 +357,7 @@ const UserSchedulePage = ({ ...props }) => {
         </Content>
       </FormGrid>
       <NextScheduleGrid>
-        <NextScheduleContent
-          oppenedView={oppenedView}
-        >
+        <NextScheduleContent oppenedView={oppenedView}>
           <>
             {oppenedView ? (
               <ContainerNexSchedule>
