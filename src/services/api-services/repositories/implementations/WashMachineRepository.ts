@@ -14,6 +14,17 @@ interface IWashMachineParams {
   };
 }
 
+const onGetWashMachine = (params: IWashMachineParams) => {
+  return new Promise((resolve, reject) => {
+    api
+      .get(routes.GET_WASH_MACHINE, { params })
+      .then(({ data }) => {
+        resolve(data?.data);
+      })
+      .catch(reject);
+  });
+};
+
 const onCreateWashMachine = (payload: IWashMachineParams) => {
   return new Promise((resolve, reject) => {
     api
@@ -39,4 +50,4 @@ const onUpdateWashMachine = (
   });
 };
 
-export { onCreateWashMachine, onUpdateWashMachine };
+export { onGetWashMachine, onCreateWashMachine, onUpdateWashMachine };

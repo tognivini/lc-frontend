@@ -6,6 +6,7 @@ interface IUserParams {
   email: string;
   phoneNumber: string;
   password?: string;
+  onlyAvailableResponsibles?: boolean
 }
 
 async function onGetAllUsers(params: IUserParams) {
@@ -16,13 +17,13 @@ async function onGetAllUsers(params: IUserParams) {
   }
 }
 
-// async function onCreateUser(payload) {
-//   try {
-//     return (await api.post(routes.CREATE_USER, payload)).data
-//   } catch (error) {
-//     return { ...error.response.data, data: [], error: true }
-//   }
-// }
+async function onGetResponsibles(params: IUserParams) {
+  try {
+    return (await api.get(routes.LIST_RESPONSIBLES, { params })).data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 const onCreateUser = (payload: IUserParams) => {
   return new Promise((resolve, reject) => {
@@ -35,16 +36,6 @@ const onCreateUser = (payload: IUserParams) => {
   });
 };
 
-// const onGetUserDataById = userId => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .get('/api/users/' + userId)
-//       .then(({ data }) => {
-//         resolve(data.data)
-//       })
-//       .catch(reject)
-//   })
-// }
 const onUpdateUser = (payload: IUserParams, userId: string) => {
   return new Promise((resolve, reject) => {
     api
@@ -56,21 +47,9 @@ const onUpdateUser = (payload: IUserParams, userId: string) => {
   });
 };
 
-// const onUpdateProfile = ({ payload, userId }) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .patch('/api/users/' + userId, payload)
-//       .then(({ data }) => {
-//         resolve(data)
-//       })
-//       .catch(reject)
-//   })
-// }
-
 export {
   onGetAllUsers,
+  onGetResponsibles,
   onCreateUser,
-  // onGetUserDataById,
   onUpdateUser,
-  // onUpdateProfile
 };

@@ -28,7 +28,7 @@ interface IScheduleParams {
   date: Date;
 }
 
-const onGetAllNextSchedules = async (params: IScheduleParams) => {
+const onGetAllSchedules = async (params: IScheduleParams) => {
   try {
     return (await api.get(routes.LIST_SCHEDULES, { params })).data;
   } catch (error) {
@@ -47,25 +47,28 @@ const onCreateSchedule = (payload: IScheduleParams) => {
   });
 };
 
-const onGetAvailableHours = async (payload: IScheduleParams) => {
+const onGetAvailableHours = async (params: IScheduleParams) => {
+  try {
+    return (await api.get(routes.CHECK_AVAILABLE_HOURS, { params })).data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const onUpdateSchedule = (payload: IScheduleParams, scheduleId: string) => {
   return new Promise((resolve, reject) => {
     api
-      .post(routes.CHECK_AVAILABLE_HOURS, payload)
-      .then(({ data }) => {
-        resolve(data);
+      .put(`${routes.EDIT_SCHEDULE}/${scheduleId}`, payload)
+      .then((data: any) => {
+        resolve(data?.data);
       })
       .catch(reject);
   });
 };
-// const onUpdateUser = (payload: IScheduleParams, userId: string) => {
-//   return new Promise((resolve, reject) => {
-//     api
-//       .put(routes.EDIT_USER + userId, payload)
-//       .then((data: any) => {
-//         resolve(data?.data);
-//       })
-//       .catch(reject);
-//   });
-// };
 
-export { onGetAllNextSchedules, onCreateSchedule, onGetAvailableHours };
+export {
+  onGetAllSchedules,
+  onCreateSchedule,
+  onGetAvailableHours,
+  onUpdateSchedule,
+};

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { parseISO } from "date-fns";
 import { format, utcToZonedTime } from "date-fns-tz";
 
@@ -20,42 +19,27 @@ import {
   NextScheduleContent,
   CardTitleNextSchedule,
   ContainerNexSchedule,
-  Thead,
-  Tbody,
   VisibleSpan,
 } from "./styles";
 import { Button } from "../../../components/atomos/Button";
 import { Table } from "../../../components/molecules/Table";
 import { Row } from "./components/Row";
-import { useAuth, AuthProvider } from "../../../contexts/auth.context";
-import { colors } from "../../../common/types/IColors";
+import { useAuth } from "../../../contexts/auth.context";
 
 import {
-  onGetAllNextSchedules,
+  onGetAllSchedules,
   onGetAvailableLaundrys,
   onCreateSchedule,
   onGetAvailableHours,
 } from "../../../services/api-services/index";
 import Swal from "sweetalert2";
 
-import { routesType } from "../../../resources/routesTypes";
-import {
-  LaundryEnum,
-  MockedBaseHourEnum,
-  SituationScheduleEnum,
-} from "../../../services/enums";
-
 const UserSchedulePage = ({ ...props }) => {
   const { user } = useAuth();
-
-  const navigate = useNavigate();
 
   const [arrayLaundryes, setArrayLaundryes] = useState();
   const [allLaundryes, setAllLaundryes] = useState();
   const [selectedLaundry, setSelectedLaundry] = useState();
-
-  const [arrayWashMachines, setArrayWashMachines] = useState();
-  const [allWashMachines, setAllWashMachines] = useState();
 
   const [responsible, setResponsible] = useState();
 
@@ -70,7 +54,8 @@ const UserSchedulePage = ({ ...props }) => {
   const [selectedDate, setSelectedDate] = useState();
 
   const [nextSchedules, setNextSchedules] = useState(false);
-  const [availableWashMachines, setAvailableWashMachines] = useState(false);
+
+  const [reloadRow, setReloadRow] = useState(false);
 
   const [oppenedView, setOppenedView] = useState(false);
 
@@ -79,7 +64,10 @@ const UserSchedulePage = ({ ...props }) => {
   const onGetNextSchedules = useCallback(async () => {
     if (user) {
       const userId = user.userId;
-      await onGetAllNextSchedules({ userId }).then((res) => {
+      // const parsedTime = parseISO(selectedDate?.value);
+      // const formattedTime = format(parsedTime, "yyyy-MM-dd");
+
+      await onGetAllSchedules({ userId }).then((res) => {
         setNextSchedules(res?.data);
       });
     }
@@ -109,6 +97,13 @@ const UserSchedulePage = ({ ...props }) => {
   }, [user]);
 
   useEffect(() => {
+    if (reloadRow) {
+      onGetNextSchedules();
+      setReloadRow(false);
+    }
+  }, [reloadRow]);
+
+  useEffect(() => {
     if (selectedLaundry && selectedWashMachine && selectedHour) {
       setDisabled(false);
     } else {
@@ -130,17 +125,17 @@ const UserSchedulePage = ({ ...props }) => {
           });
         });
         setArrayAvailableWashMachines(arr);
-        setAvailableWashMachines(laundryFinded?.washMachines);
         setResponsible(laundryFinded?.responsible);
       } else {
-        setAvailableWashMachines([]);
+        setArrayAvailableWashMachines([]);
       }
     }
   }, [allLaundryes, selectedLaundry]);
 
   const getAvailableHours = useCallback(async () => {
     if (selectedLaundry && selectedDate && selectedWashMachine) {
-      const val = new Date(selectedDate?.value);
+      const val = new Date(selectedDate?.value)
+      val.setHours(val.getHours() + 4);
       const formattedTime = format(val, "yyyy-MM-dd");
       const payload = {
         laundryId: selectedLaundry.value,
@@ -179,6 +174,40 @@ const UserSchedulePage = ({ ...props }) => {
 
     const formattedTime = format(parsedTime, "yyyy-MM-dd");
 
+    let endHour = selectedHour;
+    switch (selectedHour) {
+      case "08:00":
+        endHour = "10:00";
+        break;
+      case "10:00":
+        endHour = "12:00";
+        break;
+      case "14:00":
+        endHour = "16:00";
+        break;
+      case "16:00":
+        endHour = "18:00";
+        break;
+      case "18:00":
+        endHour = "20:00";
+        break;
+      case "20:00":
+        endHour = "22:00";
+        break;
+      case "22:00":
+        endHour = "00:00";
+        break;
+      default:
+        Swal.fire({
+          title: "Erro!",
+          text: "Horário inválido!",
+          icon: "error",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          window.reload();
+        });
+    }
+
     const payload = {
       date: formattedTime,
       laundry: {
@@ -188,7 +217,7 @@ const UserSchedulePage = ({ ...props }) => {
         id: selectedWashMachine?.value,
       },
       startHour: selectedHour,
-      endHour: selectedHour,
+      endHour: endHour,
       responsible: { id: responsible.id },
       client: { id: user?.userId },
     };
@@ -200,6 +229,8 @@ const UserSchedulePage = ({ ...props }) => {
           text: "Agendamento criado com sucesso!",
           icon: "success",
           confirmButtonText: "Ok",
+        }).then(() => {
+          onGetNextSchedules();
         });
       } else {
         Swal.fire({
@@ -241,11 +272,6 @@ const UserSchedulePage = ({ ...props }) => {
                 onSelect={(selected) => {
                   setSelectedLaundry(selected);
                 }}
-                //  initialValue={
-                //    isEdit
-                //      ? MotivosPlanoDeAcaoEnum[actionData.reason] || undefined
-                //      : null
-                //  }
               />
               <SpacedView>
                 <DateInputC
@@ -334,20 +360,23 @@ const UserSchedulePage = ({ ...props }) => {
         </Content>
       </FormGrid>
       <NextScheduleGrid>
-        <NextScheduleContent
-          oppenedView={oppenedView}
-          onClick={() => {
-            setOppenedView(!oppenedView);
-          }}
-        >
+        <NextScheduleContent oppenedView={oppenedView}>
           <>
             {oppenedView ? (
               <ContainerNexSchedule>
                 <SpacedView>
-                  <CardTitleNextSchedule>
+                  <CardTitleNextSchedule
+                    onClick={() => {
+                      setOppenedView(!oppenedView);
+                    }}
+                  >
                     Proximos agendamentos
                   </CardTitleNextSchedule>
-                  <ArrowForwardIosIconDown />
+                  <ArrowForwardIosIconDown
+                    onClick={() => {
+                      setOppenedView(!oppenedView);
+                    }}
+                  />
                 </SpacedView>
                 <Table
                   columns={[
@@ -372,16 +401,30 @@ const UserSchedulePage = ({ ...props }) => {
                 >
                   {nextSchedules &&
                     nextSchedules?.map((thisSchedule, index) => {
-                      return <Row key={Math.random()} rowData={thisSchedule} />;
+                      return (
+                        <Row
+                          key={Math.random()}
+                          rowData={thisSchedule}
+                          setReloadRow={setReloadRow}
+                        />
+                      );
                     })}
                 </Table>
               </ContainerNexSchedule>
             ) : (
               <SpacedView>
-                <CardTitleNextSchedule>
+                <CardTitleNextSchedule
+                  onClick={() => {
+                    setOppenedView(!oppenedView);
+                  }}
+                >
                   Visualizar agendamentos marcados
                 </CardTitleNextSchedule>
-                <ArrowForwardIosIcon />
+                <ArrowForwardIosIcon
+                  onClick={() => {
+                    setOppenedView(!oppenedView);
+                  }}
+                />
               </SpacedView>
             )}
           </>

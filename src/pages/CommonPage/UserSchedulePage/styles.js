@@ -22,28 +22,6 @@ export const Container = styled.div`
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25);
 `;
 
-// export const TitleGrid = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   margin-top: 20vw;
-//   padding-left: 20px;
-// `
-// export const HeaderTitle = styled(TitleOneComponent)`
-//   text-align: left;
-//   color: ${colors.white};
-//   font-weight: bold;
-//   font-family: 'Open Sans';
-//   font-size: 40px;
-//   margin-bottom: 0;
-// `
-// export const SubTitle = styled(TitleOneComponent)`
-//   text-align: left;
-//   color: ${colors.white};
-//   font-family: 'Open Sans';
-//   font-size: 15px;
-//   margin-top: 0;
-// `
-
 export const FormGrid = styled.div`
   display: flex;
   align-content: center;
@@ -62,7 +40,6 @@ export const Content = styled.div`
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
-  /* height: 100%; */
   width: 70vw;
 `;
 
@@ -98,11 +75,13 @@ export const NextScheduleGrid = styled.div`
 
 export const ArrowForwardIosIcon = styled(ArrowForwardIos)`
   color: ${colors.blueGreenLight};
+  cursor: pointer;
 `;
 
 export const ArrowForwardIosIconDown = styled(ArrowForwardIos)`
   transform: rotate(90deg);
   color: ${colors.blueGreenLight};
+  cursor: pointer;
 `;
 
 export const NextScheduleContent = styled.div`
@@ -115,8 +94,8 @@ export const NextScheduleContent = styled.div`
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
-  height: ${(props) => (props.oppenedView ? "40vh" : "2vh")};
-  width: 70vw;
+  height: ${(props) => (props.oppenedView ? "60vh" : "2vh")};
+  width: 40vw;
 `;
 
 export const ContainerNexSchedule = styled.div`
@@ -125,25 +104,16 @@ export const ContainerNexSchedule = styled.div`
 `;
 
 export const CardTitleNextSchedule = styled(TitleOneComponent)`
-  /* text-align: left; */
   color: ${colors.darkGray};
   font-family: "Open Sans" !important;
   font-size: 25px;
   margin-top: 0px !important;
+  cursor: pointer;
 `;
 
-export const Thead = styled.thead`
-  /* display: block;
-  width: 100%; */
-`;
+export const Thead = styled.thead``;
 
-export const Tbody = styled.tbody`
-  /* display: block;
-  width: 100%;
-  height: 250px;
-  overflow-y: auto;
-  overflow-x: hidden; */
-`;
+export const Tbody = styled.tbody``;
 
 export const SpacedView = styled.div`
   display: flex;

@@ -9,10 +9,6 @@ import { useEffect } from "react";
 const ConfigRoutes = () => {
   const { isAuthenticated, user } = useAuth();
 
-  useEffect(() => {
-    console.log(user, "user on route");
-  }, [user]);
-
   return (
     <Router>
       <div className="App">

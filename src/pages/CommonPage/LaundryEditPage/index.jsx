@@ -24,17 +24,19 @@ import { useParams } from "react-router";
 import {
   onCreateWashMachine,
   onGetAllLaundrys,
-  onGetAllUsers,
+  onGetResponsibles,
   onUpdateLaundry,
   onUpdateWashMachine,
 } from "../../../services/api-services/index";
 
 import Swal from "sweetalert2";
 import { Button } from "../../../components/atomos/Button";
+import { routesType } from "../../../resources/routesTypes";
 
 const LaundryEditPage = ({ ...props }) => {
   const { user } = useAuth();
   const params = useParams();
+  const navigate = useNavigate();
 
   const [name, setName] = useState();
   const [address, setAddress] = useState();
@@ -67,11 +69,12 @@ const LaundryEditPage = ({ ...props }) => {
     }
   }, [params]);
 
-  const onGetResponsibles = useCallback(async () => {
+  const onGetAvailableResponsibles = useCallback(async () => {
     const payload = {
       permissionType: TypeUserEnum.BOLSISTA,
+      onlyAvailableResponsibles: true,
     };
-    await onGetAllUsers(payload).then((res) => {
+    await onGetResponsibles(payload).then((res) => {
       const arr = [];
       res?.map((thisResponsible) => {
         return arr.push({
@@ -84,11 +87,16 @@ const LaundryEditPage = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (user?.permissionType === "ADMIN") {
-      onGetResponsibles().then(onGetLaundrys());
+    if (responsible && arrayResponsibles.length) {
+      setArrayResponsibles([responsible, ...arrayResponsibles]);
+    }
+  }, [responsible]);
+
+  useEffect(() => {
+    if (user?.permissionType === TypeUserEnum.ADMIN) {
+      onGetLaundrys().then(onGetAvailableResponsibles());
     }
   }, [user]);
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -270,10 +278,10 @@ const LaundryEditPage = ({ ...props }) => {
           <Table>
             <thead>
               <tr>
-                <th>Id</th>
                 <th>Modelo</th>
                 <th>Número</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -282,7 +290,6 @@ const LaundryEditPage = ({ ...props }) => {
                   ({ id, number, model, inOpperation }, key) => {
                     return (
                       <Tr key={key}>
-                        <td>{id}</td>
                         <td>{model}</td>
                         <td>{number}</td>
                         <td>
@@ -298,24 +305,26 @@ const LaundryEditPage = ({ ...props }) => {
                             style={{ height: 40, fontSize: 22, with: 10 }}
                           ></SwitchComponent>
                         </td>
+                        <td>
+                          <Button
+                            type="submit"
+                            fullWidth
+                            // disabled={newStateDisabled}
+                            color="blueGreenLight"
+                            smallButton
+                            onClick={() =>
+                              navigate(`${routesType.WASH_MACHINE_BASE}/${id}`)
+                            }
+                            style={{ height: 40, fontSize: 22, with: 10 }}
+                          >
+                            Editar
+                          </Button>
+                        </td>
                       </Tr>
                     );
                   }
                 )}
               <Tr>
-                <td>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={newStateDisabled}
-                    color="blueGreenLight"
-                    smallButton
-                    onClick={handleWashMachineCreate}
-                    style={{ height: 40, fontSize: 22, with: 10 }}
-                  >
-                    Cadastrar
-                  </Button>
-                </td>
                 <td>
                   <InputCustom
                     label="Modelo"
@@ -332,6 +341,7 @@ const LaundryEditPage = ({ ...props }) => {
                     label="Número"
                     placeholder="Preencha com o numeração"
                     name="newStateNumber"
+                    type="number"
                     value={newStateNumber}
                     onChange={(e) => {
                       setNewStateNumber(e?.target?.value);
@@ -341,10 +351,22 @@ const LaundryEditPage = ({ ...props }) => {
                 <td>
                   <SwitchComponent
                     customLabel="inOpperation"
-                    // checked={inOpperation}
                     onChange={(e) => setNewStateInOpperation(e.target.checked)}
                     style={{ height: 40, fontSize: 22, with: 10 }}
                   ></SwitchComponent>
+                </td>
+                <td>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    disabled={newStateDisabled}
+                    color="blueGreenLight"
+                    smallButton
+                    onClick={handleWashMachineCreate}
+                    style={{ height: 40, fontSize: 22, with: 10 }}
+                  >
+                    Cadastrar
+                  </Button>
                 </td>
               </Tr>
             </tbody>

@@ -12,10 +12,12 @@ import { routesType } from "../../resources/routesTypes";
 
 import { useAuth } from "../../contexts/auth.context";
 import { UserSchedulePage } from "../../pages/CommonPage/UserSchedulePage";
-import { ListLaundryPage } from "../../pages/CommonPage/Laundry";
+import { ListLaundryPage } from "../../pages/CommonPage/ListLaundryPage";
 import { ListUserPage } from "../../pages/CommonPage/UserList";
 import { LaundryEditPage } from "../../pages/CommonPage/LaundryEditPage";
 import { LaundryCreatePage } from "../../pages/CommonPage/LaundryCreatePage";
+import { BolsistAreaPage } from "../../pages/CommonPage/BolsistAreaPage";
+import { WashMachineEditPage } from "../../pages/CommonPage/WashMachineEditPage";
 
 const AuthenticatedStacks = () => {
   return (
@@ -33,6 +35,10 @@ const AuthenticatedStacks = () => {
       <Route path={routesType.LAUNDRY_CREATE} element={<LaundryCreatePage />} />
 
       <Route path={routesType.LAUNDRY_EDIT} element={<LaundryEditPage />} />
+
+      <Route path={routesType.WASH_MACHINE_EDIT} element={<WashMachineEditPage />} />
+
+      <Route path={routesType.BOLSISTA_AREA} element={<BolsistAreaPage />} />
     </Routes>
   );
 };
