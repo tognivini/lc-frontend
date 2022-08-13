@@ -47,15 +47,12 @@ const onCreateSchedule = (payload: IScheduleParams) => {
   });
 };
 
-const onGetAvailableHours = async (payload: IScheduleParams) => {
-  return new Promise((resolve, reject) => {
-    api
-      .post(routes.CHECK_AVAILABLE_HOURS, payload)
-      .then(({ data }) => {
-        resolve(data);
-      })
-      .catch(reject);
-  });
+const onGetAvailableHours = async (params: IScheduleParams) => {
+  try {
+    return (await api.get(routes.CHECK_AVAILABLE_HOURS, { params })).data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const onUpdateSchedule = (payload: IScheduleParams, scheduleId: string) => {
@@ -69,4 +66,9 @@ const onUpdateSchedule = (payload: IScheduleParams, scheduleId: string) => {
   });
 };
 
-export { onGetAllSchedules, onCreateSchedule, onGetAvailableHours, onUpdateSchedule };
+export {
+  onGetAllSchedules,
+  onCreateSchedule,
+  onGetAvailableHours,
+  onUpdateSchedule,
+};

@@ -134,7 +134,8 @@ const UserSchedulePage = ({ ...props }) => {
 
   const getAvailableHours = useCallback(async () => {
     if (selectedLaundry && selectedDate && selectedWashMachine) {
-      const val = new Date(selectedDate?.value);
+      const val = new Date(selectedDate?.value)
+      val.setHours(val.getHours() + 4);
       const formattedTime = format(val, "yyyy-MM-dd");
       const payload = {
         laundryId: selectedLaundry.value,
@@ -228,8 +229,8 @@ const UserSchedulePage = ({ ...props }) => {
           text: "Agendamento criado com sucesso!",
           icon: "success",
           confirmButtonText: "Ok",
-        }).then(()=>{
-          onGetNextSchedules()
+        }).then(() => {
+          onGetNextSchedules();
         });
       } else {
         Swal.fire({
