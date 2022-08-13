@@ -34,7 +34,7 @@ export const Content = styled.div`
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
-  height: 40vh;
+  height: 50vh;
   width: 70vw;
 `;
 
@@ -52,5 +52,5 @@ export const InputCustom = styled(Input)``;
 
 export const ContainerButton = styled.div`
   display: flex;
-  justify-content: end;
+  margin-top: 15px;
 `;

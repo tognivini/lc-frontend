@@ -106,7 +106,7 @@ const LaundryEditPage = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (responsible && arrayResponsibles.length) {
+    if (responsible?.value && arrayResponsibles.length) {
       setArrayResponsibles([responsible, ...arrayResponsibles]);
     }
   }, [responsible]);
@@ -140,12 +140,16 @@ const LaundryEditPage = ({ ...props }) => {
   };
 
   useEffect(() => {
-    if (name && address && cep && selectedResponsible) {
+    console.log("check", name, address, cep, responsible, selectedResponsible);
+    const thereIsResponsible = selectedResponsible?.value
+      ? selectedResponsible?.value
+      : responsible?.value;
+    if (name && address && cep && thereIsResponsible) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [name, address, cep, selectedResponsible]);
+  }, [name, address, cep, responsible, selectedResponsible]);
 
   useEffect(() => {
     if (newStateModel && newStateNumber) {
