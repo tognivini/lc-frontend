@@ -13,6 +13,8 @@ import {
   SelectInput,
   SpacedView,
   InputMasked,
+  BoxIconScrollPage,
+  ArrowForwardIcon,
 } from "./styles";
 import { Table } from "../../../components/molecules/Table";
 import { useAuth } from "../../../contexts/auth.context";
@@ -52,6 +54,23 @@ const LaundryEditPage = ({ ...props }) => {
 
   const [disabled, setDisabled] = useState(false);
   const [newStateDisabled, setNewStateDisabled] = useState(false);
+
+  const [visibilityScrollButton, setVisibilityScrollButton] = useState(true);
+
+  const toggleVisisbilityScrollButton = () => {
+    if (window.pageYOffset > 150) {
+      setVisibilityScrollButton(false);
+    } else {
+      setVisibilityScrollButton(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisisbilityScrollButton);
+    return () => {
+      window.removeEventListener("scroll", toggleVisisbilityScrollButton);
+    };
+  }, []);
 
   const onGetLaundrys = useCallback(async () => {
     if (params?.id) {
@@ -259,6 +278,17 @@ const LaundryEditPage = ({ ...props }) => {
             </ContainerButton>
           </form>
         </Content>
+        <BoxIconScrollPage
+          isVisible={visibilityScrollButton}
+          className="transition-opacity"
+          onClick={() =>
+            document.getElementById("secBottom").scrollIntoView({
+              behavior: "smooth",
+            })
+          }
+        >
+          <ArrowForwardIcon />
+        </BoxIconScrollPage>
       </FormGrid>
 
       <FormGrid>
@@ -357,6 +387,7 @@ const LaundryEditPage = ({ ...props }) => {
                 </td>
                 <td>
                   <Button
+                    id="secBottom"
                     type="submit"
                     fullWidth
                     disabled={newStateDisabled}

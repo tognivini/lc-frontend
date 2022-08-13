@@ -4,6 +4,7 @@ import { TitleOneComponent } from "../../../components/atomos/TitleOne";
 import { Input } from "../../../components/atomos/Input";
 import { Select } from "../../../components/atomos/Select";
 import { InputMask } from "../../../components/atomos/InputMask";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
 
 export const Container = styled.div`
   display: flex;
@@ -69,3 +70,16 @@ export const SpacedView = styled.div`
 `;
 
 export const InputMasked = styled(InputMask)``;
+
+export const BoxIconScrollPage = styled.div`
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 50px;
+  margin-right: 50px;
+  cursor: pointer;
+  opacity: ${(props)=> props.isVisible ? 100 : 0};
+`;
+
+export const ArrowForwardIcon = styled(ArrowDownward)``;
