@@ -386,7 +386,7 @@ const UserSchedulePage = ({ ...props }) => {
                     },
 
                     {
-                      displayName: "Hora de início",
+                      displayName: "Início",
                       columnName: "startHour",
                     },
                     {

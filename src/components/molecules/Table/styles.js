@@ -50,8 +50,7 @@ export const Container = styled.table`
     
 
   td {
-    padding: 12px 8px;
-    /* font-size: 0.8125rem; */
+    padding: 5px 0px;
     font-weight: normal;
     vertical-align: middle;
     color: #303030;

@@ -89,18 +89,20 @@ export const NextScheduleContent = styled.div`
   flex-direction: column;
   border-radius: 20px;
 
-  padding: 50px 50px 50px 50px;
+  padding: ${(props) =>
+    props.oppenedView ? "20px 50px 50px 20px" : "50px 50px 50px 50px"};
 
   background-color: ${colors.white};
   box-shadow: 0 0 3.5px 0 rgba(0, 0, 0, 0.3);
 
   height: ${(props) => (props.oppenedView ? "60vh" : "2vh")};
-  width: 40vw;
+  width: 50vw;
 `;
 
 export const ContainerNexSchedule = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 export const CardTitleNextSchedule = styled(TitleOneComponent)`
