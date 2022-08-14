@@ -65,7 +65,7 @@ const BolsistAreaPage = ({ ...props }) => {
       to_email: toEmail,
       subject: subject,
       message: message,
-      message_order: ', por favor venha buscar suas roupas!'
+      message_order: ", por favor venha buscar suas roupas!",
     };
     // console.log("ids ", EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, EMAIL_PUBLIC_KEY);
     // emailjs.send(
@@ -98,7 +98,7 @@ const BolsistAreaPage = ({ ...props }) => {
       to_email: toEmail,
       subject: subject,
       message: message,
-      message_order: ', por favor entre em contato em caso de dúvida!'
+      message_order: ", por favor entre em contato em caso de dúvida!",
     };
     emailjs.send(
       "service_kdy70dx",
@@ -151,7 +151,7 @@ const BolsistAreaPage = ({ ...props }) => {
               icon: "success",
               confirmButtonText: "Ok",
             }).then(() => {
-              sendEmailCancel(event, thisSchedule)
+              sendEmailCancel(event, thisSchedule);
               onHandleGetSchedule();
             });
           } else {
@@ -282,7 +282,7 @@ const BolsistAreaPage = ({ ...props }) => {
                       </td>
                       <td>
                         <Button
-                          disabled={isCanceled}
+                          disabled={isCanceled || isScheduleEnded}
                           onClick={(e) => onHandleCancelSchedule(e, schedule)}
                           type="button"
                           // fullWidth
