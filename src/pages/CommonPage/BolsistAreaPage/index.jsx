@@ -22,7 +22,7 @@ import {
 } from "../../../services/api-services/index";
 
 import { colors } from "../../../common/types/IColors";
-import { format, utcToZonedTime } from "date-fns-tz";
+import { format } from "date-fns-tz";
 import Swal from "sweetalert2";
 import emailjs from "emailjs-com";
 
@@ -54,8 +54,8 @@ const BolsistAreaPage = ({ ...props }) => {
 
     const fromName = "Lavanderia CEU";
     const toName = `${thisSchedule?.client?.name}`;
-    // const toEmail = "thisSchedule?.client?.email";
-    const toEmail = "tognivini@hotmail.com";
+    const toEmail = `${thisSchedule?.client?.email}`;
+    // const toEmail = "tognivini@hotmail.com";
     const subject = "finalizado";
     const message = `Agendamento no horário de ${thisSchedule?.startHour} até ${thisSchedule?.endHour} na ${thisSchedule?.laundry.name}`;
 
@@ -65,6 +65,7 @@ const BolsistAreaPage = ({ ...props }) => {
       to_email: toEmail,
       subject: subject,
       message: message,
+      message_order: ", por favor venha buscar suas roupas!",
     };
     // console.log("ids ", EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, EMAIL_PUBLIC_KEY);
     // emailjs.send(
@@ -74,6 +75,31 @@ const BolsistAreaPage = ({ ...props }) => {
     //   EMAIL_PUBLIC_KEY
     // );
 
+    emailjs.send(
+      "service_kdy70dx",
+      "template_ilaqkun",
+      templateParams,
+      "r89jayx6hnLe0Qthk"
+    );
+  };
+
+  const sendEmailCancel = (e, thisSchedule) => {
+    e.preventDefault();
+
+    const fromName = "Lavanderia CEU";
+    const toName = `${thisSchedule?.client?.name}`;
+    const toEmail = `${thisSchedule?.client?.email}`;
+    const subject = "cancelado";
+    const message = `Agendamento no horário de ${thisSchedule?.startHour} até ${thisSchedule?.endHour} na ${thisSchedule?.laundry.name}`;
+
+    let templateParams = {
+      from_name: fromName,
+      to_name: toName,
+      to_email: toEmail,
+      subject: subject,
+      message: message,
+      message_order: ", por favor entre em contato em caso de dúvida!",
+    };
     emailjs.send(
       "service_kdy70dx",
       "template_ilaqkun",
@@ -125,6 +151,7 @@ const BolsistAreaPage = ({ ...props }) => {
               icon: "success",
               confirmButtonText: "Ok",
             }).then(() => {
+              sendEmailCancel(event, thisSchedule);
               onHandleGetSchedule();
             });
           } else {
@@ -198,7 +225,7 @@ const BolsistAreaPage = ({ ...props }) => {
                     SituationScheduleEnum.CANCELADO.value
                   ) {
                     isCanceled = true;
-                    isScheduleEnded = true
+                    isScheduleEnded = true;
                   } else {
                     isCanceled = false;
                   }
@@ -255,7 +282,7 @@ const BolsistAreaPage = ({ ...props }) => {
                       </td>
                       <td>
                         <Button
-                          disabled={isCanceled}
+                          disabled={isCanceled || isScheduleEnded}
                           onClick={(e) => onHandleCancelSchedule(e, schedule)}
                           type="button"
                           // fullWidth

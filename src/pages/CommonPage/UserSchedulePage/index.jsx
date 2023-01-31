@@ -63,11 +63,11 @@ const UserSchedulePage = ({ ...props }) => {
 
   const onGetNextSchedules = useCallback(async () => {
     if (user) {
-      const userId = user.userId;
+      const clientId = user.userId;
       // const parsedTime = parseISO(selectedDate?.value);
       // const formattedTime = format(parsedTime, "yyyy-MM-dd");
 
-      await onGetAllSchedules({ userId }).then((res) => {
+      await onGetAllSchedules({ clientId }).then((res) => {
         setNextSchedules(res?.data);
       });
     }
@@ -386,7 +386,7 @@ const UserSchedulePage = ({ ...props }) => {
                     },
 
                     {
-                      displayName: "Hora de início",
+                      displayName: "Início",
                       columnName: "startHour",
                     },
                     {

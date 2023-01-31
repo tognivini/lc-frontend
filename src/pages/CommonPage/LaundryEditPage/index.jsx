@@ -13,6 +13,8 @@ import {
   SelectInput,
   SpacedView,
   InputMasked,
+  BoxIconScrollPage,
+  ArrowForwardIcon,
 } from "./styles";
 import { Table } from "../../../components/molecules/Table";
 import { useAuth } from "../../../contexts/auth.context";
@@ -53,6 +55,23 @@ const LaundryEditPage = ({ ...props }) => {
   const [disabled, setDisabled] = useState(false);
   const [newStateDisabled, setNewStateDisabled] = useState(false);
 
+  const [visibilityScrollButton, setVisibilityScrollButton] = useState(true);
+
+  const toggleVisisbilityScrollButton = () => {
+    if (window.pageYOffset > 150) {
+      setVisibilityScrollButton(false);
+    } else {
+      setVisibilityScrollButton(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisisbilityScrollButton);
+    return () => {
+      window.removeEventListener("scroll", toggleVisisbilityScrollButton);
+    };
+  }, []);
+
   const onGetLaundrys = useCallback(async () => {
     if (params?.id) {
       const laundryId = params.id;
@@ -87,7 +106,7 @@ const LaundryEditPage = ({ ...props }) => {
   }, []);
 
   useEffect(() => {
-    if (responsible && arrayResponsibles.length) {
+    if (responsible?.value && arrayResponsibles.length) {
       setArrayResponsibles([responsible, ...arrayResponsibles]);
     }
   }, [responsible]);
@@ -121,12 +140,16 @@ const LaundryEditPage = ({ ...props }) => {
   };
 
   useEffect(() => {
-    if (name && address && cep && selectedResponsible) {
+    console.log("check", name, address, cep, responsible, selectedResponsible);
+    const thereIsResponsible = selectedResponsible?.value
+      ? selectedResponsible?.value
+      : responsible?.value;
+    if (name && address && cep && thereIsResponsible) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [name, address, cep, selectedResponsible]);
+  }, [name, address, cep, responsible, selectedResponsible]);
 
   useEffect(() => {
     if (newStateModel && newStateNumber) {
@@ -259,6 +282,17 @@ const LaundryEditPage = ({ ...props }) => {
             </ContainerButton>
           </form>
         </Content>
+        <BoxIconScrollPage
+          isVisible={visibilityScrollButton}
+          className="transition-opacity"
+          onClick={() =>
+            document.getElementById("secBottom").scrollIntoView({
+              behavior: "smooth",
+            })
+          }
+        >
+          <ArrowForwardIcon />
+        </BoxIconScrollPage>
       </FormGrid>
 
       <FormGrid>
@@ -357,6 +391,7 @@ const LaundryEditPage = ({ ...props }) => {
                 </td>
                 <td>
                   <Button
+                    id="secBottom"
                     type="submit"
                     fullWidth
                     disabled={newStateDisabled}
